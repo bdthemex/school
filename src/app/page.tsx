@@ -1,3 +1,6 @@
+
+'use client'
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -23,6 +26,9 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Autoplay from "embla-carousel-autoplay"
+import React from 'react';
 
 const noticeData = [
   {
@@ -62,31 +68,69 @@ const officialLinks = [
     { title: 'ব্যানবেইস'},
 ]
 
+const heroSlides = [
+    {
+        image: "https://placehold.co/1920x800",
+        title: "প্রশাসনিক ভবন",
+        dataAiHint: "school building"
+    },
+    {
+        image: "https://placehold.co/1920x800",
+        title: "লাইব্রেরি",
+        dataAiHint: "school library"
+    },
+    {
+        image: "https://placehold.co/1920x800",
+        title: "খেলার মাঠ",
+        dataAiHint: "school playground"
+    }
+]
+
 export default function Home() {
+    const plugin = React.useRef(
+        Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
+    )
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
       <main className="flex-1">
         
-        <section className="relative h-[50vh] flex items-center justify-center text-center bg-gray-400">
-          <Image
-            src="https://placehold.co/1920x800"
-            alt="School Campus"
-            layout="fill"
-            objectFit="cover"
-            className="absolute -z-10 opacity-40"
-            data-ai-hint="school building"
-          />
-          <div className="bg-black/30 p-4 rounded-lg">
-             <h1 className="text-3xl md:text-5xl font-bold text-white">প্রশাসনিক ভবন</h1>
-          </div>
+        <section className="relative h-[50vh] w-full">
+            <Carousel
+                plugins={[plugin.current]}
+                className="w-full h-full"
+                onMouseEnter={plugin.current.stop}
+                onMouseLeave={plugin.current.play}
+            >
+                <CarouselContent className="h-full">
+                    {heroSlides.map((slide, index) => (
+                        <CarouselItem key={index} className="h-full">
+                            <div className="relative h-full flex items-center justify-center text-center bg-gray-400">
+                                <Image
+                                    src={slide.image}
+                                    alt={slide.title}
+                                    layout="fill"
+                                    objectFit="cover"
+                                    className="absolute -z-10 opacity-40"
+                                    data-ai-hint={slide.dataAiHint}
+                                />
+                                <div className="bg-black/30 p-4 rounded-lg">
+                                    <h1 className="text-3xl md:text-5xl font-bold text-white">{slide.title}</h1>
+                                </div>
+                            </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+            </Carousel>
         </section>
 
         {/* Marquee */}
-        <div className="bg-white shadow-md">
+        <div className="bg-white shadow-md overflow-hidden">
             <div className="container mx-auto px-4 flex items-center py-2">
-                <span className="bg-red-600 text-white text-sm font-bold px-3 py-1 rounded-md">জরুরী ঘোষণা</span>
-                <p className="ml-4 text-sm text-foreground animate-pulse">মাধ্যমিক বিদ্যালয়ে-২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি ও নিয়মাবলী সংক্রান্ত।</p>
+                <span className="bg-red-600 text-white text-sm font-bold px-3 py-1 rounded-md flex-shrink-0">জরুরী ঘোষণা</span>
+                <div className="ml-4 overflow-hidden flex-grow">
+                    <p className="text-sm text-foreground whitespace-nowrap animate-marquee">মাধ্যমিক বিদ্যালয়ে-২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি ও নিয়মাবলী সংক্রান্ত।</p>
+                </div>
             </div>
         </div>
 
