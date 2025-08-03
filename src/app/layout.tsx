@@ -1,10 +1,18 @@
 import type {Metadata} from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
+import { Noto_Sans_Bengali } from 'next/font/google'
+
+const notoSansBengali = Noto_Sans_Bengali({
+  subsets: ['bengali'],
+  weight: ['400', '700'],
+  variable: '--font-body',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: 'KJSGHS Info Hub',
-  description: 'ওয়েবসাইটটি কুমারী জোসেফিনা স্মৃতি গার্লস হাই স্কুল-এর তথ্য কেন্দ্র হিসাবে কাজ করে।',
+  title: 'কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়',
+  description: 'ওয়েবসাইটটি কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়-এর তথ্য কেন্দ্র হিসাবে কাজ করে।',
 };
 
 export default function RootLayout({
@@ -13,13 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
-      </head>
+    <html lang="bn" className={`${notoSansBengali.variable}`}>
       <body className="font-body antialiased">
         {children}
         <Toaster />

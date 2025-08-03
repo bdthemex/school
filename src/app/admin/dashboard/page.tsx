@@ -35,7 +35,7 @@ export default function AdminDashboard() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="mb-8">
-        <h1 className="text-4xl font-headline font-bold text-primary">ড্যাশবোর্ড</h1>
+        <h1 className="text-4xl font-bold text-primary">ড্যাশবোর্ড</h1>
         <p className="text-muted-foreground">ওয়েবসাইটের বিভিন্ন অংশ এখান থেকে পরিচালনা করুন।</p>
       </div>
 
@@ -43,7 +43,7 @@ export default function AdminDashboard() {
         {managementItems.map((item, index) => (
           <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-medium font-headline">{item.title}</CardTitle>
+              <CardTitle className="text-lg font-medium">{item.title}</CardTitle>
               <item.icon className="h-6 w-6 text-accent" />
             </CardHeader>
             <CardContent>

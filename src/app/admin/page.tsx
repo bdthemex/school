@@ -15,7 +15,7 @@ export default function AdminLoginPage() {
     <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-background">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl font-headline">এডমিন লগইন</CardTitle>
+          <CardTitle className="text-2xl">এডমিন লগইন</CardTitle>
           <CardDescription>
             আপনার ইমেইল ও পাসওয়ার্ড দিয়ে লগইন করুন
           </CardDescription>
