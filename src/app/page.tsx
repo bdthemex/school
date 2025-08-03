@@ -130,9 +130,9 @@ export default function Home() {
         {/* Marquee */}
         <div className="bg-primary text-primary-foreground shadow-md overflow-hidden">
             <div className="container mx-auto px-4 flex items-center py-2">
-                <span className="text-sm font-bold px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">জরুরী ঘোষণা</span>
-                <div className="ml-4 overflow-hidden flex-grow relative h-6">
-                    <p className="text-sm whitespace-nowrap absolute animate-marquee">
+                <span className="text-sm font-bold bg-accent text-accent-foreground px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">জরুরী ঘোষণা</span>
+                <div className="ml-4 overflow-hidden flex-grow">
+                    <p className="text-sm whitespace-nowrap animate-marquee">
                        {marqueeNotices}
                     </p>
                 </div>
