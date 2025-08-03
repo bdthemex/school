@@ -7,27 +7,32 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ClipboardList, Images, FileText, Link as LinkIcon, Edit } from 'lucide-react'
+import Link from 'next/link'
 
 const managementItems = [
   {
     title: 'নোটিশ ম্যানেজ করুন',
     description: 'নতুন নোটিশ যোগ, সম্পাদনা বা মুছে ফেলুন।',
     icon: ClipboardList,
+    href: '/admin/notices',
   },
   {
     title: 'ফলাফল ম্যানেজ করুন',
     description: 'ছাত্রীদের পরীক্ষার ফলাফল আপলোড ও সম্পাদনা করুন।',
     icon: FileText,
+    href: '/admin/results',
   },
   {
     title: 'গ্যালারি ম্যানেজ করুন',
     description: 'স্কুলের ছবি ও গ্রাফিক্স যোগ বা মুছে ফেলুন।',
     icon: Images,
+    href: '/admin/gallery',
   },
   {
     title: 'লিঙ্ক ম্যানেজ করুন',
     description: 'গুরুত্বপূর্ণ লিঙ্ক এবং রিসোর্স সম্পাদনা করুন।',
     icon: LinkIcon,
+    href: '/admin/links',
   },
 ]
 
@@ -48,9 +53,11 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <CardDescription>{item.description}</CardDescription>
-              <Button className="mt-4" variant="outline">
-                <Edit className="mr-2 h-4 w-4" />
-                ম্যানেজ করুন
+              <Button asChild className="mt-4" variant="outline">
+                <Link href={item.href}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  ম্যানেজ করুন
+                </Link>
               </Button>
             </CardContent>
           </Card>
