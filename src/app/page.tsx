@@ -18,7 +18,7 @@ import {
   ChevronRight,
   Download,
   CheckCircle,
-  Home,
+  Home as HomeIcon,
   Info
 } from 'lucide-react';
 import Header from '@/components/layout/header';
@@ -98,7 +98,7 @@ export default function Home() {
             <Card>
                 <CardHeader className='bg-primary text-primary-foreground rounded-t-lg'>
                     <CardTitle className="text-xl flex items-center gap-2">
-                        <Home className="w-5 h-5" />
+                        <HomeIcon className="w-5 h-5" />
                         প্রতিষ্ঠানের ইতিহাস
                     </CardTitle>
                 </CardHeader>
