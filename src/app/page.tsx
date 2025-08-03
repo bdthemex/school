@@ -89,6 +89,9 @@ export default function Home() {
     const plugin = React.useRef(
         Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
     )
+
+    const marqueeNotices = noticeData.map(n => n.title).join(' *** ');
+
   return (
     <div className="flex flex-col min-h-screen bg-muted/40">
       <Header />
@@ -125,11 +128,13 @@ export default function Home() {
         </section>
 
         {/* Marquee */}
-        <div className="bg-background shadow-md overflow-hidden">
+        <div className="bg-primary text-primary-foreground shadow-md overflow-hidden">
             <div className="container mx-auto px-4 flex items-center py-2">
-                <span className="bg-primary text-primary-foreground text-sm font-bold px-3 py-1 rounded-md flex-shrink-0">জরুরী ঘোষণা</span>
-                <div className="ml-4 overflow-hidden flex-grow">
-                    <p className="text-sm text-foreground whitespace-nowrap animate-marquee">২০২৫ শিক্ষাবর্ষে ৬ষ্ঠ থেকে ৯ম শ্রেণিতে ভর্তির আবেদন গ্রহণ চলছে। বিস্তারিত নোটিশ বোর্ডে দেখুন।</p>
+                <span className="text-sm font-bold px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">জরুরী ঘোষণা</span>
+                <div className="ml-4 overflow-hidden flex-grow relative h-6">
+                    <p className="text-sm whitespace-nowrap absolute animate-marquee">
+                       {marqueeNotices}
+                    </p>
                 </div>
             </div>
         </div>
@@ -297,5 +302,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
