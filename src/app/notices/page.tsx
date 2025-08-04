@@ -29,10 +29,15 @@ export default function NoticesPage() {
                 const noticesCollectionRef = collection(db, 'notices')
                 const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'))
                 const data = await getDocs(q)
-                const filteredData = data.docs.map((doc) => ({
-                    ...doc.data(),
-                    id: doc.id,
-                } as Notice))
+                const filteredData = data.docs.map((doc) => {
+                    const docData = doc.data();
+                    return {
+                      id: doc.id,
+                      date: docData.date,
+                      title: docData.title,
+                      createdAt: docData.createdAt,
+                    } as Notice
+                  })
                 setNotices(filteredData)
             } catch (error) {
                 console.error("Error fetching notices:", error)

@@ -30,7 +30,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
   DialogClose,
 } from '@/components/ui/dialog'
@@ -77,8 +76,10 @@ export default function NoticeManagementPage() {
       const filteredData = data.docs.map((doc) => {
         const docData = doc.data();
         return {
-          ...docData,
           id: doc.id,
+          date: docData.date,
+          title: docData.title,
+          createdAt: docData.createdAt,
         } as Notice
       })
       setNotices(filteredData)
@@ -100,7 +101,7 @@ export default function NoticeManagementPage() {
 
   const handleOpenDialog = (notice?: Notice) => {
     if (notice) {
-      setCurrentNotice(notice)
+      setCurrentNotice({ ...notice })
       setIsEditing(true)
     } else {
       setCurrentNotice({ date: new Date().toISOString().split('T')[0], title: '' })
@@ -118,10 +119,8 @@ export default function NoticeManagementPage() {
     try {
         if (isEditing && currentNotice.id) {
             const noticeDoc = doc(db, "notices", currentNotice.id)
-            await updateDoc(noticeDoc, { 
-              title: currentNotice.title, 
-              date: currentNotice.date,
-            })
+            const { id, createdAt, ...updateData } = currentNotice;
+            await updateDoc(noticeDoc, updateData)
             toast({ title: "সফল", description: "নোটিশটি সফলভাবে আপডেট করা হয়েছে।" })
         } else {
             await addDoc(noticesCollectionRef, { 
@@ -260,7 +259,7 @@ export default function NoticeManagementPage() {
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" variant="secondary" onClick={() => setIsDialogOpen(false)}>
+              <Button type="button" variant="secondary" onClick={() => { setIsDialogOpen(false); setCurrentNotice({}); }}>
                 বাতিল
               </Button>
             </DialogClose>

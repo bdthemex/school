@@ -90,10 +90,15 @@ export default function Home() {
                 const noticesCollectionRef = collection(db, 'notices')
                 const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'), limit(5))
                 const data = await getDocs(q)
-                const filteredData = data.docs.map((doc) => ({
-                    ...doc.data(),
-                    id: doc.id,
-                } as Notice))
+                const filteredData = data.docs.map((doc) => {
+                    const docData = doc.data();
+                    return {
+                      id: doc.id,
+                      date: docData.date,
+                      title: docData.title,
+                      createdAt: docData.createdAt,
+                    } as Notice
+                  })
                 setNotices(filteredData)
             } catch (error) {
                 console.error("Error fetching notices:", error)
@@ -143,22 +148,27 @@ export default function Home() {
 
         {/* Marquee */}
         <div className="bg-primary text-primary-foreground shadow-md">
-            <div className="container mx-auto flex h-12 items-center overflow-hidden">
-                <span className="text-sm font-bold bg-accent text-accent-foreground px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">জরুরী ঘোষণা</span>
-                <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
-                    {isLoading ? (
-                         <Skeleton className="h-4 w-full" />
-                    ) : notices.length > 0 ? (
-                        <div className="flex animate-marquee whitespace-nowrap">
-                            <span className="mx-4">{marqueeNotices}</span>
-                        </div>
-                    ) : (
-                        <div className="w-full text-center">
-                            <span>কোনো নতুন নোটিশ নেই</span>
-                        </div>
-                    )}
+          <div className="container mx-auto flex h-12 items-center overflow-hidden">
+            <span className="text-sm font-bold bg-accent text-accent-foreground px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">
+              জরুরী ঘোষণা
+            </span>
+            <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
+              {isLoading ? (
+                <Skeleton className="h-4 w-full" />
+              ) : notices.length > 0 ? (
+                <div className="w-full flex">
+                  <div className="animate-marquee whitespace-nowrap">
+                      <span className="mx-4">{marqueeNotices}</span>
+                      <span className="mx-4">{marqueeNotices}</span>
+                  </div>
                 </div>
+              ) : (
+                <div className="w-full text-center">
+                  <span>কোনো নতুন নোটিশ নেই</span>
+                </div>
+              )}
             </div>
+          </div>
         </div>
 
 
