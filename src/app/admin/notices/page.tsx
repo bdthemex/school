@@ -12,6 +12,7 @@ import {
   serverTimestamp,
   query,
   orderBy,
+  Timestamp,
 } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import {
@@ -55,7 +56,7 @@ interface Notice {
   id: string;
   date: string;
   title: string;
-  createdAt: any;
+  createdAt: Timestamp;
 }
 
 export default function NoticeManagementPage() {
@@ -113,12 +114,19 @@ export default function NoticeManagementPage() {
     }
 
     try {
-        if (isEditing) {
-            const noticeDoc = doc(db, "notices", currentNotice.id!)
-            await updateDoc(noticeDoc, { title: currentNotice.title, date: currentNotice.date })
+        if (isEditing && currentNotice.id) {
+            const noticeDoc = doc(db, "notices", currentNotice.id)
+            await updateDoc(noticeDoc, { 
+              title: currentNotice.title, 
+              date: currentNotice.date,
+            })
             toast({ title: "সফল", description: "নোটিশটি সফলভাবে আপডেট করা হয়েছে।" })
         } else {
-            await addDoc(noticesCollectionRef, { ...currentNotice, createdAt: serverTimestamp() })
+            await addDoc(noticesCollectionRef, { 
+              title: currentNotice.title, 
+              date: currentNotice.date, 
+              createdAt: serverTimestamp() 
+            })
             toast({ title: "সফল", description: "নতুন নোটিশ যোগ করা হয়েছে।" })
         }
         getNotices()
@@ -136,11 +144,9 @@ export default function NoticeManagementPage() {
         await deleteDoc(noticeDoc)
         toast({ title: "সফল", description: "নোটিশটি মুছে ফেলা হয়েছে।" })
         getNotices()
-        setNoticeToDelete(null)
     } catch (error) {
         console.error("Error deleting notice:", error)
         toast({ title: "ত্রুটি", description: "নোটিশটি মুছতে সমস্যা হয়েছে।", variant: "destructive" })
-        setNoticeToDelete(null);
     }
   };
 
