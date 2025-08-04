@@ -58,9 +58,11 @@ interface Notice {
 }
 
 // Function to format Firestore Timestamp to a 'YYYY-MM-DD' string
-const formatDate = (timestamp: Timestamp | Date) => {
-    const date = timestamp instanceof Timestamp ? timestamp.toDate() : timestamp;
-    return date.toISOString().split('T')[0];
+const formatDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
 };
 
 export default function NoticeManagementPage() {
@@ -123,10 +125,9 @@ export default function NoticeManagementPage() {
     try {
         if (isEditing && currentNotice.id) {
             const noticeDoc = doc(db, "notices", currentNotice.id)
-            const { id, createdAt, ...updateData } = currentNotice;
             await updateDoc(noticeDoc, {
-              ...updateData,
-              // Keep createdAt, but update other fields
+              title: currentNotice.title,
+              date: currentNotice.date
             })
             toast({ title: "সফল", description: "নোটিশটি সফলভাবে আপডেট করা হয়েছে।" })
         } else {
@@ -277,5 +278,3 @@ export default function NoticeManagementPage() {
     </div>
   )
 }
-
-    
