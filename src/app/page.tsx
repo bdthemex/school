@@ -140,23 +140,24 @@ export default function Home() {
         </section>
 
         {/* Marquee */}
-        <div className="bg-primary text-primary-foreground shadow-md overflow-hidden">
-            <div className="container mx-auto px-4 flex items-center py-2">
-                <span className="text-sm font-bold bg-accent text-accent-foreground px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">জরুরী ঘোষণা</span>
-                <div className="ml-4 relative flex overflow-x-hidden flex-grow">
-                    <div className="animate-marquee whitespace-nowrap py-1">
-                        <span className="mx-4">{marqueeNotices}</span>
-                        <span className="mx-4">{marqueeNotices}</span>
-                        <span className="mx-4">{marqueeNotices}</span>
-                    </div>
-
-                    <div className="absolute top-0 animate-marquee2 whitespace-nowrap py-1">
-                        <span className="mx-4">{marqueeNotices}</span>
-                        <span className="mx-4">{marqueeNotices}</span>
-                        <span className="mx-4">{marqueeNotices}</span>
-                    </div>
-                </div>
+        <div className="bg-primary text-primary-foreground shadow-md">
+          <div className="container mx-auto px-4 flex items-center py-2">
+            <span className="text-sm font-bold bg-accent text-accent-foreground px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">জরুরী ঘোষণা</span>
+            <div className="ml-4 relative flex overflow-x-hidden flex-grow h-6 items-center">
+              <div className="absolute flex animate-marquee hover:animate-pause whitespace-nowrap">
+                {notices.length > 0 ? (
+                  <>
+                    <span className="mx-4">{marqueeNotices}</span>
+                    <span className="mx-4">{marqueeNotices}</span>
+                    <span className="mx-4">{marqueeNotices}</span>
+                    <span className="mx-4">{marqueeNotices}</span>
+                  </>
+                ) : (
+                  <span className="mx-4">কোনো নতুন নোটিশ নেই</span>
+                )}
+              </div>
             </div>
+          </div>
         </div>
 
 
