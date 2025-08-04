@@ -3,6 +3,18 @@
 
 import { useState, useEffect } from 'react'
 import {
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+  query,
+  orderBy,
+} from 'firebase/firestore'
+import { db } from '@/lib/firebase'
+import {
   Table,
   TableBody,
   TableCell,
@@ -36,26 +48,52 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useToast } from "@/hooks/use-toast"
+
 
 interface Notice {
-  id: number;
+  id: string;
   date: string;
   title: string;
+  createdAt: any;
 }
 
-const initialNotices: Notice[] = [
-  { id: 1, date: '2024-07-22', title: 'বার্ষিক ক্রীড়া প্রতিযোগিতা' },
-  { id: 2, date: '2024-07-20', title: 'ছুটির নোটিশ' },
-  { id: 3, date: '2024-07-18', title: 'ফলাফল প্রকাশ' },
-  { id: 4, date: '2024-07-15', title: 'নতুন ভর্তি সংক্রান্ত বিজ্ঞপ্তি' },
-]
-
 export default function NoticeManagementPage() {
-  const [notices, setNotices] = useState<Notice[]>(initialNotices)
+  const [notices, setNotices] = useState<Notice[]>([])
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [currentNotice, setCurrentNotice] = useState<Partial<Notice>>({})
   const [isEditing, setIsEditing] = useState(false)
   const [noticeToDelete, setNoticeToDelete] = useState<Notice | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast()
+
+  const noticesCollectionRef = collection(db, 'notices')
+
+  const getNotices = async () => {
+    setIsLoading(true);
+    try {
+      const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'))
+      const data = await getDocs(q)
+      const filteredData = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      } as Notice))
+      setNotices(filteredData)
+    } catch (error) {
+      console.error("Error fetching notices:", error)
+      toast({
+        title: "ত্রুটি",
+        description: "নোটিশ আনতে সমস্যা হয়েছে।",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getNotices()
+  }, [])
 
   const handleOpenDialog = (notice?: Notice) => {
     if (notice) {
@@ -68,19 +106,42 @@ export default function NoticeManagementPage() {
     setIsDialogOpen(true)
   }
 
-  const handleSave = () => {
-    if (isEditing) {
-      setNotices(notices.map(n => n.id === currentNotice.id ? (currentNotice as Notice) : n))
-    } else {
-      setNotices([...notices, { ...currentNotice, id: Date.now() } as Notice])
+  const handleSave = async () => {
+    if (!currentNotice.title || !currentNotice.date) {
+        toast({ title: "ত্রুটি", description: "শিরোনাম এবং তারিখ পূরণ করুন।", variant: "destructive" })
+        return;
     }
-    setIsDialogOpen(false)
-    setCurrentNotice({})
+
+    try {
+        if (isEditing) {
+            const noticeDoc = doc(db, "notices", currentNotice.id!)
+            await updateDoc(noticeDoc, { title: currentNotice.title, date: currentNotice.date })
+            toast({ title: "সফল", description: "নোটিশটি সফলভাবে আপডেট করা হয়েছে।" })
+        } else {
+            await addDoc(noticesCollectionRef, { ...currentNotice, createdAt: serverTimestamp() })
+            toast({ title: "সফল", description: "নতুন নোটিশ যোগ করা হয়েছে।" })
+        }
+        getNotices()
+        setIsDialogOpen(false)
+        setCurrentNotice({})
+    } catch (error) {
+        console.error("Error saving notice:", error)
+        toast({ title: "ত্রুটি", description: "নোটিশ সংরক্ষণ করতে সমস্যা হয়েছে।", variant: "destructive" })
+    }
   }
 
-  const handleDelete = (id: number) => {
-    setNotices(notices.filter(notice => notice.id !== id));
-    setNoticeToDelete(null);
+  const handleDelete = async (id: string) => {
+    try {
+        const noticeDoc = doc(db, "notices", id)
+        await deleteDoc(noticeDoc)
+        toast({ title: "সফল", description: "নোটিশটি মুছে ফেলা হয়েছে।" })
+        getNotices()
+        setNoticeToDelete(null)
+    } catch (error) {
+        console.error("Error deleting notice:", error)
+        toast({ title: "ত্রুটি", description: "নোটিশটি মুছতে সমস্যা হয়েছে।", variant: "destructive" })
+        setNoticeToDelete(null);
+    }
   };
 
 
@@ -110,7 +171,11 @@ export default function NoticeManagementPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {notices.map((notice) => (
+                {isLoading ? (
+                    <TableRow>
+                        <TableCell colSpan={3} className="text-center">লোড হচ্ছে...</TableCell>
+                    </TableRow>
+                ) : notices.map((notice) => (
                   <TableRow key={notice.id}>
                     <TableCell className="font-medium">{notice.date}</TableCell>
                     <TableCell>{notice.title}</TableCell>
@@ -121,7 +186,7 @@ export default function NoticeManagementPage() {
 
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                           <Button variant="ghost" size="icon" className="text-red-600 hover:text-red-800" onClick={() => setNoticeToDelete(notice)}>
+                           <Button variant="ghost" size="icon" className="text-red-600 hover:text-red-800">
                              <Trash2 className="h-4 w-4" />
                            </Button>
                         </AlertDialogTrigger>
@@ -133,8 +198,8 @@ export default function NoticeManagementPage() {
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel onClick={() => setNoticeToDelete(null)}>বাতিল</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => noticeToDelete && handleDelete(noticeToDelete.id)}>
+                            <AlertDialogCancel>বাতিল</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => handleDelete(notice.id)}>
                               মুছে ফেলুন
                             </AlertDialogAction>
                           </AlertDialogFooter>
