@@ -60,14 +60,14 @@ export default function NoticesPage() {
                         {isLoading ? (
                             Array.from({ length: 5 }).map((_, index) => (
                                 <div key={index} className="flex items-center space-x-4 p-4 border rounded-lg">
-                                    <Skeleton className="h-12 w-12 rounded-lg" />
-                                    <div className="space-y-2">
-                                        <Skeleton className="h-4 w-[250px]" />
-                                        <Skeleton className="h-4 w-[200px]" />
+                                    <div className="space-y-2 w-full">
+                                        <Skeleton className="h-4 w-3/4" />
+                                        <Skeleton className="h-4 w-1/4" />
                                     </div>
                                 </div>
                             ))
-                        ) : notices.map((notice) => (
+                        ) : notices.length > 0 ? (
+                           notices.map((notice) => (
                             <Link href="#" key={notice.id}>
                                 <div className="p-4 border rounded-lg hover:bg-muted/50 transition-colors flex items-center justify-between">
                                     <div>
@@ -80,7 +80,10 @@ export default function NoticesPage() {
                                     <ChevronRight className="w-5 h-5 text-muted-foreground" />
                                 </div>
                             </Link>
-                        ))}
+                           ))
+                        ) : (
+                            <p className="text-center text-muted-foreground py-8">কোনো নোটিশ প্রকাশ করা হয়নি।</p>
+                        )}
                     </div>
                 </CardContent>
             </Card>

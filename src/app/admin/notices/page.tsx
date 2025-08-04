@@ -64,7 +64,6 @@ export default function NoticeManagementPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [currentNotice, setCurrentNotice] = useState<Partial<Notice>>({})
   const [isEditing, setIsEditing] = useState(false)
-  const [noticeToDelete, setNoticeToDelete] = useState<Notice | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast()
 
@@ -75,10 +74,13 @@ export default function NoticeManagementPage() {
     try {
       const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'))
       const data = await getDocs(q)
-      const filteredData = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      } as Notice))
+      const filteredData = data.docs.map((doc) => {
+        const docData = doc.data();
+        return {
+          ...docData,
+          id: doc.id,
+        } as Notice
+      })
       setNotices(filteredData)
     } catch (error) {
       console.error("Error fetching notices:", error)
@@ -180,6 +182,10 @@ export default function NoticeManagementPage() {
                 {isLoading ? (
                     <TableRow>
                         <TableCell colSpan={3} className="text-center">লোড হচ্ছে...</TableCell>
+                    </TableRow>
+                ) : notices.length === 0 ? (
+                    <TableRow>
+                        <TableCell colSpan={3} className="text-center">কোনো নোটিশ পাওয়া যায়নি।</TableCell>
                     </TableRow>
                 ) : notices.map((notice) => (
                   <TableRow key={notice.id}>

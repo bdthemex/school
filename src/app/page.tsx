@@ -24,13 +24,15 @@ import Footer from '@/components/layout/footer';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy, limit, Timestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Notice {
   id: string;
   date: string;
   title: string;
+  createdAt: Timestamp;
 }
 
 const facultyData = [
@@ -144,9 +146,10 @@ export default function Home() {
             <div className="container mx-auto flex h-12 items-center overflow-hidden">
                 <span className="text-sm font-bold bg-accent text-accent-foreground px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">জরুরী ঘোষণা</span>
                 <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
-                    {notices.length > 0 ? (
-                        <div className="flex animate-marquee hover:pause whitespace-nowrap">
-                            <span className="mx-4">{marqueeNotices}</span>
+                    {isLoading ? (
+                         <Skeleton className="h-4 w-full" />
+                    ) : notices.length > 0 ? (
+                        <div className="flex animate-marquee whitespace-nowrap">
                             <span className="mx-4">{marqueeNotices}</span>
                         </div>
                     ) : (
@@ -271,14 +274,25 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-4 space-y-3">
                     {isLoading ? (
-                        <p>লোড হচ্ছে...</p>
-                    ) : notices.map((notice) => (
+                        <div className="space-y-2">
+                            <Skeleton className="h-8 w-full" />
+                            <Skeleton className="h-8 w-full" />
+                            <Skeleton className="h-8 w-full" />
+                            <Skeleton className="h-8 w-full" />
+                        </div>
+                    ) : notices.length > 0 ? (
+                      notices.map((notice) => (
                         <Link href="#" key={notice.id} className="block p-2 rounded-md hover:bg-muted transition-colors">
                             <p className="text-sm font-medium text-foreground hover:text-primary">{notice.title}</p>
                             <p className="text-xs text-muted-foreground">{notice.date}</p>
                         </Link>
-                    ))}
-                    <Button variant="outline" size="sm" className='w-full border-primary text-primary hover:bg-primary hover:text-white'>সকল নোটিশ</Button>
+                      ))
+                    ) : (
+                      <p className="text-sm text-muted-foreground text-center py-4">কোনো নোটিশ নেই।</p>
+                    )}
+                    <Button asChild variant="outline" size="sm" className='w-full border-primary text-primary hover:bg-primary hover:text-white'>
+                      <Link href="/notices">সকল নোটিশ</Link>
+                    </Button>
                 </CardContent>
               </Card>
 
@@ -323,5 +337,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
