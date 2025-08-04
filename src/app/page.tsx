@@ -141,23 +141,21 @@ export default function Home() {
 
         {/* Marquee */}
         <div className="bg-primary text-primary-foreground shadow-md">
-          <div className="container mx-auto px-4 flex items-center py-2">
-            <span className="text-sm font-bold bg-accent text-accent-foreground px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">জরুরী ঘোষণা</span>
-            <div className="ml-4 relative flex overflow-x-hidden flex-grow h-6 items-center">
-              <div className="absolute flex animate-marquee hover:animate-pause whitespace-nowrap">
-                {notices.length > 0 ? (
-                  <>
-                    <span className="mx-4">{marqueeNotices}</span>
-                    <span className="mx-4">{marqueeNotices}</span>
-                    <span className="mx-4">{marqueeNotices}</span>
-                    <span className="mx-4">{marqueeNotices}</span>
-                  </>
-                ) : (
-                  <span className="mx-4">কোনো নতুন নোটিশ নেই</span>
-                )}
-              </div>
+            <div className="container mx-auto flex h-12 items-center overflow-hidden">
+                <span className="text-sm font-bold bg-accent text-accent-foreground px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">জরুরী ঘোষণা</span>
+                <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
+                    {notices.length > 0 ? (
+                        <div className="flex animate-marquee hover:pause whitespace-nowrap">
+                            <span className="mx-4">{marqueeNotices}</span>
+                            <span className="mx-4">{marqueeNotices}</span>
+                        </div>
+                    ) : (
+                        <div className="w-full text-center">
+                            <span>কোনো নতুন নোটিশ নেই</span>
+                        </div>
+                    )}
+                </div>
             </div>
-          </div>
         </div>
 
 
@@ -325,3 +323,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
