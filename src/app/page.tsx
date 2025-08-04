@@ -143,10 +143,18 @@ export default function Home() {
         <div className="bg-primary text-primary-foreground shadow-md overflow-hidden">
             <div className="container mx-auto px-4 flex items-center py-2">
                 <span className="text-sm font-bold bg-accent text-accent-foreground px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">জরুরী ঘোষণা</span>
-                <div className="ml-4 overflow-hidden flex-grow">
-                    <p className="text-sm whitespace-nowrap animate-marquee">
-                       {marqueeNotices}
-                    </p>
+                <div className="ml-4 relative flex overflow-x-hidden flex-grow">
+                    <div className="animate-marquee whitespace-nowrap py-1">
+                        <span className="mx-4">{marqueeNotices}</span>
+                        <span className="mx-4">{marqueeNotices}</span>
+                        <span className="mx-4">{marqueeNotices}</span>
+                    </div>
+
+                    <div className="absolute top-0 animate-marquee2 whitespace-nowrap py-1">
+                        <span className="mx-4">{marqueeNotices}</span>
+                        <span className="mx-4">{marqueeNotices}</span>
+                        <span className="mx-4">{marqueeNotices}</span>
+                    </div>
                 </div>
             </div>
         </div>
