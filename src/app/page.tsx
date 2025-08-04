@@ -93,7 +93,7 @@ export default function Home() {
                     const docData = doc.data();
                     return {
                       id: doc.id,
-                      date: docData.date, // Already a string
+                      date: docData.date, 
                       title: docData.title,
                     } as Notice
                   })
@@ -155,11 +155,9 @@ export default function Home() {
                 <Skeleton className="h-4 w-full" />
               ) : notices.length > 0 ? (
                 <div className="w-full flex items-center">
-                  <div className="animate-marquee whitespace-nowrap">
+                   <div className="animate-marquee whitespace-nowrap flex">
                       <span className="mx-4">{marqueeNotices}</span>
-                  </div>
-                  <div className="animate-marquee2 whitespace-nowrap absolute top-1/2 -translate-y-1/2">
-                       <span className="mx-4">{marqueeNotices}</span>
+                      <span className="mx-4">{marqueeNotices}</span>
                   </div>
                 </div>
               ) : (

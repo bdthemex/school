@@ -54,10 +54,9 @@ interface Notice {
   id: string;
   date: string;
   title: string;
-  createdAt?: Timestamp; // This can be optional on the client
+  createdAt?: Timestamp; 
 }
 
-// Function to format Firestore Timestamp to a 'YYYY-MM-DD' string
 const formatDate = (date: Date): string => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -84,7 +83,7 @@ export default function NoticeManagementPage() {
         const docData = doc.data();
         return {
           id: doc.id,
-          date: docData.date, // Already a string
+          date: docData.date, 
           title: docData.title,
         } as Notice
       })
@@ -138,7 +137,7 @@ export default function NoticeManagementPage() {
             })
             toast({ title: "সফল", description: "নতুন নোটিশ যোগ করা হয়েছে।" })
         }
-        await getNotices() // Use await to ensure data is fresh
+        await getNotices() 
         setIsDialogOpen(false)
         setCurrentNotice({})
     } catch (error) {
@@ -152,7 +151,7 @@ export default function NoticeManagementPage() {
         const noticeDoc = doc(db, "notices", id)
         await deleteDoc(noticeDoc)
         toast({ title: "সফল", description: "নোটিশটি মুছে ফেলা হয়েছে।" })
-        await getNotices() // Use await to ensure data is fresh
+        await getNotices() 
     } catch (error) {
         console.error("Error deleting notice:", error)
         toast({ title: "ত্রুটি", description: "নোটিশটি মুছতে সমস্যা হয়েছে।", variant: "destructive" })
@@ -188,11 +187,11 @@ export default function NoticeManagementPage() {
               <TableBody>
                 {isLoading ? (
                     <TableRow>
-                        <TableCell colSpan={3} className="text-center">লোড হচ্ছে...</TableCell>
+                        <TableCell colSpan={3} className="text-center py-8">লোড হচ্ছে...</TableCell>
                     </TableRow>
                 ) : notices.length === 0 ? (
                     <TableRow>
-                        <TableCell colSpan={3} className="text-center">কোনো নোটিশ পাওয়া যায়নি। অ্যাডমিন প্যানেল থেকে নতুন নোটিশ যোগ করুন।</TableCell>
+                        <TableCell colSpan={3} className="text-center py-8">কোনো নোটিশ পাওয়া যায়নি। নতুন নোটিশ যোগ করুন।</TableCell>
                     </TableRow>
                 ) : notices.map((notice) => (
                   <TableRow key={notice.id}>

@@ -32,7 +32,7 @@ export default function NoticesPage() {
                     const docData = doc.data();
                     return {
                       id: doc.id,
-                      date: docData.date, // Already a string
+                      date: docData.date, 
                       title: docData.title,
                     } as Notice
                   })
