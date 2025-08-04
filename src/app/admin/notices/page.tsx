@@ -50,13 +50,18 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useToast } from "@/hooks/use-toast"
 
-
 interface Notice {
   id: string;
   date: string;
   title: string;
-  createdAt: Timestamp;
+  createdAt?: Timestamp; // This can be optional on the client
 }
+
+// Function to format Firestore Timestamp to a 'YYYY-MM-DD' string
+const formatDate = (timestamp: Timestamp | Date) => {
+    const date = timestamp instanceof Timestamp ? timestamp.toDate() : timestamp;
+    return date.toISOString().split('T')[0];
+};
 
 export default function NoticeManagementPage() {
   const [notices, setNotices] = useState<Notice[]>([])
@@ -77,9 +82,8 @@ export default function NoticeManagementPage() {
         const docData = doc.data();
         return {
           id: doc.id,
-          date: docData.date,
+          date: docData.date, // Already a string
           title: docData.title,
-          createdAt: docData.createdAt,
         } as Notice
       })
       setNotices(filteredData)
@@ -104,7 +108,7 @@ export default function NoticeManagementPage() {
       setCurrentNotice({ ...notice })
       setIsEditing(true)
     } else {
-      setCurrentNotice({ date: new Date().toISOString().split('T')[0], title: '' })
+      setCurrentNotice({ date: formatDate(new Date()), title: '' })
       setIsEditing(false)
     }
     setIsDialogOpen(true)
@@ -120,7 +124,10 @@ export default function NoticeManagementPage() {
         if (isEditing && currentNotice.id) {
             const noticeDoc = doc(db, "notices", currentNotice.id)
             const { id, createdAt, ...updateData } = currentNotice;
-            await updateDoc(noticeDoc, updateData)
+            await updateDoc(noticeDoc, {
+              ...updateData,
+              // Keep createdAt, but update other fields
+            })
             toast({ title: "সফল", description: "নোটিশটি সফলভাবে আপডেট করা হয়েছে।" })
         } else {
             await addDoc(noticesCollectionRef, { 
@@ -130,7 +137,7 @@ export default function NoticeManagementPage() {
             })
             toast({ title: "সফল", description: "নতুন নোটিশ যোগ করা হয়েছে।" })
         }
-        getNotices()
+        await getNotices() // Use await to ensure data is fresh
         setIsDialogOpen(false)
         setCurrentNotice({})
     } catch (error) {
@@ -144,7 +151,7 @@ export default function NoticeManagementPage() {
         const noticeDoc = doc(db, "notices", id)
         await deleteDoc(noticeDoc)
         toast({ title: "সফল", description: "নোটিশটি মুছে ফেলা হয়েছে।" })
-        getNotices()
+        await getNotices() // Use await to ensure data is fresh
     } catch (error) {
         console.error("Error deleting notice:", error)
         toast({ title: "ত্রুটি", description: "নোটিশটি মুছতে সমস্যা হয়েছে।", variant: "destructive" })
@@ -184,7 +191,7 @@ export default function NoticeManagementPage() {
                     </TableRow>
                 ) : notices.length === 0 ? (
                     <TableRow>
-                        <TableCell colSpan={3} className="text-center">কোনো নোটিশ পাওয়া যায়নি।</TableCell>
+                        <TableCell colSpan={3} className="text-center">কোনো নোটিশ পাওয়া যায়নি। অ্যাডমিন প্যানেল থেকে নতুন নোটিশ যোগ করুন।</TableCell>
                     </TableRow>
                 ) : notices.map((notice) => (
                   <TableRow key={notice.id}>
@@ -270,3 +277,5 @@ export default function NoticeManagementPage() {
     </div>
   )
 }
+
+    

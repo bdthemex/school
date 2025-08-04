@@ -15,7 +15,6 @@ interface Notice {
   id: string;
   date: string;
   title: string;
-  createdAt: Timestamp;
 }
 
 export default function NoticesPage() {
@@ -33,9 +32,8 @@ export default function NoticesPage() {
                     const docData = doc.data();
                     return {
                       id: doc.id,
-                      date: docData.date,
+                      date: docData.date, // Already a string
                       title: docData.title,
-                      createdAt: docData.createdAt,
                     } as Notice
                   })
                 setNotices(filteredData)
@@ -98,3 +96,5 @@ export default function NoticesPage() {
     </div>
   )
 }
+
+    

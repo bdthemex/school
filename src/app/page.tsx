@@ -32,7 +32,6 @@ interface Notice {
   id: string;
   date: string;
   title: string;
-  createdAt: Timestamp;
 }
 
 const facultyData = [
@@ -94,9 +93,8 @@ export default function Home() {
                     const docData = doc.data();
                     return {
                       id: doc.id,
-                      date: docData.date,
+                      date: docData.date, // Already a string
                       title: docData.title,
-                      createdAt: docData.createdAt,
                     } as Notice
                   })
                 setNotices(filteredData)
@@ -156,10 +154,12 @@ export default function Home() {
               {isLoading ? (
                 <Skeleton className="h-4 w-full" />
               ) : notices.length > 0 ? (
-                <div className="w-full flex">
+                <div className="w-full flex items-center">
                   <div className="animate-marquee whitespace-nowrap">
                       <span className="mx-4">{marqueeNotices}</span>
-                      <span className="mx-4">{marqueeNotices}</span>
+                  </div>
+                  <div className="animate-marquee2 whitespace-nowrap absolute top-1/2 -translate-y-1/2">
+                       <span className="mx-4">{marqueeNotices}</span>
                   </div>
                 </div>
               ) : (
@@ -191,8 +191,10 @@ export default function Home() {
                       <p className="text-muted-foreground leading-relaxed">
                       কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ সালে প্রতিষ্ঠিত হয় এবং ১৯৯১ সালে জাতীয়করণ করা হয়। বর্তমানে এখানে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয়। विद्यालयটিতে বর্তমানে ৭১৭ জন ছাত্র-ছাত্রী অধ্যয়নরত এবং ১২ জন শিক্ষক কর্মরত আছেন। আমাদের লক্ষ্য মানসম্মত শিক্ষা প্রদান করে শিক্ষার্থীদের ভবিষ্যৎ উজ্জ্বল করা।
                       </p>
-                       <Button variant="outline" size="sm" className="text-primary border-primary hover:bg-primary hover:text-primary-foreground">
-                            বিস্তারিত পড়ুন <ChevronRight className="ml-1 h-4 w-4" />
+                       <Button asChild variant="outline" size="sm" className="text-primary border-primary hover:bg-primary hover:text-primary-foreground">
+                            <Link href="/about">
+                                বিস্তারিত পড়ুন <ChevronRight className="ml-1 h-4 w-4" />
+                            </Link>
                        </Button>
                     </div>
                 </CardContent>
@@ -212,7 +214,9 @@ export default function Home() {
                            <Image src={faculty.image} alt={faculty.name} width={100} height={100} className="rounded-full border-4 border-accent" data-ai-hint={faculty.dataAiHint} />
                            <div className='space-y-2 text-center sm:text-left'>
                                <p className='text-sm text-muted-foreground italic'>"{faculty.message}"</p>
-                               <Button variant="link" className="p-0 h-auto text-primary hover:underline">বিস্তারিত</Button>
+                               <Button asChild variant="link" className="p-0 h-auto text-primary hover:underline">
+                                 <Link href={index === 0 ? "/principals-message" : "/vice-principals-message"}>বিস্তারিত</Link>
+                               </Button>
                            </div>
                         </CardContent>
                     </Card>
@@ -229,10 +233,15 @@ export default function Home() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                        {['ক্লাস রুটিন', 'সিলেবাস', 'ভর্তি তথ্য', 'ফলাফল'].map(item => (
-                             <Link href="#" key={item} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
+                        {[
+                          {label: 'ক্লাস রুটিন', href: '/class-routine'}, 
+                          {label: 'সিলেবাস', href: '#'}, 
+                          {label: 'ভর্তি তথ্য', href: '#'}, 
+                          {label: 'ফলাফল', href: '/results'}
+                        ].map(item => (
+                             <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
                                 <ChevronRight className="w-4 h-4 text-blue-600" />
-                                {item}
+                                {item.label}
                             </Link>
                         ))}
                     </CardContent>
@@ -245,10 +254,15 @@ export default function Home() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                        {['নোটিশ', 'ছুটির তালিকা', 'একাডেমিক ক্যালেন্ডার', 'সহশিক্ষা কার্যক্রম'].map(item => (
-                             <Link href="#" key={item} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
+                        {[
+                          {label: 'নোটিশ', href: '/notices'}, 
+                          {label: 'ছুটির তালিকা', href: '#'}, 
+                          {label: 'একাডেমিক ক্যালেন্ডার', href: '#'}, 
+                          {label: 'সহশিক্ষা কার্যক্রম', href: '#'}
+                        ].map(item => (
+                             <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
                                 <ChevronRight className="w-4 h-4 text-green-600" />
-                                {item}
+                                {item.label}
                             </Link>
                         ))}
                     </CardContent>
@@ -261,10 +275,15 @@ export default function Home() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                        {['শিক্ষক পরিচিতি', 'গ্যালারি', 'ব্লগ', 'যোগাযোগ'].map(item => (
-                             <Link href="#" key={item} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
+                        {[
+                          {label: 'শিক্ষক পরিচিতি', href: '/teachers'}, 
+                          {label: 'গ্যালারি', href: '/gallery'}, 
+                          {label: 'ব্লগ', href: '#'}, 
+                          {label: 'যোগাযোগ', href: '/contact'}
+                        ].map(item => (
+                             <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
                                 <ChevronRight className="w-4 h-4 text-yellow-600" />
-                                {item}
+                                {item.label}
                             </Link>
                         ))}
                     </CardContent>
@@ -292,7 +311,7 @@ export default function Home() {
                         </div>
                     ) : notices.length > 0 ? (
                       notices.map((notice) => (
-                        <Link href="#" key={notice.id} className="block p-2 rounded-md hover:bg-muted transition-colors">
+                        <Link href="/notices" key={notice.id} className="block p-2 rounded-md hover:bg-muted transition-colors">
                             <p className="text-sm font-medium text-foreground hover:text-primary">{notice.title}</p>
                             <p className="text-xs text-muted-foreground">{notice.date}</p>
                         </Link>
@@ -347,3 +366,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
