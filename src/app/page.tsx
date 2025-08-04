@@ -23,26 +23,15 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore'
+import { db } from '@/lib/firebase'
 
-const noticeData = [
-  {
-    date: '২০২৪-০৭-২২',
-    title: 'বার্ষিক ক্রীড়া প্রতিযোগিতা',
-  },
-  {
-    date: '২০২৪-০৭-২০',
-    title: 'ছুটির নোটিশ',
-  },
-  {
-    date: '২০২৪-০৭-১৮',
-    title: 'ফলাফল প্রকাশ',
-  },
-  {
-    date: '২০২৪-০৭-১৫',
-    title: 'নতুন ভর্তি সংক্রান্ত বিজ্ঞপ্তি',
-  },
-];
+interface Notice {
+  id: string;
+  date: string;
+  title: string;
+}
 
 const facultyData = [
   { name: 'প্রধান শিক্ষক', message: 'দীর্ঘদিন পরে কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়ের ওয়েব সাইট সম্প্রতি খোলা হয়েছে। এটা বিদ্যালয়ের জন্য উজ্জ্বল মাইল ফলক।', image: 'https://placehold.co/100x100', dataAiHint: 'teacher portrait' },
@@ -89,8 +78,31 @@ export default function Home() {
     const plugin = React.useRef(
         Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
     )
+    const [notices, setNotices] = useState<Notice[]>([])
+    const [isLoading, setIsLoading] = useState(true)
 
-    const marqueeNotices = noticeData.map(n => n.title).join(' *** ');
+    useEffect(() => {
+        const getNotices = async () => {
+            setIsLoading(true);
+            try {
+                const noticesCollectionRef = collection(db, 'notices')
+                const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'), limit(5))
+                const data = await getDocs(q)
+                const filteredData = data.docs.map((doc) => ({
+                    ...doc.data(),
+                    id: doc.id,
+                } as Notice))
+                setNotices(filteredData)
+            } catch (error) {
+                console.error("Error fetching notices:", error)
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        getNotices()
+    }, [])
+
+    const marqueeNotices = notices.map(n => n.title).join(' *** ');
 
   return (
     <div className="flex flex-col min-h-screen bg-muted/40">
@@ -251,8 +263,10 @@ export default function Home() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 space-y-3">
-                    {noticeData.map((notice, index) => (
-                        <Link href="#" key={index} className="block p-2 rounded-md hover:bg-muted transition-colors">
+                    {isLoading ? (
+                        <p>লোড হচ্ছে...</p>
+                    ) : notices.map((notice) => (
+                        <Link href="#" key={notice.id} className="block p-2 rounded-md hover:bg-muted transition-colors">
                             <p className="text-sm font-medium text-foreground hover:text-primary">{notice.title}</p>
                             <p className="text-xs text-muted-foreground">{notice.date}</p>
                         </Link>
