@@ -32,6 +32,7 @@ interface Notice {
   id: string;
   date: string;
   title: string;
+  createdAt?: Timestamp;
 }
 
 const facultyData = [
@@ -107,7 +108,7 @@ export default function Home() {
         getNotices()
     }, [])
 
-    const marqueeNotices = notices.map(n => n.title).join(' *** ');
+    const marqueeNotices = notices.length > 0 ? notices.map(n => n.title).join(' *** ') : '';
 
   return (
     <div className="flex flex-col min-h-screen bg-muted/40">

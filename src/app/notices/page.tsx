@@ -15,6 +15,7 @@ interface Notice {
   id: string;
   date: string;
   title: string;
+  createdAt?: Timestamp;
 }
 
 export default function NoticesPage() {
