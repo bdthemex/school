@@ -126,7 +126,7 @@ export default function NoticeManagementPage() {
             const noticeDoc = doc(db, "notices", currentNotice.id)
             await updateDoc(noticeDoc, {
               title: currentNotice.title,
-              date: currentNotice.date
+              date: currentNotice.date,
             })
             toast({ title: "সফল", description: "নোটিশটি সফলভাবে আপডেট করা হয়েছে।" })
         } else {
