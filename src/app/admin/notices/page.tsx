@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   collection,
   getDocs,
@@ -74,17 +74,20 @@ export default function NoticeManagementPage() {
 
   const noticesCollectionRef = collection(db, 'notices')
 
-  const getNotices = async () => {
+  const getNotices = useCallback(async () => {
     setIsLoading(true);
     try {
       const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'))
       const data = await getDocs(q)
       const filteredData = data.docs.map((doc) => {
         const docData = doc.data();
+        // Firebase Timestamps need to be converted to be serializable if needed, but for display, we can format them.
+        const createdAt = docData.createdAt instanceof Timestamp ? docData.createdAt.toDate() : new Date();
         return {
           id: doc.id,
           date: docData.date, 
           title: docData.title,
+          createdAt: docData.createdAt
         } as Notice
       })
       setNotices(filteredData)
@@ -98,11 +101,11 @@ export default function NoticeManagementPage() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [toast])
 
   useEffect(() => {
     getNotices()
-  }, [])
+  }, [getNotices])
 
   const handleOpenDialog = (notice?: Notice) => {
     if (notice) {
