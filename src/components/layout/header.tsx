@@ -19,7 +19,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from '../icons/logo';
 
 const navLinks = [
@@ -73,16 +73,38 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
 
   return (
     <header className="w-full bg-white">
-      <div className="relative w-full h-[150px] md:h-[200px] hidden md:block">
+      <div className={cn(
+          "relative w-full h-[150px] md:h-[200px] hidden md:block transition-all duration-300 ease-in-out overflow-hidden",
+          isScrolled && "h-0"
+        )}>
         <Image 
             src="https://kjsghs.edu.bd/wp-content/uploads/2022/10/cropped-KJSGHS-Banner-2-2.jpg"
             alt="Header Banner"
             fill
             style={{objectFit: 'cover'}}
             data-ai-hint="school banner"
+            priority
         />
       </div>
       
