@@ -52,7 +52,7 @@ export default function HistoryPage() {
                                     <div key={index} className="relative">
                                         <div className="absolute -left-[35px] top-1.5 w-4 h-4 bg-accent rounded-full border-4 border-muted/40"></div>
                                         <p className="font-bold text-primary">{item.year}</p>
-                                        <p className="text-muted-foreground">{item.event}</p>
+                                        <p className="text-muted-foreground leading-relaxed">{item.event}</p>
                                     </div>
                                 ))}
                             </div>

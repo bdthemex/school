@@ -38,7 +38,7 @@ export default function AboutPage() {
                             <Target className="w-6 h-6 text-accent" />
                             আমাদের লক্ষ্য ও উদ্দেশ্য
                         </h3>
-                        <ul className="list-disc list-inside text-muted-foreground space-y-2">
+                        <ul className="list-disc list-inside text-muted-foreground space-y-2 leading-relaxed">
                             <li>শিক্ষার্থীদের মধ্যে জ্ঞান, শৃঙ্খলা এবং নৈতিকতার বিকাশ ঘটানো।</li>
                             <li>আধুনিক ও যুগোপযোগী শিক্ষা প্রদান করে ডিজিটাল বাংলাদেশ গঠনে ভূমিকা রাখা।</li>
                             <li>শিক্ষার্থীদের সুপ্ত প্রতিভা বিকাশে সহশিক্ষা কার্যক্রম পরিচালনা করা।</li>
@@ -50,7 +50,7 @@ export default function AboutPage() {
                             <BookOpen className="w-6 h-6 text-accent" />
                             একাডেমিক কার্যক্রম
                         </h3>
-                        <p className="text-muted-foreground">
+                        <p className="text-muted-foreground leading-relaxed">
                         বর্তমানে বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয়। অভিজ্ঞ শিক্ষকমণ্ডলী দ্বারা পরিচালিত এই প্রতিষ্ঠানে জাতীয় শিক্ষাক্রম অনুসরণ করে পাঠদান করা হয়। নিয়মিত পরীক্ষা, ক্লাসের মূল্যায়ন এবং অভিভাবকদের সাথে মতবিনিময়ের মাধ্যমে শিক্ষার্থীদের সার্বিক মানোন্নয়নে আমরা সর্বদা সচেষ্ট।
                         </p>
                     </div>
