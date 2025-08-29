@@ -20,7 +20,8 @@ import {
   BookOpen,
   Check,
   Download,
-  X
+  X,
+  Target
 } from 'lucide-react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
@@ -42,6 +43,14 @@ const facultyData = [
   { name: 'প্রধান শিক্ষক', message: 'দীর্ঘদিন পরে কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়ের ওয়েব সাইট সম্প্রতি খোলা হয়েছে। এটা বিদ্যালয়ের জন্য উজ্জ্বল মাইল ফলক।', image: 'https://placehold.co/100x100', dataAiHint: 'teacher portrait' },
   { name: 'সহকারী প্রধান শিক্ষক', message: 'তথ্য প্রযুক্তির যুগে প্রবেশ করতে পেরে আমরা আনন্দিত। এর মাধ্যমে স্কুলের কার্যক্রম আরও গতিশীল হবে।', image: 'https://placehold.co/100x100', dataAiHint: 'teacher portrait' },
 ];
+
+const importantSiteLinks = [
+    { title: 'নোটিশ', href: '/notices' },
+    { title: 'পরীক্ষার ফলাফল', href: '/results' },
+    { title: 'কৃতি শিক্ষার্থী', href: '#' },
+    { title: 'ছুটির দিন', href: '#' },
+    { title: 'যোগাযোগ', href: '/contact' },
+]
 
 const resourceLinks = [
     { title: 'প্রধানমন্ত্রীর শিক্ষা সহায়তা ট্রাস্ট'},
@@ -66,30 +75,31 @@ export default function Home() {
     const [showMarquee, setShowMarquee] = useState(true);
 
 
-    useEffect(() => {
-      const getNotices = async () => {
-          setIsLoading(true);
-          try {
-              const noticesCollectionRef = collection(db, 'notices')
-              const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'), limit(5))
-              const data = await getDocs(q)
-              const filteredData: Notice[] = data.docs.map((doc) => {
-                  const docData = doc.data();
-                  return {
+    const getNotices = React.useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const noticesCollectionRef = collection(db, 'notices');
+            const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'), limit(5));
+            const data = await getDocs(q);
+            const filteredData: Notice[] = data.docs.map((doc) => {
+                const docData = doc.data();
+                return {
                     id: doc.id,
-                    date: docData.date, 
+                    date: docData.date,
                     title: docData.title,
-                  } as Notice
-                })
-              setNotices(filteredData)
-          } catch (error) {
-              console.error("Error fetching notices:", error)
-          } finally {
-              setIsLoading(false);
-          }
-      }
-      getNotices()
-  }, [])
+                } as Notice;
+            });
+            setNotices(filteredData);
+        } catch (error) {
+            console.error("Error fetching notices:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        getNotices();
+    }, [getNotices]);
 
     const marqueeNotices = notices.length > 0 ? notices.map(n => n.title).join(' *** ') : '';
 
@@ -221,8 +231,8 @@ export default function Home() {
                             শিক্ষার্থীদের কর্নার
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4 pt-6">
-                        <Image src="https://placehold.co/600x400" alt="শিক্ষার্থীদের কর্নার" width={600} height={400} className="w-full h-auto object-cover rounded-lg shadow-md mb-4" data-ai-hint="students classroom" />
+                    <CardContent className="flex items-center gap-4 pt-6">
+                        <Image src="https://placehold.co/100x100" alt="শিক্ষার্থীদের কর্নার" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="students icon" />
                         <div className="space-y-2">
                         {[
                           {label: 'শ্রেণিভিত্তিক শিক্ষার্থী', href: '#'}, 
@@ -245,8 +255,8 @@ export default function Home() {
                             শিক্ষকমন্ডলীদের কর্ণার
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4 pt-6">
-                         <Image src="https://placehold.co/600x400" alt="শিক্ষকমন্ডলীদের কর্ণার" width={600} height={400} className="w-full h-auto object-cover rounded-lg shadow-md mb-4" data-ai-hint="teachers meeting" />
+                     <CardContent className="flex items-center gap-4 pt-6">
+                         <Image src="https://placehold.co/100x100" alt="শিক্ষকমন্ডলীদের কর্ণার" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="teachers icon" />
                         <div className="space-y-2">
                         {[
                           {label: 'শিক্ষকমন্ডলী', href: '/teachers'}, 
@@ -269,7 +279,9 @@ export default function Home() {
                             সকল ডাউনলোড
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2 pt-6">
+                    <CardContent className="flex items-center gap-4 pt-6">
+                        <Image src="https://placehold.co/100x100" alt="সকল ডাউনলোড" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="download icon" />
+                        <div className="space-y-2">
                         {[
                             {label: 'ডাউনলোড', href: '#'},
                             {label: 'পরীক্ষার রুটিন', href: '#'},
@@ -280,6 +292,7 @@ export default function Home() {
                                 {item.label}
                             </Link>
                         ))}
+                        </div>
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
@@ -289,7 +302,9 @@ export default function Home() {
                              একাডেমিক তথ্য
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2 pt-6">
+                    <CardContent className="flex items-center gap-4 pt-6">
+                        <Image src="https://placehold.co/100x100" alt="একাডেমিক তথ্য" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="calendar icon" />
+                        <div className="space-y-2">
                         {[
                           {label: 'প্রতিষ্ঠানের ইতিহাস', href: '/history'}, 
                           {label: 'পরীক্ষার ফলাফল', href: '/results'}, 
@@ -302,12 +317,27 @@ export default function Home() {
                                 {item.label}
                             </Link>
                         ))}
+                        </div>
                     </CardContent>
                 </Card>
              </div>
           </div>
 
           <aside className="lg:col-span-1 space-y-6">
+               <Card className="shadow-lg">
+                 <CardContent className="p-2 space-y-2">
+                    {importantSiteLinks.map((link) => (
+                        <Link
+                            href={link.href}
+                            key={link.title}
+                            className="flex items-center gap-2 p-2.5 text-sm font-medium border rounded-md hover:bg-muted transition-colors"
+                        >
+                             <Target className="w-4 h-4 text-blue-600" />
+                             {link.title}
+                        </Link>
+                    ))}
+                 </CardContent>
+               </Card>
               <Card className="shadow-lg">
                 <CardHeader className='bg-blue-600 text-white rounded-t-lg'>
                     <CardTitle className="text-lg flex items-center gap-2">
@@ -315,7 +345,7 @@ export default function Home() {
                         নোটিশ বোর্ড
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 space-y-3">
+                <CardContent className="p-4 space-y-3 bg-gray-100">
                     {isLoading ? (
                         <div className="space-y-2">
                             <Skeleton className="h-8 w-full" />
@@ -325,9 +355,11 @@ export default function Home() {
                         </div>
                     ) : notices.length > 0 ? (
                       notices.map((notice) => (
-                        <Link href="/notices" key={notice.id} className="block p-2 rounded-md hover:bg-muted transition-colors border-b last:border-b-0">
-                            <p className="text-sm font-medium text-foreground hover:text-primary">{notice.title}</p>
-                            <p className="text-xs text-muted-foreground">{notice.date}</p>
+                        <Link href="/notices" key={notice.id} className="block text-sm text-gray-700 hover:text-primary gap-2">
+                           <div className="flex items-start gap-2">
+                             <Target className="w-4 h-4 mt-1 flex-shrink-0 text-gray-500" />
+                             <p>{notice.title}</p>
+                           </div>
                         </Link>
                       ))
                     ) : (
