@@ -139,20 +139,20 @@ export default function Home() {
 
         {showMarquee && (
         <div className="my-4">
-            <div className="bg-[#eaf4ff] flex h-12 items-center overflow-hidden shadow-sm">
-                <div className="relative bg-[#2978d6] text-white px-4 py-3 flex items-center">
+            <div className="bg-muted flex h-12 items-center overflow-hidden shadow-sm">
+                <div className="relative bg-primary text-primary-foreground px-4 py-3 flex items-center">
                     <span className="text-sm font-bold whitespace-nowrap">জরুরী ঘোষণা</span>
-                    <div className="absolute right-[-24px] top-0 h-full w-6 bg-[#2978d6]" style={{ clipPath: 'polygon(100% 50%, 0 0, 0 100%)' }}></div>
+                    <div className="absolute right-[-24px] top-0 h-full w-6 bg-primary" style={{ clipPath: 'polygon(100% 50%, 0 0, 0 100%)' }}></div>
                 </div>
                 <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
                     <div className="w-full flex items-center">
-                    <div className="animate-marquee whitespace-nowrap flex text-[#2978d6] text-sm">
+                    <div className="animate-marquee whitespace-nowrap flex text-primary text-sm">
                         <span className="mx-4">{marqueeText}</span>
                         <span className="mx-4">{marqueeText}</span>
                     </div>
                     </div>
                 </div>
-                <button onClick={() => setShowMarquee(false)} className='bg-[#2978d6] text-white hover:bg-blue-700 p-3 h-full flex items-center'>
+                <button onClick={() => setShowMarquee(false)} className='bg-primary text-primary-foreground hover:bg-primary/90 p-3 h-full flex items-center'>
                     <X className='w-4 h-4' />
                 </button>
             </div>
@@ -164,7 +164,7 @@ export default function Home() {
           <div className="lg:col-span-3 space-y-6">
             {/* About Section */}
             <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
+                <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                     <CardTitle className="text-xl flex items-center gap-2">
                         <HomeIcon className="w-5 h-5" />
                         প্রতিষ্ঠানের ইতিহাস
@@ -197,7 +197,7 @@ export default function Home() {
                      {facultyData.map((faculty, index) => (
                         <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2">
                             <Card className="shadow-lg h-full">
-                                <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
+                                <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                                     <CardTitle className="text-xl flex items-center gap-2">
                                         <Users className="w-5 h-5" />
                                         {faculty.title}
@@ -221,7 +221,7 @@ export default function Home() {
              {/* Corner Cards */}
              <div className="grid md:grid-cols-2 gap-6">
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-600 p-4'>
+                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg border-b-4 border-primary/80 p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <GraduationCap className="w-5 h-5" />
                             শিক্ষার্থীদের কর্নার
@@ -237,7 +237,7 @@ export default function Home() {
                           {label: 'নোটিশ', href: '/notices'}
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-blue-500" />
+                                <Check className="w-4 h-4 text-accent" />
                                 {item.label}
                             </Link>
                         ))}
@@ -245,7 +245,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-600 p-4'>
+                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg border-b-4 border-primary/80 p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                            <Users className="w-5 h-5" />
                             শিক্ষকমন্ডলীদের কর্ণার
@@ -261,7 +261,7 @@ export default function Home() {
                           {label: 'SMS ALERT', href: '#'}
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-blue-500" />
+                                <Check className="w-4 h-4 text-accent" />
                                 {item.label}
                             </Link>
                         ))}
@@ -269,7 +269,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-600 p-4'>
+                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg border-b-4 border-primary/80 p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <Download className="w-5 h-5" />
                             সকল ডাউনলোড
@@ -284,7 +284,7 @@ export default function Home() {
                             {label: 'ভর্তি', href: '#'},
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-blue-500" />
+                                <Check className="w-4 h-4 text-accent" />
                                 {item.label}
                             </Link>
                         ))}
@@ -292,7 +292,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-600 p-4'>
+                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg border-b-4 border-primary/80 p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <BookOpen className="w-5 h-5" />
                              একাডেমিক তথ্য
@@ -309,7 +309,7 @@ export default function Home() {
                           {label: 'একাডেমিক ক্যালেন্ডার', href: '#'}, 
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-blue-500" />
+                                <Check className="w-4 h-4 text-accent" />
                                 {item.label}
                             </Link>
                         ))}
@@ -328,20 +328,20 @@ export default function Home() {
                             key={link.title}
                             className="flex items-center gap-2 p-2.5 text-sm font-medium border rounded-md hover:bg-muted transition-colors"
                         >
-                             <Target className="w-4 h-4 text-blue-600" />
+                             <Target className="w-4 h-4 text-primary" />
                              {link.title}
                         </Link>
                     ))}
                  </CardContent>
                </Card>
               <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
+                <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <Megaphone className="w-5 h-5" />
                         নোটিশ বোর্ড
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 space-y-3 bg-gray-100">
+                <CardContent className="p-4 space-y-3 bg-muted/50">
                     {isLoading ? (
                         <div className="space-y-2">
                             <Skeleton className="h-8 w-full" />
@@ -353,7 +353,7 @@ export default function Home() {
                       notices.map((notice) => (
                         <Link href="/notices" key={notice.id} className="block text-sm text-gray-700 hover:text-primary gap-2">
                            <div className="flex items-start gap-2">
-                             <Target className="w-4 h-4 mt-1 flex-shrink-0 text-gray-500" />
+                             <Target className="w-4 h-4 mt-1 flex-shrink-0 text-muted-foreground" />
                              <p>{notice.title}</p>
                            </div>
                         </Link>
@@ -365,7 +365,7 @@ export default function Home() {
               </Card>
 
                <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
+                <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <LinkIcon className="w-5 h-5" />
                         গুরুত্বপূর্ণ লিংক
@@ -382,7 +382,7 @@ export default function Home() {
               </Card>
 
               <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
+                <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <LinkIcon className="w-5 h-5" />
                         অফিসিয়াল লিংক
@@ -404,4 +404,3 @@ export default function Home() {
   );
 }
 
-    
