@@ -99,7 +99,7 @@ export default function Home() {
     }, [getNotices]);
 
   return (
-    <main className="p-4">
+    <main>
       
         <section className="relative w-full shadow-md">
             <Carousel
