@@ -31,10 +31,10 @@ export default function VicePrincipalsMessagePage() {
                     <p className="text-muted-foreground leading-relaxed italic text-lg">
                         "তথ্য প্রযুক্তির যুগে প্রবেশ করতে পেরে আমরা আনন্দিত। এর মাধ্যমে স্কুলের কার্যক্রম আরও গতিশীল হবে। আমাদের নতুন ওয়েবসাইটটি ছাত্র-ছাত্রী, শিক্ষক এবং অভিভাবকদের জন্য একটি গুরুত্বপূর্ণ সংযোগ স্থাপন করবে।"
                     </p>
-                    <p className="text-muted-foreground leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed text-base">
                     আমরা শিক্ষার্থীদের সার্বিক বিকাশে বিশ্বাসী। পড়াশোনার পাশাপাশি খেলাধুলা, সাংস্কৃতিক কার্যক্রম এবং অন্যান্য সহশিক্ষা কার্যক্রমে অংশগ্রহণের মাধ্যমে তারা নিজেদের প্রতিভা বিকাশের সুযোগ পাবে। আমাদের অভিজ্ঞ শিক্ষকমণ্ডলী সর্বদা ছাত্র-ছাত্রীদের পাশে থেকে তাদের সঠিক পথে পরিচালিত করতে সচেষ্ট।
                     </p>
-                    <p className="text-muted-foreground leading-relaxed">
+                    <p className="text-muted-foreground leading-relaxed text-base">
                     আমি আশা করি, আমাদের সকলের আন্তরিক প্রচেষ্টায় কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয় সাফল্যের শীর্ষে পৌঁছাবে।
                     </p>
                     <div className="text-right mt-6">

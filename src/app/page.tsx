@@ -122,12 +122,12 @@ export default function Home() {
         <div className="my-4">
             <div className="bg-muted flex h-12 items-center overflow-hidden shadow-sm">
                 <div className="relative bg-primary text-primary-foreground px-4 py-3 flex items-center">
-                    <span className="text-sm font-bold whitespace-nowrap">জরুরী ঘোষণা</span>
+                    <span className="text-base font-bold whitespace-nowrap">জরুরী ঘোষণা</span>
                     <div className="absolute right-[-24px] top-0 h-full w-6 bg-primary" style={{ clipPath: 'polygon(100% 50%, 0 0, 0 100%)' }}></div>
                 </div>
                 <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
                     <div className="w-full flex items-center">
-                    <div className="animate-marquee whitespace-nowrap flex text-primary text-sm">
+                    <div className="animate-marquee whitespace-nowrap flex text-primary text-base">
                         <span className="mx-4">{marqueeText}</span>
                         <span className="mx-4">{marqueeText}</span>
                     </div>
@@ -156,7 +156,7 @@ export default function Home() {
                          <Image src="https://placehold.co/400x300" alt="প্রতিষ্ঠানের ইতিহাস" width={400} height={300} className="w-full h-auto object-cover rounded-lg shadow-md" data-ai-hint="historic building" />
                     </div>
                     <div className="md:col-span-3 space-y-3">
-                      <p className="text-muted-foreground leading-relaxed text-justify">
+                      <p className="text-muted-foreground leading-relaxed text-justify text-base">
                       কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ খ্রি: সালে প্রতিষ্ঠিত। বিগত ১৯/০৩/১৯৯১খ্রি: সনে প্রতিষ্ঠানটি জাতীয় করণ করা হয়। বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান চালু আছে। বিদ্যালয়টিতে বর্তমানে ৭১৭ জন ছাত্র-ছাত্রী অধ্যয়নরত এবং একুশজন শিক্ষকের স্থলে ১২ জন শিক্ষক, শিক্ষিকা কর্মরত আছেন। বিদ্যালয়ের তিন তলা ভবনটি একটি দু'তলা ভবন একটি, হাফ বিল্ডিং তিনটি, খেলার মাঠ একটি ও বিদ্যালয় প্রাঙ্গনে দুইটি শহীদ মিনার রয়েছে।
                       </p>
                        <Button asChild variant="link" size="sm" className="p-0 h-auto">
@@ -187,7 +187,7 @@ export default function Home() {
                                 <CardContent className="flex flex-col sm:flex-row items-center gap-4 pt-6">
                                    <Image src={faculty.image} alt={faculty.name} width={80} height={80} className="rounded-md border-2 border-accent" data-ai-hint={faculty.dataAiHint} />
                                    <div className='space-y-2 text-center sm:text-left'>
-                                       <p className='text-sm text-muted-foreground italic text-justify'>"{faculty.message}"</p>
+                                       <p className='text-base text-muted-foreground italic text-justify'>"{faculty.message}"</p>
                                        <Button asChild variant="link" className="p-0 h-auto text-primary hover:underline">
                                          <Link href={faculty.link}>বিস্তারিত</Link>
                                        </Button>
@@ -217,7 +217,7 @@ export default function Home() {
                           {label: 'ছুটির তালিকা', href: '#'}, 
                           {label: 'নোটিশ', href: '/notices'}
                         ].map(item => (
-                             <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
+                             <Link href={item.href} key={item.label} className="flex items-center text-base text-gray-700 hover:text-primary gap-2">
                                 <Check className="w-4 h-4 text-accent" />
                                 {item.label}
                             </Link>
@@ -241,7 +241,7 @@ export default function Home() {
                           {label: 'শিক্ষক/কর্মচারী সংখ্যা', href: '#'}, 
                           {label: 'SMS ALERT', href: '#'}
                         ].map(item => (
-                             <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
+                             <Link href={item.href} key={item.label} className="flex items-center text-base text-gray-700 hover:text-primary gap-2">
                                 <Check className="w-4 h-4 text-accent" />
                                 {item.label}
                             </Link>
@@ -264,7 +264,7 @@ export default function Home() {
                             {label: 'পরীক্ষার রুটিন', href: '#'},
                             {label: 'ভর্তি', href: '#'},
                         ].map(item => (
-                             <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
+                             <Link href={item.href} key={item.label} className="flex items-center text-base text-gray-700 hover:text-primary gap-2">
                                 <Check className="w-4 h-4 text-accent" />
                                 {item.label}
                             </Link>
@@ -289,7 +289,7 @@ export default function Home() {
                           {label: 'ছুটির দিন', href: '#'},
                           {label: 'একাডেমিক ক্যালেন্ডার', href: '#'}, 
                         ].map(item => (
-                             <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
+                             <Link href={item.href} key={item.label} className="flex items-center text-base text-gray-700 hover:text-primary gap-2">
                                 <Check className="w-4 h-4 text-accent" />
                                 {item.label}
                             </Link>
@@ -307,7 +307,7 @@ export default function Home() {
                         <Link
                             href={link.href}
                             key={link.title}
-                            className="flex items-center gap-2 p-2.5 text-sm font-medium border rounded-md hover:bg-muted transition-colors"
+                            className="flex items-center gap-2 p-2.5 text-base font-medium border rounded-md hover:bg-muted transition-colors"
                         >
                              <Target className="w-4 h-4 text-primary" />
                              {link.title}
@@ -332,7 +332,7 @@ export default function Home() {
                         </div>
                     ) : notices.length > 0 ? (
                       notices.map((notice) => (
-                        <Link href="/notices" key={notice.id} className="block text-sm text-gray-700 hover:text-primary gap-2">
+                        <Link href={`/notices/${notice.id}`} key={notice.id} className="block text-base text-gray-700 hover:text-primary gap-2">
                            <div className="flex items-start gap-2">
                              <Target className="w-4 h-4 mt-1 flex-shrink-0 text-muted-foreground" />
                              <p>{notice.title}</p>
@@ -354,7 +354,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-4 space-y-2">
                      {resourceLinks.map((link, index) => (
-                        <Link href="#" key={index} className="flex items-center text-sm text-muted-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
+                        <Link href="#" key={index} className="flex items-center text-base text-muted-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
                             <ChevronRight className="w-4 h-4 text-primary" />
                             {link.title}
                         </Link>
@@ -371,7 +371,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-4 space-y-2">
                      {officialLinks.map((link, index) => (
-                        <Link href="#" key={index} className="flex items-center text-sm text-muted-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
+                        <Link href="#" key={index} className="flex items-center text-base text-muted-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
                             <ChevronRight className="w-4 h-4 text-primary" />
                             {link.title}
                         </Link>
