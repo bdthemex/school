@@ -11,19 +11,19 @@
     --card-foreground: 220 15% 25%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 15% 25%;
-    --primary: 22 100% 50%; /* New orange color */
+    --primary: 220 84% 59%; /* New Blue color */
     --primary-foreground: 0 0% 100%;
     --secondary: 216 34% 91%;
     --secondary-foreground: 215 39% 35%;
     --muted: 216 34% 91%;
     --muted-foreground: 220 10% 45%;
-    --accent: 142 71% 45%; /* New green color */
+    --accent: 142 71% 45%; /* Green color */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 220 13% 89%;
     --input: 220 13% 89%;
-    --ring: 22 100% 50%;
+    --ring: 220 84% 59%;
     --radius: 0.5rem;
   }
  
@@ -34,7 +34,7 @@
     --card-foreground: 220 20% 96%;
     --popover: 220 15% 12%;
     --popover-foreground: 220 20% 96%;
-    --primary: 22 100% 60%;
+    --primary: 220 84% 69%;
     --primary-foreground: 0 0% 100%;
     --secondary: 216 34% 21%;
     --secondary-foreground: 215 39% 45%;
@@ -46,7 +46,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 216 34% 21%;
     --input: 216 34% 21%;
-    --ring: 22 100% 60%;
+    --ring: 220 84% 69%;
   }
 }
  
@@ -58,5 +58,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-    

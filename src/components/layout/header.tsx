@@ -31,20 +31,18 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white shadow-md">
-      <div className="bg-gradient-to-r from-green-700 to-green-500 text-white py-4">
-        <div className="container mx-auto px-4 flex items-center justify-between">
-          <div className='text-center w-full'>
-            <p className='text-lg'>গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</p>
-          </div>
-        </div>
-        <div className="container mx-auto px-4 flex items-center gap-4 pt-2">
+      <div className="bg-gradient-to-r from-green-600 to-green-400 text-white py-2">
+        <div className="container mx-auto px-4 flex flex-col items-center justify-center">
+          <p className='text-lg'>গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</p>
+          <div className="flex items-center gap-4 pt-2">
             <Link href="/" className='flex-shrink-0'>
               <Logo className="h-20 w-auto" />
             </Link>
-            <div className='border-l-2 border-white/50 pl-4'>
+            <div className='text-center'>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়</h1>
                 <p className="text-md text-green-200">কেন্দুয়া, নেত্রকোণা | স্থাপিত: ১৮৩২</p>
             </div>
+        </div>
         </div>
       </div>
       
@@ -99,5 +97,3 @@ export default function Header() {
     </header>
   );
 }
-
-    

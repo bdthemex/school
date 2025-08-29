@@ -1,9 +1,9 @@
 import type {Metadata} from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
-import { Noto_Sans_Bengali } from 'next/font/google'
+import { Hind_Siliguri } from 'next/font/google'
 
-const notoSansBengali = Noto_Sans_Bengali({
+const hindSiliguri = Hind_Siliguri({
   subsets: ['bengali'],
   weight: ['400', '700'],
   variable: '--font-body',
@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="bn" className={`${notoSansBengali.variable}`}>
+    <html lang="bn" className={`${hindSiliguri.variable}`}>
       <body className="font-body antialiased">
         {children}
         <Toaster />

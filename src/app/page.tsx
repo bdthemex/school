@@ -165,7 +165,7 @@ export default function Home() {
           
           <div className="lg:col-span-3 space-y-6">
             {/* About Section */}
-            <Card className="shadow-lg border-t-4 border-blue-600">
+            <Card className="shadow-lg">
                 <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
                     <CardTitle className="text-xl flex items-center gap-2">
                         <HomeIcon className="w-5 h-5" />
@@ -192,7 +192,7 @@ export default function Home() {
             {/* Teachers */}
              <div className="grid md:grid-cols-2 gap-6">
                  {facultyData.map((faculty, index) => (
-                    <Card key={index} className="shadow-lg border-t-4 border-blue-600">
+                    <Card key={index} className="shadow-lg">
                         <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
                             <CardTitle className="text-xl flex items-center gap-2">
                                 <Users className="w-5 h-5" />
@@ -214,7 +214,7 @@ export default function Home() {
 
              {/* Corner Cards */}
              <div className="grid md:grid-cols-2 gap-6">
-                <Card className="shadow-lg border-t-4 border-red-600">
+                <Card className="shadow-lg">
                     <CardHeader className='bg-red-600 text-white rounded-t-sm'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <GraduationCap className="w-5 h-5" />
@@ -235,7 +235,7 @@ export default function Home() {
                         ))}
                     </CardContent>
                 </Card>
-                <Card className="shadow-lg border-t-4 border-green-600">
+                <Card className="shadow-lg">
                     <CardHeader className='bg-green-600 text-white rounded-t-sm'>
                         <CardTitle className="text-lg flex items-center gap-2">
                            <Users className="w-5 h-5" />
@@ -256,7 +256,7 @@ export default function Home() {
                         ))}
                     </CardContent>
                 </Card>
-                <Card className="shadow-lg border-t-4 border-orange-500">
+                <Card className="shadow-lg">
                     <CardHeader className='bg-orange-500 text-white rounded-t-sm'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <Download className="w-5 h-5" />
@@ -276,7 +276,7 @@ export default function Home() {
                         ))}
                     </CardContent>
                 </Card>
-                <Card className="shadow-lg border-t-4 border-purple-600">
+                <Card className="shadow-lg">
                     <CardHeader className='bg-purple-600 text-white rounded-t-sm'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <BookOpen className="w-5 h-5" />
@@ -302,7 +302,7 @@ export default function Home() {
           </div>
 
           <aside className="lg:col-span-1 space-y-6">
-              <Card className="shadow-lg border-t-4 border-blue-600">
+              <Card className="shadow-lg">
                 <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <Megaphone className="w-5 h-5" />
@@ -330,7 +330,7 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-               <Card className="shadow-lg border-t-4 border-blue-600">
+               <Card className="shadow-lg">
                 <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <LinkIcon className="w-5 h-5" />
@@ -347,7 +347,7 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              <Card className="shadow-lg border-t-4 border-blue-600">
+              <Card className="shadow-lg">
                 <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <LinkIcon className="w-5 h-5" />
