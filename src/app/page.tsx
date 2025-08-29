@@ -32,6 +32,14 @@ interface Notice {
   createdAt?: Timestamp;
 }
 
+const demoNotices: Notice[] = [
+    { id: '1', date: '২০২৪-০৭-২৬', title: '২০২৫ শিক্ষাবর্ষে ৬ষ্ঠ থেকে ৯ম শ্রেণিতে ভর্তির বিজ্ঞপ্তি।' },
+    { id: '2', date: '২০২৪-০৭-২৫', title: 'বার্ষিক ক্রীড়া প্রতিযোগিতা-২০২৪ এর পুরস্কার বিতরণী অনুষ্ঠান।' },
+    { id: '3', date: '২০২৪-০৭-২৪', title: 'অভিভাবক সমাবেশ এবং ফলাফল প্রকাশ সংক্রান্ত নোটিশ।' },
+    { id: '4', date: '২০২৪-০৭-২৩', title: 'ডেঙ্গু প্রতিরোধে সচেতনতামূলক কার্যক্রম গ্রহণ প্রসঙ্গে।' },
+    { id: '5', date: '২০২৪-০৭-২২', title: 'বর্ষাকালীন ছুটি ও গ্রীষ্মকালীন অবকাশের নোটিশ।' },
+];
+
 const facultyData = [
   { name: 'প্রধান শিক্ষক', title: 'প্রধান শিক্ষকের বাণী', message: 'দীর্ঘদিন পরে কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়ের ওয়েব সাইট সম্প্রতি খোলা হয়েছে। এটা বিদ্যালয়ের জন্য উজ্জ্বল মাইল ফলক।', image: 'https://placehold.co/100x100', dataAiHint: 'teacher portrait', link: '/principals-message' },
   { name: 'সহকারী প্রধান শিক্ষক', title: 'সহকারী প্রধান শিক্ষকের বাণী', message: 'তথ্য প্রযুক্তির যুগে প্রবেশ করতে পেরে আমরা আনন্দিত। এর মাধ্যমে স্কুলের কার্যক্রম আরও গতিশীল হবে।', image: 'https://placehold.co/100x100', dataAiHint: 'teacher portrait', link: '/vice-principals-message' },
@@ -66,37 +74,10 @@ export default function Home() {
      const facultyCarouselPlugin = React.useRef(
         Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true })
     )
-    const [notices, setNotices] = useState<Notice[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [notices, setNotices] = useState<Notice[]>(demoNotices.slice(0, 5))
+    const [isLoading, setIsLoading] = useState(false)
     const [showMarquee, setShowMarquee] = useState(true);
     const marqueeText = "সরকারি ও বেসরকারি মাধ্যমিক বিদ্যালয়ে-২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি ও নিয়মাবলী সংক্রান্ত। আমাদের ওয়েবসাইটে আপনাকে স্বাগত…(সাইট ডেভেলপমেন্টের কাজ চলছে) *** "
-
-
-    const getNotices = React.useCallback(async () => {
-        setIsLoading(true);
-        try {
-            const noticesCollectionRef = collection(db, 'notices');
-            const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'), limit(5));
-            const data = await getDocs(q);
-            const filteredData: Notice[] = data.docs.map((doc) => {
-                const docData = doc.data();
-                return {
-                    id: doc.id,
-                    date: docData.date,
-                    title: docData.title,
-                } as Notice;
-            });
-            setNotices(filteredData);
-        } catch (error) {
-            console.error("Error fetching notices:", error);
-        } finally {
-            setIsLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        getNotices();
-    }, [getNotices]);
 
   return (
     <main>
