@@ -17,7 +17,10 @@ import {
   ChevronRight,
   HomeIcon,
   Info,
-  BookOpen
+  BookOpen,
+  Check,
+  Download,
+  X
 } from 'lucide-react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
@@ -44,7 +47,6 @@ const resourceLinks = [
     { title: 'প্রধানমন্ত্রীর শিক্ষা সহায়তা ট্রাস্ট'},
     { title: 'উপবৃত্তি তথ্য'},
     { title: 'বৃত্তি তথ্য'},
-    { title: 'শিক্ষক বাতায়ন'},
 ]
 
 const officialLinks = [
@@ -55,105 +57,71 @@ const officialLinks = [
     { title: 'ব্যানবেইস'},
 ]
 
-const heroSlides = [
-    {
-        image: "https://placehold.co/1920x800",
-        title: "কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়",
-        subtitle: "নেত্রকোণা",
-        dataAiHint: "school building"
-    },
-    {
-        image: "https://placehold.co/1920x800",
-        title: "ঐতিহ্য ও আধুনিকতার সমন্বয়",
-        subtitle: "১৮৩২ সাল থেকে শিক্ষায় अग्रणी",
-        dataAiHint: "school campus students"
-    },
-    {
-        image: "https://placehold.co/1920x800",
-        title: "জ্ঞানভিত্তিক সমাজ গঠনে আমরা",
-        subtitle: "আপনার সন্তানের উজ্জ্বল ভবিষ্যতের জন্য",
-        dataAiHint: "classroom students"
-    }
-]
-
 export default function Home() {
     const plugin = React.useRef(
         Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
     )
     const [notices, setNotices] = useState<Notice[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    const [showMarquee, setShowMarquee] = useState(true);
+
 
     useEffect(() => {
-        const getNotices = async () => {
-            setIsLoading(true);
-            try {
-                const noticesCollectionRef = collection(db, 'notices')
-                const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'), limit(5))
-                const data = await getDocs(q)
-                const filteredData = data.docs.map((doc) => {
-                    const docData = doc.data();
-                    return {
-                      id: doc.id,
-                      date: docData.date, 
-                      title: docData.title,
-                    } as Notice
-                  })
-                setNotices(filteredData)
-            } catch (error) {
-                console.error("Error fetching notices:", error)
-            } finally {
-                setIsLoading(false);
-            }
-        }
-        getNotices()
-    }, [])
+      const getNotices = async () => {
+          setIsLoading(true);
+          try {
+              const noticesCollectionRef = collection(db, 'notices')
+              const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'), limit(5))
+              const data = await getDocs(q)
+              const filteredData: Notice[] = data.docs.map((doc) => {
+                  const docData = doc.data();
+                  return {
+                    id: doc.id,
+                    date: docData.date, 
+                    title: docData.title,
+                  } as Notice
+                })
+              setNotices(filteredData)
+          } catch (error) {
+              console.error("Error fetching notices:", error)
+          } finally {
+              setIsLoading(false);
+          }
+      }
+      getNotices()
+  }, [])
 
     const marqueeNotices = notices.length > 0 ? notices.map(n => n.title).join(' *** ') : '';
 
   return (
-    <div className="flex flex-col min-h-screen bg-muted/40">
+    <div className="flex flex-col min-h-screen bg-muted/20">
       <Header />
       <main className="flex-1">
         
-        <section className="relative h-[60vh] w-full">
-            <Carousel
-                plugins={[plugin.current]}
-                className="w-full h-full"
-                onMouseEnter={plugin.current.stop}
-                onMouseLeave={plugin.current.play}
-            >
-                <CarouselContent className="h-full">
-                    {heroSlides.map((slide, index) => (
-                        <CarouselItem key={index} className="h-full">
-                            <div className="relative h-full flex items-center justify-center text-center bg-gray-900">
-                                <Image
-                                    src={slide.image}
-                                    alt={slide.title}
-                                    layout="fill"
-                                    objectFit="cover"
-                                    className="absolute inset-0 z-0 opacity-40"
-                                    data-ai-hint={slide.dataAiHint}
-                                />
-                                <div className="z-10 text-white p-4 space-y-4">
-                                    <h1 className="text-4xl md:text-6xl font-bold leading-tight">{slide.title}</h1>
-                                    <p className="text-xl md:text-2xl">{slide.subtitle}</p>
-                                </div>
-                            </div>
-                        </CarouselItem>
-                    ))}
-                </CarouselContent>
-            </Carousel>
+        <section className="relative w-full shadow-md">
+            <Image
+              src="https://placehold.co/1920x400"
+              alt="School building"
+              width={1920}
+              height={400}
+              className="w-full h-auto max-h-[400px] object-cover"
+              data-ai-hint="school building"
+            />
+            <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
+                <p className='font-bold text-lg'>প্রশাসনিক ভবন</p>
+            </div>
         </section>
 
         {/* Marquee */}
-        <div className="bg-primary text-primary-foreground shadow-md">
+       {showMarquee && (
+        <div className="bg-blue-600 text-white shadow-md my-4">
           <div className="container mx-auto flex h-12 items-center overflow-hidden">
-            <span className="text-sm font-bold bg-accent text-accent-foreground px-3 py-1 rounded-md flex-shrink-0 whitespace-nowrap">
+            <span className="text-sm font-bold bg-blue-800 text-white px-3 py-1.5 rounded-md flex-shrink-0 whitespace-nowrap">
               জরুরী ঘোষণা
             </span>
             <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
               {isLoading ? (
-                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-full bg-blue-500/50" />
               ) : notices.length > 0 ? (
                 <div className="w-full flex items-center">
                    <div className="animate-marquee whitespace-nowrap flex">
@@ -162,35 +130,39 @@ export default function Home() {
                   </div>
                 </div>
               ) : (
-                <div className="w-full text-center">
+                <div className="w-full">
                   <span>কোনো নতুন নোটিশ নেই</span>
                 </div>
               )}
             </div>
+            <button onClick={() => setShowMarquee(false)} className='text-white hover:bg-blue-700 p-1 rounded-full'>
+                <X className='w-4 h-4' />
+            </button>
           </div>
         </div>
+        )}
 
 
-        <div className="container mx-auto px-4 py-12 grid lg:grid-cols-4 gap-8">
+        <div className="container mx-auto px-4 py-8 grid lg:grid-cols-4 gap-6">
           
-          <div className="lg:col-span-3 space-y-8">
+          <div className="lg:col-span-3 space-y-6">
             {/* About Section */}
-            <Card className="shadow-lg">
-                <CardHeader>
-                    <CardTitle className="text-2xl flex items-center gap-2 text-primary">
-                        <HomeIcon className="w-6 h-6" />
-                        আমাদের সম্পর্কে
+            <Card className="shadow-lg border-t-4 border-blue-600">
+                <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
+                    <CardTitle className="text-xl flex items-center gap-2">
+                        <HomeIcon className="w-5 h-5" />
+                        প্রতিষ্ঠানের ইতিহাস
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="grid md:grid-cols-5 gap-6">
+                <CardContent className="grid md:grid-cols-5 gap-6 pt-6">
                     <div className='md:col-span-2'>
-                         <Image src="https://placehold.co/400x300" alt="প্রতিষ্ঠানের ইতিহাস" width={400} height={300} className="w-full h-auto object-cover rounded-lg" data-ai-hint="historic building" />
+                         <Image src="https://placehold.co/400x300" alt="প্রতিষ্ঠানের ইতিহাস" width={400} height={300} className="w-full h-auto object-cover rounded-lg shadow-md" data-ai-hint="historic building" />
                     </div>
                     <div className="md:col-span-3 space-y-3">
                       <p className="text-muted-foreground leading-relaxed">
-                      কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ সালে প্রতিষ্ঠিত হয় এবং ১৯৯১ সালে জাতীয়করণ করা হয়। বর্তমানে এখানে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয়। विद्यालयটিতে বর্তমানে ৭১৭ জন ছাত্র-ছাত্রী অধ্যয়নরত এবং ১২ জন শিক্ষক কর্মরত আছেন। আমাদের লক্ষ্য মানসম্মত শিক্ষা প্রদান করে শিক্ষার্থীদের ভবিষ্যৎ উজ্জ্বল করা।
+                      কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ খ্রি: সালে প্রতিষ্ঠিত। বিগত ১৯/০৩/১৯৯১খ্রি: সনে প্রতিষ্ঠানটি জাতীয় করণ করা হয়। বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান চালু আছে। বিদ্যালয়টিতে বর্তমানে ৭১৭ জন ছাত্র-ছাত্রী অধ্যয়নরত এবং একুশজন শিক্ষকের স্থলে ১২ জন শিক্ষক, শিক্ষিকা কর্মরত আছেন। বিদ্যালয়ের তিন তলা ভবনটি একটি দু'তলা ভবন একটি, হাফ বিল্ডিং তিনটি, খেলার মাঠ একটি ও বিদ্যালয় প্রাঙ্গনে দুইটি শহীদ মিনার রয়েছে।
                       </p>
-                       <Button asChild variant="outline" size="sm" className="text-primary border-primary hover:bg-primary hover:text-primary-foreground">
+                       <Button asChild variant="link" size="sm" className="p-0 h-auto">
                             <Link href="/about">
                                 বিস্তারিত পড়ুন <ChevronRight className="ml-1 h-4 w-4" />
                             </Link>
@@ -200,17 +172,17 @@ export default function Home() {
             </Card>
 
             {/* Teachers */}
-             <div className="grid md:grid-cols-2 gap-8">
+             <div className="grid md:grid-cols-2 gap-6">
                  {facultyData.map((faculty, index) => (
-                    <Card key={index} className="shadow-lg">
-                        <CardHeader>
-                            <CardTitle className="text-xl flex items-center gap-2 text-primary">
+                    <Card key={index} className="shadow-lg border-t-4 border-blue-600">
+                        <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
+                            <CardTitle className="text-xl flex items-center gap-2">
                                 <Users className="w-5 h-5" />
                                 {index === 0 ? 'প্রধান শিক্ষকের বাণী' : 'সহকারী প্রধান শিক্ষকের বাণী' }
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="flex flex-col sm:flex-row items-center gap-4">
-                           <Image src={faculty.image} alt={faculty.name} width={100} height={100} className="rounded-full border-4 border-accent" data-ai-hint={faculty.dataAiHint} />
+                        <CardContent className="flex flex-col sm:flex-row items-center gap-4 pt-6">
+                           <Image src={faculty.image} alt={faculty.name} width={80} height={80} className="rounded-md border-2 border-accent" data-ai-hint={faculty.dataAiHint} />
                            <div className='space-y-2 text-center sm:text-left'>
                                <p className='text-sm text-muted-foreground italic'>"{faculty.message}"</p>
                                <Button asChild variant="link" className="p-0 h-auto text-primary hover:underline">
@@ -223,78 +195,97 @@ export default function Home() {
              </div>
 
              {/* Corner Cards */}
-             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card className="bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg">
-                    <CardHeader>
-                        <CardTitle className="text-lg flex items-center gap-2 text-blue-800">
+             <div className="grid md:grid-cols-2 gap-6">
+                <Card className="shadow-lg border-t-4 border-red-600">
+                    <CardHeader className='bg-red-600 text-white rounded-t-sm'>
+                        <CardTitle className="text-lg flex items-center gap-2">
                             <GraduationCap className="w-5 h-5" />
                             শিক্ষার্থীদের কর্নার
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2">
+                    <CardContent className="space-y-2 pt-6">
                         {[
+                          {label: 'শ্রেণিভিত্তিক শিক্ষার্থী', href: '#'}, 
                           {label: 'ক্লাস রুটিন', href: '/class-routine'}, 
-                          {label: 'সিলেবাস', href: '#'}, 
-                          {label: 'ভর্তি তথ্য', href: '#'}, 
-                          {label: 'ফলাফল', href: '/results'}
-                        ].map(item => (
-                             <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <ChevronRight className="w-4 h-4 text-blue-600" />
-                                {item.label}
-                            </Link>
-                        ))}
-                    </CardContent>
-                </Card>
-                <Card className="bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
-                    <CardHeader>
-                        <CardTitle className="text-lg flex items-center gap-2 text-green-800">
-                           <BookOpen className="w-5 h-5" />
-                            একাডেমিক তথ্য
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                        {[
-                          {label: 'নোটিশ', href: '/notices'}, 
                           {label: 'ছুটির তালিকা', href: '#'}, 
-                          {label: 'একাডেমিক ক্যালেন্ডার', href: '#'}, 
-                          {label: 'সহশিক্ষা কার্যক্রম', href: '#'}
+                          {label: 'নোটিশ', href: '/notices'}
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <ChevronRight className="w-4 h-4 text-green-600" />
+                                <Check className="w-4 h-4 text-red-600" />
                                 {item.label}
                             </Link>
                         ))}
                     </CardContent>
                 </Card>
-                <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 shadow-lg">
-                    <CardHeader>
-                        <CardTitle className="text-lg flex items-center gap-2 text-yellow-800">
-                            <Info className="w-5 h-5" />
-                             অন্যান্য তথ্য
+                <Card className="shadow-lg border-t-4 border-green-600">
+                    <CardHeader className='bg-green-600 text-white rounded-t-sm'>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                           <Users className="w-5 h-5" />
+                            শিক্ষকমন্ডলীদের কর্ণার
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2">
+                    <CardContent className="space-y-2 pt-6">
                         {[
-                          {label: 'শিক্ষক পরিচিতি', href: '/teachers'}, 
-                          {label: 'গ্যালারি', href: '/gallery'}, 
-                          {label: 'ব্লগ', href: '#'}, 
-                          {label: 'যোগাযোগ', href: '/contact'}
+                          {label: 'শিক্ষকমন্ডলী', href: '/teachers'}, 
+                          {label: 'স্টাফ', href: '/staff'}, 
+                          {label: 'শিক্ষক/কর্মচারী সংখ্যা', href: '#'}, 
+                          {label: 'SMS ALERT', href: '#'}
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <ChevronRight className="w-4 h-4 text-yellow-600" />
+                                <Check className="w-4 h-4 text-green-600" />
+                                {item.label}
+                            </Link>
+                        ))}
+                    </CardContent>
+                </Card>
+                <Card className="shadow-lg border-t-4 border-orange-500">
+                    <CardHeader className='bg-orange-500 text-white rounded-t-sm'>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                            <Download className="w-5 h-5" />
+                            সকল ডাউনলোড
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2 pt-6">
+                        {[
+                            {label: 'ডাউনলোড', href: '#'},
+                            {label: 'পরীক্ষার রুটিন', href: '#'},
+                            {label: 'ভর্তি', href: '#'},
+                        ].map(item => (
+                             <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
+                                <Check className="w-4 h-4 text-orange-500" />
+                                {item.label}
+                            </Link>
+                        ))}
+                    </CardContent>
+                </Card>
+                <Card className="shadow-lg border-t-4 border-purple-600">
+                    <CardHeader className='bg-purple-600 text-white rounded-t-sm'>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                            <BookOpen className="w-5 h-5" />
+                             একাডেমিক তথ্য
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2 pt-6">
+                        {[
+                          {label: 'প্রতিষ্ঠানের ইতিহাস', href: '/history'}, 
+                          {label: 'পরীক্ষার ফলাফল', href: '/results'}, 
+                          {label: 'নোটিশ', href: '/notices'}, 
+                          {label: 'ছুটির দিন', href: '#'},
+                          {label: 'একাডেমিক ক্যালেন্ডার', href: '#'}, 
+                        ].map(item => (
+                             <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
+                                <Check className="w-4 h-4 text-purple-600" />
                                 {item.label}
                             </Link>
                         ))}
                     </CardContent>
                 </Card>
              </div>
-
-
           </div>
 
           <aside className="lg:col-span-1 space-y-6">
-              <Card className="shadow-lg">
-                <CardHeader className='bg-primary text-primary-foreground rounded-t-lg'>
+              <Card className="shadow-lg border-t-4 border-blue-600">
+                <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <Megaphone className="w-5 h-5" />
                         নোটিশ বোর্ড
@@ -310,7 +301,7 @@ export default function Home() {
                         </div>
                     ) : notices.length > 0 ? (
                       notices.map((notice) => (
-                        <Link href="/notices" key={notice.id} className="block p-2 rounded-md hover:bg-muted transition-colors">
+                        <Link href="/notices" key={notice.id} className="block p-2 rounded-md hover:bg-muted transition-colors border-b last:border-b-0">
                             <p className="text-sm font-medium text-foreground hover:text-primary">{notice.title}</p>
                             <p className="text-xs text-muted-foreground">{notice.date}</p>
                         </Link>
@@ -318,14 +309,11 @@ export default function Home() {
                     ) : (
                       <p className="text-sm text-muted-foreground text-center py-4">কোনো নোটিশ নেই।</p>
                     )}
-                    <Button asChild variant="outline" size="sm" className='w-full border-primary text-primary hover:bg-primary hover:text-white'>
-                      <Link href="/notices">সকল নোটিশ</Link>
-                    </Button>
                 </CardContent>
               </Card>
 
-               <Card className="shadow-lg">
-                <CardHeader className='bg-primary text-primary-foreground rounded-t-lg'>
+               <Card className="shadow-lg border-t-4 border-blue-600">
+                <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <LinkIcon className="w-5 h-5" />
                         গুরুত্বপূর্ণ লিংক
@@ -333,7 +321,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-4 space-y-2">
                      {resourceLinks.map((link, index) => (
-                        <Link href="#" key={index} className="flex items-center text-sm text-muted-foreground hover:text-primary gap-2">
+                        <Link href="#" key={index} className="flex items-center text-sm text-muted-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
                             <ChevronRight className="w-4 h-4 text-primary" />
                             {link.title}
                         </Link>
@@ -341,8 +329,8 @@ export default function Home() {
                 </CardContent>
               </Card>
 
-              <Card className="shadow-lg">
-                <CardHeader className='bg-primary text-primary-foreground rounded-t-lg'>
+              <Card className="shadow-lg border-t-4 border-blue-600">
+                <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <LinkIcon className="w-5 h-5" />
                         অফিসিয়াল লিংক
@@ -350,14 +338,13 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-4 space-y-2">
                      {officialLinks.map((link, index) => (
-                        <Link href="#" key={index} className="flex items-center text-sm text-muted-foreground hover:text-primary gap-2">
+                        <Link href="#" key={index} className="flex items-center text-sm text-muted-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
                             <ChevronRight className="w-4 h-4 text-primary" />
                             {link.title}
                         </Link>
                     ))}
                 </CardContent>
               </Card>
-              
           </aside>
         </div>
       </main>
@@ -365,3 +352,6 @@ export default function Home() {
     </div>
   );
 }
+
+
+    

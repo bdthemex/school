@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/icons/logo';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Home, Info, Users, Newspaper, ImageIcon as GalleryIcon, Video, MoreHorizontal, Phone, ChevronDown } from 'lucide-react';
+import { Menu, Home, Info, Users, Newspaper, ImageIcon as GalleryIcon, Phone, GraduationCap } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,63 +16,78 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
-  { href: '/', label: 'প্রচ্ছদ' },
-  { 
-    label: 'আমাদের সম্পর্কে',
-    subLinks: [
-        { href: '/about', label: 'আমাদের সম্পর্কে' },
-        { href: '/history', label: 'প্রতিষ্ঠানের ইতিহাস' },
-        { href: '/principals-message', label: 'প্রধান শিক্ষকের বাণী' },
-        { href: '/vice-principals-message', label: 'সহকারী প্রধান শিক্ষকের বাণী' },
-    ]
-  },
-  { 
-    label: 'একাডেমিক', 
-    subLinks: [
-        { href: '/teachers', label: 'শিক্ষক পরিচিতি' },
-        { href: '/staff', label: 'কর্মচারী পরিচিতি' },
-        { href: '/class-routine', label: 'ক্লাস রুটিন' },
-    ]
-  },
-  { href: '/notices', label: 'নোটিশ'},
-  { href: '/results', label: 'ফলাফল' },
-  { href: '/gallery', label: 'গ্যালারি' },
-  { href: '/contact', label: 'যোগাযোগ' },
+  { href: '/', label: 'প্রচ্ছদ', icon: Home },
+  { href: '/history', label: 'প্রতিষ্ঠানের ইতিহাস', icon: Info },
+  { href: '/teachers', label: 'শিক্ষকমন্ডলী', icon: Users },
+  { href: '/notices', label: 'নোটিশ', icon: Newspaper },
+  { href: '/results', label: 'পরীক্ষার ফলাফল', icon: GraduationCap },
+  { href: '/gallery', label: 'ফটো', icon: GalleryIcon },
+  { href: '/contact', label: 'যোগাযোগ', icon: Phone },
 ];
+
 
 export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background shadow-md">
-      <div className="container mx-auto px-4 flex items-center justify-between py-4">
-        <Link href="/" className="flex items-center gap-4">
-          <Logo className="h-16 w-auto" />
-          <div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-primary">কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়</h1>
-            <p className="text-sm text-muted-foreground">EIIN: 113026 | স্থাপিত: ১৮৩২</p>
+    <header className="sticky top-0 z-50 w-full bg-white shadow-md">
+      <div className="bg-gradient-to-r from-green-700 to-green-500 text-white py-4">
+        <div className="container mx-auto px-4 flex items-center justify-between">
+          <div className='text-center w-full'>
+            <p className='text-lg'>গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</p>
           </div>
-        </Link>
-        <div className="md:hidden">
+        </div>
+        <div className="container mx-auto px-4 flex items-center gap-4 pt-2">
+            <Link href="/" className='flex-shrink-0'>
+              <Logo className="h-20 w-auto" />
+            </Link>
+            <div className='border-l-2 border-white/50 pl-4'>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়</h1>
+                <p className="text-md text-green-200">কেন্দুয়া, নেত্রকোণা | স্থাপিত: ১৮৩২</p>
+            </div>
+        </div>
+      </div>
+      
+      <div className="bg-gray-800 text-gray-100 hidden md:block">
+        <div className="container mx-auto flex h-14 items-center justify-start px-4">
+            <nav className="flex items-center gap-1">
+            {navLinks.map((link) => (
+                <Button key={link.label} asChild variant="ghost" 
+                  className={cn(
+                    "hover:bg-gray-700 text-base text-white hover:text-white",
+                    link.href === pathname ? 'bg-gray-700' : ''
+                  )}>
+                    <Link href={link.href} className="flex items-center gap-2">
+                        <link.icon className='w-4 h-4' />
+                        {link.label}
+                    </Link>
+                </Button>
+            ))}
+            </nav>
+        </div>
+      </div>
+
+       <div className="md:hidden p-2 bg-gray-800 text-white flex justify-end">
             <Sheet>
                 <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" className='bg-transparent text-white border-white'>
                     <Menu className="h-6 w-6" />
                     <span className="sr-only">মেনু খুলুন</span>
                 </Button>
                 </SheetTrigger>
-                <SheetContent side="left">
+                <SheetContent side="left" className='bg-gray-800 text-white border-r-gray-700'>
                   <div className='p-6'>
                     <nav className="flex flex-col gap-4">
                         {navLinks.map((link) => (
                           <Link 
                             key={link.label} 
-                            href={link.href || '#'} 
+                            href={link.href} 
                             className={cn(
-                              "text-lg font-medium transition-colors hover:text-primary",
-                              (link.href === pathname || (link.subLinks && link.subLinks.some(sl => sl.href === pathname))) ? 'text-primary' : 'text-foreground'
+                              "text-lg font-medium transition-colors hover:text-green-400 flex items-center gap-3 p-2 rounded-md",
+                              pathname === link.href ? 'bg-gray-700 text-green-400' : 'text-white'
                             )}
                           >
+                             <link.icon className='w-5 h-5' />
                             {link.label}
                           </Link>
                         ))}
@@ -81,49 +96,6 @@ export default function Header() {
                 </SheetContent>
             </Sheet>
         </div>
-      </div>
-      
-      <div className="bg-primary text-primary-foreground hidden md:block">
-        <div className="container mx-auto flex h-14 items-center justify-center px-4">
-            <nav className="flex items-center gap-2">
-            {navLinks.map((link) => (
-                link.subLinks ? (
-                    <DropdownMenu key={link.label}>
-                        <DropdownMenuTrigger asChild>
-                           <Button 
-                              variant="ghost" 
-                              className={cn(
-                                "hover:bg-accent/20 focus-visible:ring-0 text-base",
-                                (link.subLinks && link.subLinks.some(sl => sl.href === pathname)) ? 'bg-accent/20' : ''
-                              )}
-                            >
-                                {link.label}
-                                <ChevronDown className="ml-1 h-4 w-4" />
-                           </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            {link.subLinks.map(subLink => (
-                                <DropdownMenuItem key={subLink.label} asChild>
-                                    <Link href={subLink.href}>{subLink.label}</Link>
-                                </DropdownMenuItem>
-                            ))}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                ) : (
-                    <Button key={link.label} asChild variant="ghost" 
-                      className={cn(
-                        "hover:bg-accent/20 text-base",
-                        link.href === pathname ? 'bg-accent/20' : ''
-                      )}>
-                        <Link href={link.href}>
-                            {link.label}
-                        </Link>
-                    </Button>
-                )
-            ))}
-            </nav>
-        </div>
-      </div>
     </header>
   );
 }
