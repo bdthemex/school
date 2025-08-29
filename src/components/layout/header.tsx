@@ -20,6 +20,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import React from 'react';
+import Logo from '../icons/logo';
 
 const navLinks = [
   { href: '/', label: 'প্রচ্ছদ', icon: Home },
@@ -74,8 +75,8 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white shadow-md">
-      <div className="relative w-full h-[150px] md:h-[200px]">
+    <header className="w-full bg-white">
+      <div className="relative w-full h-[150px] md:h-[200px] hidden md:block">
         <Image 
             src="https://picsum.photos/1280/200?random=10"
             alt="Header Banner"
@@ -85,49 +86,52 @@ export default function Header() {
         />
       </div>
       
-      <div className="bg-[#0a2342] text-primary-foreground hidden md:block py-2">
-        <div className="container mx-auto">
-            <nav className="flex items-center gap-1">
-            {navLinks.map((link) => (
-                link.children ? (
-                    <DropdownMenu key={link.label}>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="hover:bg-[#8B0000] text-base text-white hover:text-white flex items-center gap-1">
+      <div className="sticky top-0 z-50 w-full shadow-md">
+        <div className="bg-[#0a2342] text-primary-foreground hidden md:block py-2">
+            <div className="container mx-auto">
+                <nav className="flex items-center gap-1">
+                {navLinks.map((link) => (
+                    link.children ? (
+                        <DropdownMenu key={link.label}>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="hover:bg-[#8B0000] text-base text-white hover:text-white flex items-center gap-1">
+                                    <link.icon className='w-4 h-4' />
+                                    {link.label}
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="bg-[#0a2342] text-white border-none">
+                                {link.children.map(child => (
+                                    <DropdownMenuItem key={child.label} asChild className='hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white'>
+                                        <Link href={child.href} className='flex items-center gap-2'>
+                                            <child.icon className='w-4 h-4' />
+                                            {child.label}
+                                        </Link>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    ) : (
+                        <Button key={link.label} asChild variant="ghost" 
+                        className={cn(
+                            "hover:bg-[#8B0000] text-base text-white hover:text-white",
+                            link.href === pathname ? 'bg-[#8B0000]' : ''
+                        )}>
+                            <Link href={link.href!} className="flex items-center gap-2">
                                 <link.icon className='w-4 h-4' />
                                 {link.label}
-                                <ChevronDown className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="bg-[#0a2342] text-white border-none">
-                            {link.children.map(child => (
-                                <DropdownMenuItem key={child.label} asChild className='hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white'>
-                                    <Link href={child.href} className='flex items-center gap-2'>
-                                        <child.icon className='w-4 h-4' />
-                                        {child.label}
-                                    </Link>
-                                </DropdownMenuItem>
-                            ))}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                ) : (
-                    <Button key={link.label} asChild variant="ghost" 
-                    className={cn(
-                        "hover:bg-[#8B0000] text-base text-white hover:text-white",
-                        link.href === pathname ? 'bg-[#8B0000]' : ''
-                    )}>
-                        <Link href={link.href!} className="flex items-center gap-2">
-                            <link.icon className='w-4 h-4' />
-                            {link.label}
-                        </Link>
-                    </Button>
-                )
-            ))}
-            </nav>
+                            </Link>
+                        </Button>
+                    )
+                ))}
+                </nav>
+            </div>
         </div>
-      </div>
 
        <div className="md:hidden flex justify-between items-center h-16 bg-[#0a2342] text-white px-4">
-            <span className='text-lg font-bold'>মেনু</span>
+            <Link href="/" className="flex items-center gap-2">
+              <Logo className="w-10 h-10" />
+            </Link>
             <Sheet>
                 <SheetTrigger asChild>
                 <Button variant="outline" size="icon" className='bg-transparent text-white border-white hover:bg-opacity-80 hover:text-white'>
@@ -142,7 +146,7 @@ export default function Header() {
                             <Collapsible key={link.label} className="w-full">
                               <CollapsibleTrigger asChild>
                                 <div className={cn(
-                                    "text-lg font-medium transition-colors hover:bg-opacity-80 flex items-center justify-between gap-3 p-2 rounded-md",
+                                    "text-lg font-medium transition-colors hover:bg-opacity-80 flex items-center justify-between gap-3 p-2 rounded-md group",
                                     pathname.startsWith(link.children.map(c => c.href).join()) ? 'bg-[#8B0000] text-white' : 'text-white'
                                   )}>
                                   <div className="flex items-center gap-3">
@@ -188,6 +192,7 @@ export default function Header() {
                 </SheetContent>
             </Sheet>
         </div>
+      </div>
     </header>
   );
 }
