@@ -76,31 +76,18 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white">
-      <div className="relative text-white py-2 px-4">
+      <div className="relative w-full h-[150px] md:h-[200px]">
         <Image 
-            src="https://placehold.co/1280x200"
-            alt="Header background"
+            src="https://kjsghs.edu.bd/wp-content/uploads/2023/12/Headerpc.jpg"
+            alt="Header Banner"
             fill
-            objectFit='cover'
-            className='absolute top-0 left-0 -z-10'
-            data-ai-hint='green gradient'
+            style={{objectFit: 'cover'}}
+            priority
         />
-        <div className="flex flex-col items-center justify-center relative z-10">
-          <p className='text-lg'>গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</p>
-          <div className="flex items-center gap-4 pt-2">
-            <Link href="/" className='flex-shrink-0'>
-              <Logo className="h-20 w-auto" />
-            </Link>
-            <div className='text-center'>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়</h1>
-                <p className="text-md text-green-200">কেন্দুয়া, নেত্রকোণা | স্থাপিত: ১৮৩২</p>
-            </div>
-        </div>
-        </div>
       </div>
       
       <div className="bg-gray-800 text-gray-100 hidden md:block">
-        <div className="container mx-auto flex h-14 items-center justify-start">
+        <div className="container mx-auto">
             <nav className="flex items-center gap-1">
             {navLinks.map((link) => (
                 link.children ? (
@@ -153,7 +140,7 @@ export default function Header() {
                         {navLinks.map((link) => (
                           link.children ? (
                             <Collapsible key={link.label} className="w-full">
-                              <CollapsibleTrigger className="w-full">
+                              <CollapsibleTrigger asChild>
                                 <div className={cn(
                                     "text-lg font-medium transition-colors hover:text-green-400 flex items-center justify-between gap-3 p-2 rounded-md",
                                     pathname.startsWith(link.children.map(c => c.href).join()) ? 'bg-gray-700 text-green-400' : 'text-white'
