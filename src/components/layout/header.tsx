@@ -65,7 +65,7 @@ export default function Header() {
         </div>
       </div>
 
-       <div className="md:hidden p-2 bg-gray-800 text-white flex justify-end">
+       <div className="md:hidden container mx-auto px-4 flex justify-end items-center h-16 bg-gray-800 text-white">
             <Sheet>
                 <SheetTrigger asChild>
                 <Button variant="outline" size="icon" className='bg-transparent text-white border-white'>

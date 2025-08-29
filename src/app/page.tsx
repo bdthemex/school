@@ -102,64 +102,66 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         
-        <section className="relative w-full shadow-md">
-            <Carousel
-                plugins={[plugin.current]}
-                className="w-full"
-                >
-                <CarouselContent>
-                    <CarouselItem>
-                        <Image
-                            src="https://placehold.co/1920x400"
-                            alt="School building"
-                            width={1920}
-                            height={400}
-                            className="w-full h-auto max-h-[400px] object-cover"
-                            data-ai-hint="school building"
-                        />
-                         <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
-                            <p className='font-bold text-lg'>প্রশাসনিক ভবন</p>
-                        </div>
-                    </CarouselItem>
-                    <CarouselItem>
-                         <Image
-                            src="https://placehold.co/1920x400"
-                            alt="School campus"
-                            width={1920}
-                            height={400}
-                            className="w-full h-auto max-h-[400px] object-cover"
-                            data-ai-hint="school campus"
-                        />
-                         <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
-                            <p className='font-bold text-lg'>স্কুল ক্যাম্পাস</p>
-                        </div>
-                    </CarouselItem>
-                </CarouselContent>
-            </Carousel>
-        </section>
+        <div className="container mx-auto px-4">
+            <section className="relative w-full shadow-md mt-4">
+                <Carousel
+                    plugins={[plugin.current]}
+                    className="w-full"
+                    >
+                    <CarouselContent>
+                        <CarouselItem>
+                            <Image
+                                src="https://placehold.co/1920x400"
+                                alt="School building"
+                                width={1920}
+                                height={400}
+                                className="w-full h-auto max-h-[400px] object-cover"
+                                data-ai-hint="school building"
+                            />
+                            <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
+                                <p className='font-bold text-lg'>প্রশাসনিক ভবন</p>
+                            </div>
+                        </CarouselItem>
+                        <CarouselItem>
+                            <Image
+                                src="https://placehold.co/1920x400"
+                                alt="School campus"
+                                width={1920}
+                                height={400}
+                                className="w-full h-auto max-h-[400px] object-cover"
+                                data-ai-hint="school campus"
+                            />
+                            <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
+                                <p className='font-bold text-lg'>স্কুল ক্যাম্পাস</p>
+                            </div>
+                        </CarouselItem>
+                    </CarouselContent>
+                </Carousel>
+            </section>
 
-        {/* Marquee */}
-       {showMarquee && (
-        <div className="my-4">
-          <div className="container mx-auto bg-[#eaf4ff] flex h-12 items-center overflow-hidden shadow-sm">
-            <div className="relative bg-[#2978d6] text-white px-4 py-3 flex items-center">
-                <span className="text-sm font-bold whitespace-nowrap">জরুরী ঘোষণা</span>
-                <div className="absolute right-[-24px] top-0 h-full w-6 bg-[#2978d6]" style={{ clipPath: 'polygon(100% 50%, 0 0, 0 100%)' }}></div>
-            </div>
-            <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
-                <div className="w-full flex items-center">
-                   <div className="animate-marquee whitespace-nowrap flex text-[#2978d6] text-sm">
-                      <span className="mx-4">{marqueeText}</span>
-                      <span className="mx-4">{marqueeText}</span>
-                  </div>
+            {/* Marquee */}
+            {showMarquee && (
+            <div className="my-4">
+                <div className="bg-[#eaf4ff] flex h-12 items-center overflow-hidden shadow-sm">
+                    <div className="relative bg-[#2978d6] text-white px-4 py-3 flex items-center">
+                        <span className="text-sm font-bold whitespace-nowrap">জরুরী ঘোষণা</span>
+                        <div className="absolute right-[-24px] top-0 h-full w-6 bg-[#2978d6]" style={{ clipPath: 'polygon(100% 50%, 0 0, 0 100%)' }}></div>
+                    </div>
+                    <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
+                        <div className="w-full flex items-center">
+                        <div className="animate-marquee whitespace-nowrap flex text-[#2978d6] text-sm">
+                            <span className="mx-4">{marqueeText}</span>
+                            <span className="mx-4">{marqueeText}</span>
+                        </div>
+                        </div>
+                    </div>
+                    <button onClick={() => setShowMarquee(false)} className='bg-[#2978d6] text-white hover:bg-blue-700 p-3 h-full flex items-center'>
+                        <X className='w-4 h-4' />
+                    </button>
                 </div>
             </div>
-            <button onClick={() => setShowMarquee(false)} className='bg-[#2978d6] text-white hover:bg-blue-700 p-3 h-full flex items-center'>
-                <X className='w-4 h-4' />
-            </button>
-          </div>
+            )}
         </div>
-        )}
 
 
         <div className="container mx-auto px-4 py-8 grid lg:grid-cols-4 gap-6">
@@ -216,7 +218,7 @@ export default function Home() {
              {/* Corner Cards */}
              <div className="grid md:grid-cols-2 gap-6">
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-red-600 text-white rounded-t-lg border-b-4 border-red-800'>
+                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-800'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <GraduationCap className="w-5 h-5" />
                             শিক্ষার্থীদের কর্নার
@@ -232,7 +234,7 @@ export default function Home() {
                           {label: 'নোটিশ', href: '/notices'}
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-red-500" />
+                                <Check className="w-4 h-4 text-blue-500" />
                                 {item.label}
                             </Link>
                         ))}
@@ -240,7 +242,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-green-600 text-white rounded-t-lg border-b-4 border-green-800'>
+                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-800'>
                         <CardTitle className="text-lg flex items-center gap-2">
                            <Users className="w-5 h-5" />
                             শিক্ষকমন্ডলীদের কর্ণার
@@ -256,7 +258,7 @@ export default function Home() {
                           {label: 'SMS ALERT', href: '#'}
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-green-500" />
+                                <Check className="w-4 h-4 text-blue-500" />
                                 {item.label}
                             </Link>
                         ))}
@@ -264,7 +266,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-orange-500 text-white rounded-t-lg border-b-4 border-orange-700'>
+                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-800'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <Download className="w-5 h-5" />
                             সকল ডাউনলোড
@@ -279,7 +281,7 @@ export default function Home() {
                             {label: 'ভর্তি', href: '#'},
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-orange-500" />
+                                <Check className="w-4 h-4 text-blue-500" />
                                 {item.label}
                             </Link>
                         ))}
@@ -287,7 +289,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-purple-600 text-white rounded-t-lg border-b-4 border-purple-800'>
+                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-800'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <BookOpen className="w-5 h-5" />
                              একাডেমিক তথ্য
@@ -304,7 +306,7 @@ export default function Home() {
                           {label: 'একাডেমিক ক্যালেন্ডার', href: '#'}, 
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-purple-500" />
+                                <Check className="w-4 h-4 text-blue-500" />
                                 {item.label}
                             </Link>
                         ))}
