@@ -100,7 +100,7 @@ export default function Header() {
       </div>
       
       <div className="bg-gray-800 text-gray-100 hidden md:block">
-        <div className="flex h-14 items-center justify-start">
+        <div className="px-4 flex h-14 items-center justify-start">
             <nav className="flex items-center gap-1">
             {navLinks.map((link) => (
                 link.children ? (

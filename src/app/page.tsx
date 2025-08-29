@@ -99,8 +99,7 @@ export default function Home() {
     }, [getNotices]);
 
   return (
-    <main className="p-4">
-      
+    <main>
         <section className="relative w-full shadow-md">
             <Carousel
                 plugins={[heroCarouselPlugin.current]}
@@ -137,9 +136,8 @@ export default function Home() {
             </Carousel>
         </section>
 
-        {/* Marquee */}
         {showMarquee && (
-        <div className="my-4">
+        <div className="my-4 px-4">
             <div className="bg-[#eaf4ff] flex h-12 items-center overflow-hidden shadow-sm">
                 <div className="relative bg-[#2978d6] text-white px-4 py-3 flex items-center">
                     <span className="text-sm font-bold whitespace-nowrap">জরুরী ঘোষণা</span>
@@ -160,8 +158,7 @@ export default function Home() {
         </div>
         )}
 
-
-        <div className="grid lg:grid-cols-4 gap-6">
+        <div className="grid lg:grid-cols-4 gap-6 px-4 pb-4">
           
           <div className="lg:col-span-3 space-y-6">
             {/* About Section */}
@@ -404,7 +401,3 @@ export default function Home() {
     </main>
   );
 }
-
-    
-
-    
