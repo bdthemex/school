@@ -77,10 +77,11 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full bg-white shadow-md">
       <div className="relative w-full h-[150px] md:h-[200px]">
         <Image 
-            src="https://kjsghs.edu.bd/wp-content/uploads/2023/12/Headerpc.jpg"
+            src="https://picsum.photos/1280/200?random=10"
             alt="Header Banner"
             fill
             style={{objectFit: 'cover'}}
+            data-ai-hint="school banner"
         />
       </div>
       

@@ -90,28 +90,28 @@ export default function Home() {
                 <CarouselContent>
                     <CarouselItem>
                         <Image
-                            src="https://picsum.photos/1280/400?random=1"
-                            alt="School building"
+                            src="https://picsum.photos/1280/400?random=11"
+                            alt="School classroom"
                             width={1280}
                             height={400}
                             className="w-full h-auto max-h-[400px] object-cover"
-                            data-ai-hint="school building"
+                            data-ai-hint="school classroom students"
                         />
                         <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
-                            <p className='font-bold text-lg'>প্রশাসনিক ভবন</p>
+                            <p className='font-bold text-lg'>আমাদের শ্রেণীকক্ষ</p>
                         </div>
                     </CarouselItem>
                     <CarouselItem>
                         <Image
-                            src="https://picsum.photos/1280/400?random=2"
-                            alt="School campus"
+                            src="https://picsum.photos/1280/400?random=12"
+                            alt="School library"
                             width={1280}
                             height={400}
                             className="w-full h-auto max-h-[400px] object-cover"
-                            data-ai-hint="school campus"
+                            data-ai-hint="school library books"
                         />
                         <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
-                            <p className='font-bold text-lg'>স্কুল ক্যাম্পাস</p>
+                            <p className='font-bold text-lg'>সমৃদ্ধ লাইব্রেরি</p>
                         </div>
                     </CarouselItem>
                 </CarouselContent>
@@ -153,7 +153,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="grid md:grid-cols-5 gap-6 pt-6">
                     <div className='md:col-span-2'>
-                         <Image src="https://picsum.photos/400/300" alt="প্রতিষ্ঠানের ইতিহাস" width={400} height={300} className="w-full h-auto object-cover rounded-lg shadow-md" data-ai-hint="historic building" />
+                         <Image src="https://picsum.photos/400/300?random=1" alt="প্রতিষ্ঠানের ইতিহাস" width={400} height={300} className="w-full h-auto object-cover rounded-lg shadow-md" data-ai-hint="historic building" />
                     </div>
                     <div className="md:col-span-3 space-y-3">
                       <p className="text-foreground leading-relaxed text-base">
