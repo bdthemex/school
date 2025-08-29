@@ -18,7 +18,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import Logo from '../icons/logo';
 
 const navLinks = [
@@ -72,48 +72,10 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
-  const [isBannerVisible, setIsBannerVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const bannerRef = useRef<HTMLDivElement>(null);
-  const [bannerHeight, setBannerHeight] = useState(0);
-
-  useEffect(() => {
-    if (bannerRef.current) {
-      setBannerHeight(bannerRef.current.offsetHeight);
-    }
-  }, []);
-
-  const handleScroll = () => {
-    const currentScrollY = window.scrollY;
-    if (currentScrollY > bannerHeight) {
-      if (currentScrollY > lastScrollY) {
-        // Scrolling down
-        setIsBannerVisible(false);
-      } else {
-        // Scrolling up
-        setIsBannerVisible(true);
-      }
-    } else {
-      setIsBannerVisible(true);
-    }
-    setLastScrollY(currentScrollY);
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY, bannerHeight]);
-
-
+  
   return (
-    <>
-      <header className="relative w-full bg-white z-40">
-        <div 
-          ref={bannerRef}
-          className={cn(
-            "fixed top-0 left-0 right-0 w-full h-[150px] md:h-[200px] transition-transform duration-300 ease-in-out",
-            isBannerVisible ? "translate-y-0" : "-translate-y-full"
-          )}>
+      <header className="w-full bg-white z-40">
+        <div className="w-full h-[150px] md:h-[200px] relative">
           <Image 
               src="https://kjsghs.edu.bd/wp-content/uploads/2022/10/cropped-KJSGHS-Banner-2-2.jpg"
               alt="Header Banner"
@@ -124,49 +86,47 @@ export default function Header() {
           />
         </div>
         
-        <div className={cn("sticky top-0 z-50 w-full shadow-md transition-all duration-300", isBannerVisible ? "mt-[150px] md:mt-[200px]" : "mt-0")}>
-          <div className="bg-[#0a2342] text-primary-foreground hidden md:block py-2">
-              <div className="container mx-auto">
-                  <nav className="flex items-center gap-1">
-                  {navLinks.map((link) => (
-                      link.children ? (
-                          <DropdownMenu key={link.label}>
-                              <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" className="hover:bg-[#8B0000] text-base text-white hover:text-white flex items-center gap-1">
-                                      <link.icon className='w-4 h-4' />
-                                      {link.label}
-                                      <ChevronDown className="h-4 w-4" />
-                                  </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="bg-[#0a2342] text-white border-none">
-                                  {link.children.map(child => (
-                                      <DropdownMenuItem key={child.label} asChild className='hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white'>
-                                          <Link href={child.href} className='flex items-center gap-2'>
-                                              <child.icon className='w-4 h-4' />
-                                              {child.label}
-                                          </Link>
-                                      </DropdownMenuItem>
-                                  ))}
-                              </DropdownMenuContent>
-                          </DropdownMenu>
-                      ) : (
-                          <Button key={link.label} asChild variant="ghost" 
-                          className={cn(
-                              "hover:bg-[#8B0000] text-base text-white hover:text-white",
-                              link.href === pathname ? 'bg-[#8B0000]' : ''
-                          )}>
-                              <Link href={link.href!} className="flex items-center gap-2">
+        <div className="w-full shadow-md bg-[#0a2342] text-primary-foreground">
+          <div className="container mx-auto hidden md:block py-2">
+              <nav className="flex items-center gap-1">
+              {navLinks.map((link) => (
+                  link.children ? (
+                      <DropdownMenu key={link.label}>
+                          <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" className="hover:bg-[#8B0000] text-base text-white hover:text-white flex items-center gap-1">
                                   <link.icon className='w-4 h-4' />
                                   {link.label}
-                              </Link>
-                          </Button>
-                      )
-                  ))}
-                  </nav>
-              </div>
+                                  <ChevronDown className="h-4 w-4" />
+                              </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="bg-[#0a2342] text-white border-none">
+                              {link.children.map(child => (
+                                  <DropdownMenuItem key={child.label} asChild className='hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white'>
+                                      <Link href={child.href} className='flex items-center gap-2'>
+                                          <child.icon className='w-4 h-4' />
+                                          {child.label}
+                                      </Link>
+                                  </DropdownMenuItem>
+                              ))}
+                          </DropdownMenuContent>
+                      </DropdownMenu>
+                  ) : (
+                      <Button key={link.label} asChild variant="ghost" 
+                      className={cn(
+                          "hover:bg-[#8B0000] text-base text-white hover:text-white",
+                          link.href === pathname ? 'bg-[#8B0000]' : ''
+                      )}>
+                          <Link href={link.href!} className="flex items-center gap-2">
+                              <link.icon className='w-4 h-4' />
+                              {link.label}
+                          </Link>
+                      </Button>
+                  )
+              ))}
+              </nav>
           </div>
 
-        <div className="md:hidden flex justify-between items-center h-16 bg-[#0a2342] text-white px-4">
+        <div className="md:hidden flex justify-between items-center h-16 bg-[#0a2342] text-white px-4 container mx-auto">
               <Link href="/" className="flex items-center gap-2">
                 <Logo className="w-10 h-10" />
               </Link>
@@ -232,10 +192,5 @@ export default function Header() {
           </div>
         </div>
       </header>
-      <div 
-        className="transition-all duration-300 ease-in-out"
-        style={{ paddingTop: isBannerVisible ? bannerHeight : 0 }} 
-      />
-    </>
   );
 }
