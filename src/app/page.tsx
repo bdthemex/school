@@ -9,19 +9,14 @@ import {
   Users,
   Megaphone,
   Link as LinkIcon,
-  GraduationCap,
-  Calendar,
-  Phone,
-  Mail,
-  MapPin,
-  ChevronRight,
-  HomeIcon,
-  Info,
   BookOpen,
   Check,
   Download,
   X,
-  Target
+  Target,
+  HomeIcon,
+  GraduationCap,
+  ChevronRight,
 } from 'lucide-react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
@@ -145,20 +140,21 @@ export default function Home() {
 
         {/* Marquee */}
        {showMarquee && (
-        <div className="bg-blue-600 text-white shadow-md my-4">
-          <div className="container mx-auto flex h-12 items-center overflow-hidden">
-            <span className="text-sm font-bold bg-blue-800 text-white px-3 py-1.5 rounded-md flex-shrink-0 whitespace-nowrap">
-              জরুরী ঘোষণা
-            </span>
+        <div className="my-4">
+          <div className="container mx-auto bg-[#eaf4ff] flex h-12 items-center overflow-hidden shadow-sm">
+            <div className="relative bg-[#2978d6] text-white px-4 py-3 flex items-center">
+                <span className="text-sm font-bold whitespace-nowrap">জরুরী ঘোষণা</span>
+                <div className="absolute right-[-24px] top-0 h-full w-6 bg-[#2978d6]" style={{ clipPath: 'polygon(100% 50%, 0 0, 0 100%)' }}></div>
+            </div>
             <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
                 <div className="w-full flex items-center">
-                   <div className="animate-marquee whitespace-nowrap flex">
+                   <div className="animate-marquee whitespace-nowrap flex text-[#2978d6] text-sm">
                       <span className="mx-4">{marqueeText}</span>
                       <span className="mx-4">{marqueeText}</span>
                   </div>
                 </div>
             </div>
-            <button onClick={() => setShowMarquee(false)} className='text-white hover:bg-blue-700 p-1 rounded-full'>
+            <button onClick={() => setShowMarquee(false)} className='bg-[#2978d6] text-white hover:bg-blue-700 p-3 h-full flex items-center'>
                 <X className='w-4 h-4' />
             </button>
           </div>
@@ -403,5 +399,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
