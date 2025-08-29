@@ -95,7 +95,7 @@ export default function Header() {
   return (
     <header className="w-full bg-white">
       <div className={cn(
-          "relative w-full h-[150px] md:h-[200px] hidden md:block transition-all duration-300 ease-in-out overflow-hidden",
+          "relative w-full h-[150px] md:h-[200px] transition-all duration-300 ease-in-out overflow-hidden",
           isScrolled && "h-0"
         )}>
         <Image 
