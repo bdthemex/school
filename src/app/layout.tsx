@@ -2,6 +2,8 @@ import type {Metadata} from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { Hind_Siliguri } from 'next/font/google'
+import Header from '@/components/layout/header';
+import Footer from '@/components/layout/footer';
 
 const hindSiliguri = Hind_Siliguri({
   subsets: ['bengali'],
@@ -23,9 +25,9 @@ export default function RootLayout({
   return (
     <html lang="bn" className={`${hindSiliguri.variable}`}>
       <body className="font-body antialiased bg-muted/40">
-        <div className="max-w-7xl mx-auto shadow-lg bg-background">
-          {children}
-        </div>
+        <Header />
+        {children}
+        <Footer />
         <Toaster />
       </body>
     </html>

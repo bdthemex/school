@@ -1,7 +1,5 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import Header from '@/components/layout/header'
-import Footer from '@/components/layout/footer'
 import { CalendarDays, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -26,62 +24,60 @@ const routine = {
 
 export default function ClassRoutinePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-muted/40">
-      <Header />
-      <main className="flex-1">
-        <div className="container mx-auto px-4 py-12">
-            <Card className="shadow-lg">
-                <CardHeader className="text-center bg-primary text-primary-foreground">
-                    <CardTitle className="text-3xl flex items-center justify-center gap-3">
-                        <CalendarDays className="w-8 h-8" />
-                        ক্লাস রুটিন
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-8 space-y-8">
-                   <div className="text-center">
-                     <p className="text-muted-foreground mb-4">
-                        এখানে বিভিন্ন শ্রেণীর ক্লাস রুটিন দেওয়া হলো। প্রয়োজনে সম্পূর্ণ রুটিনটি ডাউনলোড করতে পারেন।
-                     </p>
-                      <Button>
-                        <Download className="mr-2 h-4 w-4" />
-                        সম্পূর্ণ রুটিন ডাউনলোড করুন
-                      </Button>
-                   </div>
+    <main className="flex-1">
+        <div className="max-w-7xl mx-auto shadow-lg bg-background p-4">
+            <div className="container mx-auto px-4 py-12">
+                <Card className="shadow-lg">
+                    <CardHeader className="text-center bg-primary text-primary-foreground">
+                        <CardTitle className="text-3xl flex items-center justify-center gap-3">
+                            <CalendarDays className="w-8 h-8" />
+                            ক্লাস রুটিন
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-8 space-y-8">
+                    <div className="text-center">
+                        <p className="text-muted-foreground mb-4">
+                            এখানে বিভিন্ন শ্রেণীর ক্লাস রুটিন দেওয়া হলো। প্রয়োজনে সম্পূর্ণ রুটিনটি ডাউনলোড করতে পারেন।
+                        </p>
+                        <Button>
+                            <Download className="mr-2 h-4 w-4" />
+                            সম্পূর্ণ রুটিন ডাউনলোড করুন
+                        </Button>
+                    </div>
 
-                   {Object.entries(routine).map(([className, schedule]) => (
-                     <div key={className}>
-                        <h2 className="text-2xl font-bold text-primary mb-4">{className}</h2>
-                        <div className="border rounded-lg overflow-hidden">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                <TableHead className="w-[100px]">বার</TableHead>
-                                <TableHead>১ম পিরিয়ড</TableHead>
-                                <TableHead>২য় পিরিয়ড</TableHead>
-                                <TableHead>৩য় পিরিয়ড</TableHead>
-                                <TableHead>৪র্থ পিরিয়ড</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {schedule.map(dayInfo => (
-                                    <TableRow key={dayInfo.day}>
-                                        <TableCell className="font-medium">{dayInfo.day}</TableCell>
-                                        <TableCell>{dayInfo.p1}</TableCell>
-                                        <TableCell>{dayInfo.p2}</TableCell>
-                                        <TableCell>{dayInfo.p3}</TableCell>
-                                        <TableCell>{dayInfo.p4}</TableCell>
+                    {Object.entries(routine).map(([className, schedule]) => (
+                        <div key={className}>
+                            <h2 className="text-2xl font-bold text-primary mb-4">{className}</h2>
+                            <div className="border rounded-lg overflow-hidden">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                    <TableHead className="w-[100px]">বার</TableHead>
+                                    <TableHead>১ম পিরিয়ড</TableHead>
+                                    <TableHead>২য় পিরিয়ড</TableHead>
+                                    <TableHead>৩য় পিরিয়ড</TableHead>
+                                    <TableHead>৪র্থ পিরিয়ড</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {schedule.map(dayInfo => (
+                                        <TableRow key={dayInfo.day}>
+                                            <TableCell className="font-medium">{dayInfo.day}</TableCell>
+                                            <TableCell>{dayInfo.p1}</TableCell>
+                                            <TableCell>{dayInfo.p2}</TableCell>
+                                            <TableCell>{dayInfo.p3}</TableCell>
+                                            <TableCell>{dayInfo.p4}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                            </div>
                         </div>
-                     </div>
-                   ))}
-                </CardContent>
-            </Card>
+                    ))}
+                    </CardContent>
+                </Card>
+            </div>
         </div>
-      </main>
-      <Footer />
-    </div>
+    </main>
   )
 }

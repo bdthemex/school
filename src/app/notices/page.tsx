@@ -5,8 +5,6 @@ import { useState, useEffect } from 'react'
 import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import Header from '@/components/layout/header'
-import Footer from '@/components/layout/footer'
 import { Megaphone, Calendar, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -48,9 +46,8 @@ export default function NoticesPage() {
     }, [])
 
   return (
-    <div className="flex flex-col min-h-screen bg-muted/40">
-      <Header />
-      <main className="flex-1">
+    <main className="flex-1">
+      <div className="max-w-7xl mx-auto shadow-lg bg-background p-4">
         <div className="container mx-auto px-4 py-12">
             <Card className="shadow-lg">
                 <CardHeader className="text-center bg-primary text-primary-foreground">
@@ -92,8 +89,7 @@ export default function NoticesPage() {
                 </CardContent>
             </Card>
         </div>
-      </main>
-      <Footer />
-    </div>
+      </div>
+    </main>
   )
 }

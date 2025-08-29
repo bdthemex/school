@@ -1,8 +1,6 @@
 
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import Header from '@/components/layout/header'
-import Footer from '@/components/layout/footer'
 import { Camera } from 'lucide-react'
 
 const galleryImages = [
@@ -16,37 +14,35 @@ const galleryImages = [
 
 export default function GalleryPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-muted/40">
-      <Header />
-      <main className="flex-1">
-        <div className="container mx-auto px-4 py-12">
-            <Card className="shadow-lg">
-                <CardHeader className="text-center bg-primary text-primary-foreground">
-                    <CardTitle className="text-3xl flex items-center justify-center gap-3">
-                        <Camera className="w-8 h-8" />
-                        ফটো গ্যালারি
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="p-8">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        {galleryImages.map((image, index) => (
-                        <div key={index} className="overflow-hidden rounded-lg shadow-md group">
-                            <Image
-                                src={image.src}
-                                alt={image.alt}
-                                width={600}
-                                height={400}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                data-ai-hint={image.dataAiHint}
-                            />
+    <main className="flex-1">
+        <div className="max-w-7xl mx-auto shadow-lg bg-background p-4">
+            <div className="container mx-auto px-4 py-12">
+                <Card className="shadow-lg">
+                    <CardHeader className="text-center bg-primary text-primary-foreground">
+                        <CardTitle className="text-3xl flex items-center justify-center gap-3">
+                            <Camera className="w-8 h-8" />
+                            ফটো গ্যালারি
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            {galleryImages.map((image, index) => (
+                            <div key={index} className="overflow-hidden rounded-lg shadow-md group">
+                                <Image
+                                    src={image.src}
+                                    alt={image.alt}
+                                    width={600}
+                                    height={400}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    data-ai-hint={image.dataAiHint}
+                                />
+                            </div>
+                            ))}
                         </div>
-                        ))}
-                    </div>
-                </CardContent>
-            </Card>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
-      </main>
-      <Footer />
-    </div>
+    </main>
   )
 }
