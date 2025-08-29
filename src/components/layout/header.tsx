@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 const navLinks = [
   { href: '/', label: 'প্রচ্ছদ', icon: Home },
@@ -31,8 +32,16 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white shadow-md">
-      <div className="bg-gradient-to-r from-green-600 to-green-400 text-white py-2 px-4">
-        <div className="flex flex-col items-center justify-center">
+      <div className="relative text-white py-2 px-4">
+        <Image 
+            src="https://placehold.co/1280x200"
+            alt="Header background"
+            layout="fill"
+            objectFit='cover'
+            className='absolute top-0 left-0 -z-10'
+            data-ai-hint='green gradient'
+        />
+        <div className="flex flex-col items-center justify-center relative z-10">
           <p className='text-lg'>গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</p>
           <div className="flex items-center gap-4 pt-2">
             <Link href="/" className='flex-shrink-0'>
@@ -97,3 +106,5 @@ export default function Header() {
     </header>
   );
 }
+
+    
