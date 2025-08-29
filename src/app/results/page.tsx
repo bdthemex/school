@@ -127,7 +127,7 @@ export default function ResultsPage() {
 
   return (
     <main className="flex-1">
-        <div className="p-4">
+        <div>
             <div className="container mx-auto px-4 py-12">
                 <Card className="shadow-lg">
                     <CardHeader className="text-center bg-primary text-primary-foreground">
@@ -219,7 +219,7 @@ export default function ResultsPage() {
                                         </div>
                                     </div>
                                     <Button type="submit" className="w-full" disabled={isLoading}>
-                                        {isLoading ? 'অনুসন্ধান করা হচ্ছে...' : 'ফলাফল দেখুন'}
+                                        {isLoading ? 'অনুসন্ধาน করা হচ্ছে...' : 'ফলাফল দেখুন'}
                                     </Button>
                                 </form>
                             </CardContent>

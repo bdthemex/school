@@ -14,7 +14,7 @@ const historyMilestones = [
 export default function HistoryPage() {
   return (
     <main className="flex-1">
-        <div className="p-4">
+        <div>
             <div className="container mx-auto px-4 py-12">
             <Card className="shadow-lg overflow-hidden">
                 <CardHeader className="text-center bg-primary text-primary-foreground">

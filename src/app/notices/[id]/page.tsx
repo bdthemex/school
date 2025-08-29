@@ -42,7 +42,7 @@ export default function NoticeDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="p-4">
+      <div>
         <div className="container mx-auto px-4 py-12">
           <Card className="shadow-lg">
             <CardHeader>
@@ -64,7 +64,7 @@ export default function NoticeDetailsPage() {
 
   if (!notice) {
     return (
-      <div className="p-4">
+      <div>
         <div className="container mx-auto px-4 py-12 text-center">
           <h1 className="text-2xl font-bold text-destructive">নোটিশ পাওয়া যায়নি</h1>
           <p className="text-muted-foreground">আপনি যে নোটিশটি খুঁজছেন তা এখানে নেই।</p>
@@ -75,7 +75,7 @@ export default function NoticeDetailsPage() {
 
   return (
     <main className="flex-1">
-      <div className="p-4">
+      <div>
         <div className="container mx-auto px-4 py-12">
           <Card className="shadow-lg">
             <CardHeader>
