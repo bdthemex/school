@@ -84,22 +84,22 @@ export default function Header() {
         />
       </div>
       
-      <div className="bg-gray-800 text-gray-100 hidden md:block">
+      <div className="bg-[#0a2342] text-gray-100 hidden md:block py-2">
         <div className="container mx-auto">
             <nav className="flex items-center gap-1">
             {navLinks.map((link) => (
                 link.children ? (
                     <DropdownMenu key={link.label}>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="hover:bg-gray-700 text-base text-white hover:text-white flex items-center gap-1">
+                            <Button variant="ghost" className="hover:bg-[#8B0000] text-base text-white hover:text-white flex items-center gap-1">
                                 <link.icon className='w-4 h-4' />
                                 {link.label}
                                 <ChevronDown className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="bg-gray-800 text-white border-gray-700">
+                        <DropdownMenuContent className="bg-[#0a2342] text-white border-gray-700">
                             {link.children.map(child => (
-                                <DropdownMenuItem key={child.label} asChild className='hover:!bg-gray-700 focus:!bg-gray-700 focus:!text-white hover:!text-white'>
+                                <DropdownMenuItem key={child.label} asChild className='hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white'>
                                     <Link href={child.href} className='flex items-center gap-2'>
                                         <child.icon className='w-4 h-4' />
                                         {child.label}
@@ -111,8 +111,8 @@ export default function Header() {
                 ) : (
                     <Button key={link.label} asChild variant="ghost" 
                     className={cn(
-                        "hover:bg-gray-700 text-base text-white hover:text-white",
-                        link.href === pathname ? 'bg-gray-700' : ''
+                        "hover:bg-[#8B0000] text-base text-white hover:text-white",
+                        link.href === pathname ? 'bg-[#8B0000]' : ''
                     )}>
                         <Link href={link.href!} className="flex items-center gap-2">
                             <link.icon className='w-4 h-4' />
@@ -125,7 +125,7 @@ export default function Header() {
         </div>
       </div>
 
-       <div className="md:hidden flex justify-end items-center h-16 bg-gray-800 text-white px-4">
+       <div className="md:hidden flex justify-end items-center h-16 bg-[#0a2342] text-white px-4">
             <Sheet>
                 <SheetTrigger asChild>
                 <Button variant="outline" size="icon" className='bg-transparent text-white border-white'>
@@ -133,15 +133,15 @@ export default function Header() {
                     <span className="sr-only">মেনু খুলুন</span>
                 </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className='bg-gray-800 text-white border-r-gray-700 p-0 pt-6'>
+                <SheetContent side="left" className='bg-[#0a2342] text-white border-r-gray-700 p-0 pt-6'>
                     <nav className="flex flex-col gap-1 px-2">
                         {navLinks.map((link) => (
                           link.children ? (
                             <Collapsible key={link.label} className="w-full">
                               <CollapsibleTrigger asChild>
                                 <div className={cn(
-                                    "text-lg font-medium transition-colors hover:text-green-400 flex items-center justify-between gap-3 p-2 rounded-md",
-                                    pathname.startsWith(link.children.map(c => c.href).join()) ? 'bg-gray-700 text-green-400' : 'text-white'
+                                    "text-lg font-medium transition-colors hover:bg-[#8B0000] flex items-center justify-between gap-3 p-2 rounded-md",
+                                    pathname.startsWith(link.children.map(c => c.href).join()) ? 'bg-[#8B0000] text-white' : 'text-white'
                                   )}>
                                   <div className="flex items-center gap-3">
                                     <link.icon className='w-5 h-5' />
@@ -157,8 +157,8 @@ export default function Header() {
                                     key={child.label} 
                                     href={child.href} 
                                     className={cn(
-                                      "text-base font-medium transition-colors hover:text-green-400 flex items-center gap-3 p-2 rounded-md",
-                                      pathname === child.href ? 'bg-gray-700 text-green-400' : 'text-white'
+                                      "text-base font-medium transition-colors hover:bg-[#8B0000] flex items-center gap-3 p-2 rounded-md",
+                                      pathname === child.href ? 'bg-[#8B0000] text-white' : 'text-white'
                                     )}
                                   >
                                     <child.icon className='w-4 h-4' />
@@ -173,8 +173,8 @@ export default function Header() {
                               key={link.label} 
                               href={link.href!}
                               className={cn(
-                                "text-lg font-medium transition-colors hover:text-green-400 flex items-center gap-3 p-2 rounded-md",
-                                pathname === link.href ? 'bg-gray-700 text-green-400' : 'text-white'
+                                "text-lg font-medium transition-colors hover:bg-[#8B0000] flex items-center gap-3 p-2 rounded-md",
+                                pathname === link.href ? 'bg-[#8B0000] text-white' : 'text-white'
                               )}
                             >
                                <link.icon className='w-5 h-5' />
