@@ -3,9 +3,8 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import Logo from '@/components/icons/logo';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Home, Info, Users, Newspaper, ImageIcon as GalleryIcon, Phone, GraduationCap, Building, ChevronDown, ChevronRight, MessageSquare, Video, BookOpen, Star, UserSquare, History } from 'lucide-react';
+import { Menu, Home, Info, Users, Newspaper, ImageIcon as GalleryIcon, Phone, GraduationCap, ChevronDown, ChevronRight, MessageSquare, Video, BookOpen, Star, UserSquare, History } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -82,7 +81,6 @@ export default function Header() {
             alt="Header Banner"
             fill
             style={{objectFit: 'cover'}}
-            priority
         />
       </div>
       
