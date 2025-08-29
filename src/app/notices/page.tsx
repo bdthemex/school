@@ -2,8 +2,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Megaphone, Calendar, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
@@ -13,37 +11,20 @@ interface Notice {
   id: string;
   date: string;
   title: string;
-  createdAt?: Timestamp;
 }
 
-export default function NoticesPage() {
-    const [notices, setNotices] = useState<Notice[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+const demoNotices: Notice[] = [
+    { id: '1', date: '২০২৪-০৭-২৬', title: '২০২৫ শিক্ষাবর্ষে ৬ষ্ঠ থেকে ৯ম শ্রেণিতে ভর্তির বিজ্ঞপ্তি।' },
+    { id: '2', date: '২০২৪-০৭-২৫', title: 'বার্ষিক ক্রীড়া প্রতিযোগিতা-২০২৪ এর পুরস্কার বিতরণী অনুষ্ঠান।' },
+    { id: '3', date: '২০২৪-০৭-২৪', title: 'অভিভাবক সমাবেশ এবং ফলাফল প্রকাশ সংক্রান্ত নোটিশ।' },
+    { id: '4', date: '২০২৪-০৭-২৩', title: 'ডেঙ্গু প্রতিরোধে সচেতনতামূলক কার্যক্রম গ্রহণ প্রসঙ্গে।' },
+    { id: '5', date: '২০২৪-০৭-২২', title: 'বর্ষাকালীন ছুটি ও গ্রীষ্মকালীন অবকাশের নোটিশ।' },
+];
 
-    useEffect(() => {
-        const getNotices = async () => {
-            setIsLoading(true);
-            try {
-                const noticesCollectionRef = collection(db, 'notices')
-                const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'))
-                const data = await getDocs(q)
-                const filteredData = data.docs.map((doc) => {
-                    const docData = doc.data();
-                    return {
-                      id: doc.id,
-                      date: docData.date, 
-                      title: docData.title,
-                    } as Notice
-                  })
-                setNotices(filteredData)
-            } catch (error) {
-                console.error("Error fetching notices:", error)
-            } finally {
-                setIsLoading(false);
-            }
-        }
-        getNotices()
-    }, [])
+
+export default function NoticesPage() {
+    const [notices, setNotices] = useState<Notice[]>(demoNotices)
+    const [isLoading, setIsLoading] = useState(false)
 
   return (
     <main className="flex-1">
