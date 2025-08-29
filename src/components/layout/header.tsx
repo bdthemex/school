@@ -38,7 +38,7 @@ const navLinks = [
     icon: GraduationCap,
     children: [
         { href: '/class-routine', label: 'ক্লাস রুটিন', icon: UserSquare },
-        { href: '#', label: 'কৃতি শিক্ষার্থী', icon: Star },
+        { href: '/#', label: 'কৃতি শিক্ষার্থী', icon: Star },
     ]
   },
   {
@@ -78,7 +78,7 @@ export default function Header() {
     <header className="w-full bg-white">
       <div className="relative w-full h-[150px] md:h-[200px] hidden md:block">
         <Image 
-            src="https://picsum.photos/1280/200?random=10"
+            src="https://kjsghs.edu.bd/wp-content/uploads/2022/10/cropped-KJSGHS-Banner-2-2.jpg"
             alt="Header Banner"
             fill
             style={{objectFit: 'cover'}}
