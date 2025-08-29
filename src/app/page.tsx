@@ -33,8 +33,8 @@ interface Notice {
 }
 
 const facultyData = [
-  { name: 'প্রধান শিক্ষক', message: 'দীর্ঘদিন পরে কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়ের ওয়েব সাইট সম্প্রতি খোলা হয়েছে। এটা বিদ্যালয়ের জন্য উজ্জ্বল মাইল ফলক।', image: 'https://placehold.co/100x100', dataAiHint: 'teacher portrait' },
-  { name: 'সহকারী প্রধান শিক্ষক', message: 'তথ্য প্রযুক্তির যুগে প্রবেশ করতে পেরে আমরা আনন্দিত। এর মাধ্যমে স্কুলের কার্যক্রম আরও গতিশীল হবে।', image: 'https://placehold.co/100x100', dataAiHint: 'teacher portrait' },
+  { name: 'প্রধান শিক্ষক', title: 'প্রধান শিক্ষকের বাণী', message: 'দীর্ঘদিন পরে কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়ের ওয়েব সাইট সম্প্রতি খোলা হয়েছে। এটা বিদ্যালয়ের জন্য উজ্জ্বল মাইল ফলক।', image: 'https://placehold.co/100x100', dataAiHint: 'teacher portrait', link: '/principals-message' },
+  { name: 'সহকারী প্রধান শিক্ষক', title: 'সহকারী প্রধান শিক্ষকের বাণী', message: 'তথ্য প্রযুক্তির যুগে প্রবেশ করতে পেরে আমরা আনন্দিত। এর মাধ্যমে স্কুলের কার্যক্রম আরও গতিশীল হবে।', image: 'https://placehold.co/100x100', dataAiHint: 'teacher portrait', link: '/vice-principals-message' },
 ];
 
 const importantSiteLinks = [
@@ -60,8 +60,11 @@ const officialLinks = [
 ]
 
 export default function Home() {
-    const plugin = React.useRef(
+    const heroCarouselPlugin = React.useRef(
         Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
+    )
+     const facultyCarouselPlugin = React.useRef(
+        Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true })
     )
     const [notices, setNotices] = useState<Notice[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -96,11 +99,11 @@ export default function Home() {
     }, [getNotices]);
 
   return (
-    <main className="flex-1 p-4">
+    <main className="p-4">
       
         <section className="relative w-full shadow-md">
             <Carousel
-                plugins={[plugin.current]}
+                plugins={[heroCarouselPlugin.current]}
                 className="w-full"
                 >
                 <CarouselContent>
@@ -186,28 +189,36 @@ export default function Home() {
                 </CardContent>
             </Card>
 
-            {/* Teachers */}
-             <div className="grid md:grid-cols-2 gap-6">
-                 {facultyData.map((faculty, index) => (
-                    <Card key={index} className="shadow-lg">
-                        <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
-                            <CardTitle className="text-xl flex items-center gap-2">
-                                <Users className="w-5 h-5" />
-                                {index === 0 ? 'প্রধান শিক্ষকের বাণী' : 'সহকারী প্রধান শিক্ষকের বাণী' }
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex flex-col sm:flex-row items-center gap-4 pt-6">
-                           <Image src={faculty.image} alt={faculty.name} width={80} height={80} className="rounded-md border-2 border-accent" data-ai-hint={faculty.dataAiHint} />
-                           <div className='space-y-2 text-center sm:text-left'>
-                               <p className='text-sm text-muted-foreground italic text-justify'>"{faculty.message}"</p>
-                               <Button asChild variant="link" className="p-0 h-auto text-primary hover:underline">
-                                 <Link href={index === 0 ? "/principals-message" : "/vice-principals-message"}>বিস্তারিত</Link>
-                               </Button>
-                           </div>
-                        </CardContent>
-                    </Card>
-                 ))}
-             </div>
+            {/* Teachers Messages Carousel */}
+             <Carousel
+                opts={{ loop: true, align: "start" }}
+                plugins={[facultyCarouselPlugin.current]}
+                className="w-full"
+             >
+                <CarouselContent className="-ml-2 md:-ml-4">
+                     {facultyData.map((faculty, index) => (
+                        <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2">
+                            <Card className="shadow-lg h-full">
+                                <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
+                                    <CardTitle className="text-xl flex items-center gap-2">
+                                        <Users className="w-5 h-5" />
+                                        {faculty.title}
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="flex flex-col sm:flex-row items-center gap-4 pt-6">
+                                   <Image src={faculty.image} alt={faculty.name} width={80} height={80} className="rounded-md border-2 border-accent" data-ai-hint={faculty.dataAiHint} />
+                                   <div className='space-y-2 text-center sm:text-left'>
+                                       <p className='text-sm text-muted-foreground italic text-justify'>"{faculty.message}"</p>
+                                       <Button asChild variant="link" className="p-0 h-auto text-primary hover:underline">
+                                         <Link href={faculty.link}>বিস্তারিত</Link>
+                                       </Button>
+                                   </div>
+                                </CardContent>
+                            </Card>
+                        </CarouselItem>
+                     ))}
+                </CarouselContent>
+             </Carousel>
 
              {/* Corner Cards */}
              <div className="grid md:grid-cols-2 gap-6">
@@ -393,3 +404,5 @@ export default function Home() {
     </main>
   );
 }
+
+    
