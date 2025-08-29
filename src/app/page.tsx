@@ -100,8 +100,8 @@ export default function Home() {
 
   return (
     <main>
-      <div className='px-4'>
-        <section className="relative w-full shadow-md mt-4">
+      <div className='p-4'>
+        <section className="relative w-full shadow-md">
             <Carousel
                 plugins={[heroCarouselPlugin.current]}
                 className="w-full"
@@ -221,7 +221,7 @@ export default function Home() {
              {/* Corner Cards */}
              <div className="grid md:grid-cols-2 gap-6">
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg border-b-4 border-primary/80 p-4'>
+                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <GraduationCap className="w-5 h-5" />
                             শিক্ষার্থীদের কর্নার
@@ -245,7 +245,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg border-b-4 border-primary/80 p-4'>
+                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                            <Users className="w-5 h-5" />
                             শিক্ষকমন্ডলীদের কর্ণার
@@ -269,7 +269,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg border-b-4 border-primary/80 p-4'>
+                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <Download className="w-5 h-5" />
                             সকল ডাউনলোড
@@ -292,7 +292,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg border-b-4 border-primary/80 p-4'>
+                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <BookOpen className="w-5 h-5" />
                              একাডেমিক তথ্য
@@ -403,4 +403,3 @@ export default function Home() {
     </main>
   );
 }
-
