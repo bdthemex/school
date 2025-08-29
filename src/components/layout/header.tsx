@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -84,27 +83,25 @@ export default function Header() {
     }
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > bannerHeight) {
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+    if (currentScrollY > bannerHeight) {
+      if (currentScrollY > lastScrollY) {
         // Scrolling down
-        if (currentScrollY > lastScrollY) {
-          setIsBannerVisible(false);
-        } else { // Scrolling up
-          setIsBannerVisible(true);
-        }
+        setIsBannerVisible(false);
       } else {
+        // Scrolling up
         setIsBannerVisible(true);
       }
-      setLastScrollY(currentScrollY);
-    };
+    } else {
+      setIsBannerVisible(true);
+    }
+    setLastScrollY(currentScrollY);
+  };
 
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY, bannerHeight]);
 
 
@@ -235,7 +232,10 @@ export default function Header() {
           </div>
         </div>
       </header>
-      <div style={{ paddingTop: bannerHeight }} />
+      <div 
+        className="transition-all duration-300 ease-in-out"
+        style={{ paddingTop: isBannerVisible ? bannerHeight : 0 }} 
+      />
     </>
   );
 }

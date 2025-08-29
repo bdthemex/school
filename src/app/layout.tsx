@@ -26,9 +26,11 @@ export default function RootLayout({
     <html lang="bn" className={`${hindSiliguri.variable}`}>
       <body className="font-body antialiased bg-muted/40">
         <Header />
-        <div className="max-w-7xl mx-auto shadow-lg bg-background p-4">
-          {children}
-        </div>
+        <main className="max-w-7xl mx-auto bg-background shadow-lg">
+          <div className="p-4">
+            {children}
+          </div>
+        </main>
         <Footer />
         <Toaster />
       </body>
