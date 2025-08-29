@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -18,7 +19,7 @@ const managementItems = [
   },
   {
     title: 'ফলাফল ম্যানেজ করুন',
-    description: 'ছাত্রীদের পরীক্ষার ফলাফল আপলোড ও সম্পাদনা করুন।',
+    description: 'শিক্ষার্থীদের পরীক্ষার ফলাফল আপলোড ও সম্পাদনা করুন।',
     icon: FileText,
     href: '/admin/results',
   },
