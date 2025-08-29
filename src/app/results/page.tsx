@@ -37,22 +37,56 @@ interface StudentResult {
   results: SubjectResult[];
 }
 
-const demoResult: StudentResult = {
-    studentName: "মোঃ আব্দুল্লাহ",
-    fatherName: "মোঃ আব্দুর রহমান",
-    className: "১০ম",
-    roll: "১০১",
-    totalMarks: 850,
-    grade: "A+",
-    results: [
-        { subject: 'বাংলা', marks: 85 },
-        { subject: 'ইংরেজি', marks: 88 },
-        { subject: 'গণিত', marks: 92 },
-        { subject: 'বিজ্ঞান', marks: 80 },
-        { subject: 'সমাজ বিজ্ঞান', marks: 85 },
-        { subject: 'ধর্ম', marks: 90 },
-    ]
-}
+const demoResults: StudentResult[] = [
+    {
+        studentName: "মোঃ আব্দুল্লাহ",
+        fatherName: "মোঃ আব্দুর রহমান",
+        className: "১০ম",
+        roll: "১০১",
+        totalMarks: 850,
+        grade: "A+",
+        results: [
+            { subject: 'বাংলা', marks: 85 },
+            { subject: 'ইংরেজি', marks: 88 },
+            { subject: 'গণিত', marks: 92 },
+            { subject: 'বিজ্ঞান', marks: 80 },
+            { subject: 'সমাজ বিজ্ঞান', marks: 85 },
+            { subject: 'ধর্ম', marks: 90 },
+        ]
+    },
+    {
+        studentName: "ফাতেমা আক্তার",
+        fatherName: "মোঃ জামাল উদ্দিন",
+        className: "১০ম",
+        roll: "১০২",
+        totalMarks: 790,
+        grade: "A",
+        results: [
+            { subject: 'বাংলা', marks: 78 },
+            { subject: 'ইংরেজি', marks: 82 },
+            { subject: 'গণিত', marks: 85 },
+            { subject: 'বিজ্ঞান', marks: 75 },
+            { subject: 'সমাজ বিজ্ঞান', marks: 80 },
+            { subject: 'ধর্ম', marks: 88 },
+        ]
+    },
+     {
+        studentName: "সাইফুল ইসলাম",
+        fatherName: "মোঃ কামাল হোসেন",
+        className: "১০ম",
+        roll: "১০৩",
+        totalMarks: 910,
+        grade: "A+",
+        results: [
+            { subject: 'বাংলা', marks: 90 },
+            { subject: 'ইংরেজি', marks: 92 },
+            { subject: 'গণিত', marks: 95 },
+            { subject: 'বিজ্ঞান', marks: 88 },
+            { subject: 'সমাজ বিজ্ঞান', marks: 91 },
+            { subject: 'ধর্ম', marks: 94 },
+        ]
+    }
+]
 
 
 export default function ResultsPage() {
@@ -77,8 +111,12 @@ export default function ResultsPage() {
 
         // Demo logic
         setTimeout(() => {
-            if (data.year === '2024' && data.examType === 'বার্ষিক পরীক্ষা' && data.class === '১০ম' && data.roll === '১০১') {
-                setResult(demoResult);
+            const foundResult = demoResults.find(
+              (r) => r.className === data.class && r.roll === data.roll
+            );
+            
+            if (data.year === '2024' && data.examType === 'বার্ষিক পরীক্ষা' && foundResult) {
+                setResult(foundResult);
             } else {
                 setResult(null);
             }
