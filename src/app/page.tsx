@@ -98,7 +98,7 @@ export default function Home() {
     }, [getNotices]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-muted/20">
+    <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-1">
         
@@ -169,7 +169,7 @@ export default function Home() {
           <div className="lg:col-span-3 space-y-6">
             {/* About Section */}
             <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-lg'>
+                <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
                     <CardTitle className="text-xl flex items-center gap-2">
                         <HomeIcon className="w-5 h-5" />
                         প্রতিষ্ঠানের ইতিহাস
@@ -180,7 +180,7 @@ export default function Home() {
                          <Image src="https://placehold.co/400x300" alt="প্রতিষ্ঠানের ইতিহাস" width={400} height={300} className="w-full h-auto object-cover rounded-lg shadow-md" data-ai-hint="historic building" />
                     </div>
                     <div className="md:col-span-3 space-y-3">
-                      <p className="text-muted-foreground leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed text-justify">
                       কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ খ্রি: সালে প্রতিষ্ঠিত। বিগত ১৯/০৩/১৯৯১খ্রি: সনে প্রতিষ্ঠানটি জাতীয় করণ করা হয়। বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান চালু আছে। বিদ্যালয়টিতে বর্তমানে ৭১৭ জন ছাত্র-ছাত্রী অধ্যয়নরত এবং একুশজন শিক্ষকের স্থলে ১২ জন শিক্ষক, শিক্ষিকা কর্মরত আছেন। বিদ্যালয়ের তিন তলা ভবনটি একটি দু'তলা ভবন একটি, হাফ বিল্ডিং তিনটি, খেলার মাঠ একটি ও বিদ্যালয় প্রাঙ্গনে দুইটি শহীদ মিনার রয়েছে।
                       </p>
                        <Button asChild variant="link" size="sm" className="p-0 h-auto">
@@ -196,7 +196,7 @@ export default function Home() {
              <div className="grid md:grid-cols-2 gap-6">
                  {facultyData.map((faculty, index) => (
                     <Card key={index} className="shadow-lg">
-                        <CardHeader className='bg-blue-600 text-white rounded-t-lg'>
+                        <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
                             <CardTitle className="text-xl flex items-center gap-2">
                                 <Users className="w-5 h-5" />
                                 {index === 0 ? 'প্রধান শিক্ষকের বাণী' : 'সহকারী প্রধান শিক্ষকের বাণী' }
@@ -205,7 +205,7 @@ export default function Home() {
                         <CardContent className="flex flex-col sm:flex-row items-center gap-4 pt-6">
                            <Image src={faculty.image} alt={faculty.name} width={80} height={80} className="rounded-md border-2 border-accent" data-ai-hint={faculty.dataAiHint} />
                            <div className='space-y-2 text-center sm:text-left'>
-                               <p className='text-sm text-muted-foreground italic'>"{faculty.message}"</p>
+                               <p className='text-sm text-muted-foreground italic text-justify'>"{faculty.message}"</p>
                                <Button asChild variant="link" className="p-0 h-auto text-primary hover:underline">
                                  <Link href={index === 0 ? "/principals-message" : "/vice-principals-message"}>বিস্তারিত</Link>
                                </Button>
@@ -218,7 +218,7 @@ export default function Home() {
              {/* Corner Cards */}
              <div className="grid md:grid-cols-2 gap-6">
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-800'>
+                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-600 p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <GraduationCap className="w-5 h-5" />
                             শিক্ষার্থীদের কর্নার
@@ -242,7 +242,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-800'>
+                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-600 p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                            <Users className="w-5 h-5" />
                             শিক্ষকমন্ডলীদের কর্ণার
@@ -266,7 +266,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-800'>
+                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-600 p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <Download className="w-5 h-5" />
                             সকল ডাউনলোড
@@ -289,7 +289,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-800'>
+                    <CardHeader className='bg-blue-600 text-white rounded-t-lg border-b-4 border-blue-600 p-4'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <BookOpen className="w-5 h-5" />
                              একাডেমিক তথ্য
@@ -332,7 +332,7 @@ export default function Home() {
                  </CardContent>
                </Card>
               <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-lg'>
+                <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <Megaphone className="w-5 h-5" />
                         নোটিশ বোর্ড
@@ -362,7 +362,7 @@ export default function Home() {
               </Card>
 
                <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-lg'>
+                <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <LinkIcon className="w-5 h-5" />
                         গুরুত্বপূর্ণ লিংক
@@ -379,7 +379,7 @@ export default function Home() {
               </Card>
 
               <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-lg'>
+                <CardHeader className='bg-blue-600 text-white rounded-t-lg p-4'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <LinkIcon className="w-5 h-5" />
                         অফিসিয়াল লিংক
@@ -401,3 +401,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
