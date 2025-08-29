@@ -161,7 +161,7 @@ export default function ResultsPage() {
                                                         <SelectContent>
                                                             <SelectItem value="৬ষ্ঠ">৬ষ্ঠ</SelectItem>
                                                             <SelectItem value="৭ম">৭ম</SelectItem>
-                                                            <SelectItem value="৮ম">৮ম</arcticle>
+                                                            <SelectItem value="৮ম">৮ম</SelectItem>
                                                             <SelectItem value="৯ম">৯ম</SelectItem>
                                                             <SelectItem value="১০ম">১০ম</SelectItem>
                                                         </SelectContent>
@@ -257,5 +257,3 @@ export default function ResultsPage() {
     </main>
   )
 }
-
-    
