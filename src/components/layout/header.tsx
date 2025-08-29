@@ -75,7 +75,7 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white shadow-md">
+    <header className="sticky top-0 z-50 w-full bg-white">
       <div className="relative text-white py-2 px-4">
         <Image 
             src="https://placehold.co/1280x200"
@@ -100,45 +100,43 @@ export default function Header() {
       </div>
       
       <div className="bg-gray-800 text-gray-100 hidden md:block">
-        <div className="container mx-auto px-4">
-            <div className="flex h-14 items-center justify-start">
-                <nav className="flex items-center gap-1">
-                {navLinks.map((link) => (
-                    link.children ? (
-                        <DropdownMenu key={link.label}>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="hover:bg-gray-700 text-base text-white hover:text-white flex items-center gap-1">
-                                    <link.icon className='w-4 h-4' />
-                                    {link.label}
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-gray-800 text-white border-gray-700">
-                                {link.children.map(child => (
-                                    <DropdownMenuItem key={child.label} asChild className='hover:!bg-gray-700 focus:!bg-gray-700 focus:!text-white hover:!text-white'>
-                                        <Link href={child.href} className='flex items-center gap-2'>
-                                            <child.icon className='w-4 h-4' />
-                                            {child.label}
-                                        </Link>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    ) : (
-                        <Button key={link.label} asChild variant="ghost" 
-                        className={cn(
-                            "hover:bg-gray-700 text-base text-white hover:text-white",
-                            link.href === pathname ? 'bg-gray-700' : ''
-                        )}>
-                            <Link href={link.href!} className="flex items-center gap-2">
+        <div className="container mx-auto flex h-14 items-center justify-start">
+            <nav className="flex items-center gap-1">
+            {navLinks.map((link) => (
+                link.children ? (
+                    <DropdownMenu key={link.label}>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="hover:bg-gray-700 text-base text-white hover:text-white flex items-center gap-1">
                                 <link.icon className='w-4 h-4' />
                                 {link.label}
-                            </Link>
-                        </Button>
-                    )
-                ))}
-                </nav>
-            </div>
+                                <ChevronDown className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="bg-gray-800 text-white border-gray-700">
+                            {link.children.map(child => (
+                                <DropdownMenuItem key={child.label} asChild className='hover:!bg-gray-700 focus:!bg-gray-700 focus:!text-white hover:!text-white'>
+                                    <Link href={child.href} className='flex items-center gap-2'>
+                                        <child.icon className='w-4 h-4' />
+                                        {child.label}
+                                    </Link>
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                ) : (
+                    <Button key={link.label} asChild variant="ghost" 
+                    className={cn(
+                        "hover:bg-gray-700 text-base text-white hover:text-white",
+                        link.href === pathname ? 'bg-gray-700' : ''
+                    )}>
+                        <Link href={link.href!} className="flex items-center gap-2">
+                            <link.icon className='w-4 h-4' />
+                            {link.label}
+                        </Link>
+                    </Button>
+                )
+            ))}
+            </nav>
         </div>
       </div>
 
