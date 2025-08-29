@@ -127,7 +127,7 @@ export default function Home() {
                 </div>
                 <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
                     <div className="w-full flex items-center">
-                    <div className="animate-marquee whitespace-nowrap flex text-primary text-base">
+                    <div className="animate-marquee whitespace-nowrap flex text-foreground text-base">
                         <span className="mx-4">{marqueeText}</span>
                         <span className="mx-4">{marqueeText}</span>
                     </div>
@@ -157,7 +157,7 @@ export default function Home() {
                     </div>
                     <div className="md:col-span-3 space-y-3">
                       <p className="text-foreground leading-relaxed text-base">
-                      কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ খ্রি: সালে প্রতিষ্ঠিত। বিগত ১৯/০৩/১৯৯১খ্রি: সনে প্রতিষ্ঠানটি জাতীয় করণ করা হয়। বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান চালু আছে। বিদ্যালয়টিতে বর্তমানে ৭১৭ জন ছাত্র-ছাত্রী অধ্যয়নরত এবং একুশজন শিক্ষকের স্থলে ১২ জন শিক্ষক, শিক্ষিকা কর্মরত আছেন। বিদ্যালয়ের তিন তলা ভবনটি একটি দু'তলা ভবন একটি, হাফ বিল্ডিং তিনটি, খেলার মাঠ একটি ও বিদ্যালয় প্রাঙ্গনে দুইটি শহীদ মিনার রয়েছে।
+                      কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ সালে প্রতিষ্ঠিত হয়। এটি এই অঞ্চলের অন্যতম প্রাচীন এবং স্বনামধন্য একটি শিক্ষা প্রতিষ্ঠান। ১৯ মার্চ, ১৯৯১ সালে প্রতিষ্ঠানটি জাতীয়করণ করা হয়। বর্তমানে বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয় এবং প্রায় ৭১৭ জন শিক্ষার্থী অধ্যয়নরত আছে। অভিজ্ঞ শিক্ষকমণ্ডলীর মাধ্যমে পরিচালিত এই বিদ্যালয়ে বর্তমানে ১২ জন শিক্ষক কর্মরত রয়েছেন। বিদ্যালয়টিতে একটি তিন তলা ভবন, একটি দোতলা ভবন, তিনটি হাফ বিল্ডিং, একটি খেলার মাঠ এবং দুইটি শহীদ মিনার রয়েছে।
                       </p>
                        <Button asChild variant="link" size="sm" className="p-0 h-auto">
                             <Link href="/about">
@@ -383,4 +383,5 @@ export default function Home() {
       </div>
     </main>
   );
-}
+
+    
