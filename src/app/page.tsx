@@ -156,7 +156,7 @@ export default function Home() {
                          <Image src="https://placehold.co/400x300" alt="প্রতিষ্ঠানের ইতিহাস" width={400} height={300} className="w-full h-auto object-cover rounded-lg shadow-md" data-ai-hint="historic building" />
                     </div>
                     <div className="md:col-span-3 space-y-3">
-                      <p className="text-muted-foreground leading-relaxed text-base">
+                      <p className="text-foreground leading-relaxed text-base">
                       কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ খ্রি: সালে প্রতিষ্ঠিত। বিগত ১৯/০৩/১৯৯১খ্রি: সনে প্রতিষ্ঠানটি জাতীয় করণ করা হয়। বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান চালু আছে। বিদ্যালয়টিতে বর্তমানে ৭১৭ জন ছাত্র-ছাত্রী অধ্যয়নরত এবং একুশজন শিক্ষকের স্থলে ১২ জন শিক্ষক, শিক্ষিকা কর্মরত আছেন। বিদ্যালয়ের তিন তলা ভবনটি একটি দু'তলা ভবন একটি, হাফ বিল্ডিং তিনটি, খেলার মাঠ একটি ও বিদ্যালয় প্রাঙ্গনে দুইটি শহীদ মিনার রয়েছে।
                       </p>
                        <Button asChild variant="link" size="sm" className="p-0 h-auto">
@@ -187,7 +187,7 @@ export default function Home() {
                                 <CardContent className="flex flex-col sm:flex-row items-center gap-4 pt-6">
                                    <Image src={faculty.image} alt={faculty.name} width={80} height={80} className="rounded-md border-2 border-accent" data-ai-hint={faculty.dataAiHint} />
                                    <div className='space-y-2 text-center sm:text-left'>
-                                       <p className='text-base text-muted-foreground italic text-justify leading-relaxed'>"{faculty.message}"</p>
+                                       <p className='text-base text-foreground italic text-justify leading-relaxed'>"{faculty.message}"</p>
                                        <Button asChild variant="link" className="p-0 h-auto text-primary hover:underline">
                                          <Link href={faculty.link}>বিস্তারিত</Link>
                                        </Button>
@@ -307,7 +307,7 @@ export default function Home() {
                         <Link
                             href={link.href}
                             key={link.title}
-                            className="flex items-center gap-2 p-2.5 text-base font-medium border rounded-md hover:bg-muted transition-colors"
+                            className="flex items-center gap-2 p-2.5 text-base font-medium border rounded-md hover:bg-muted transition-colors text-foreground"
                         >
                              <Target className="w-4 h-4 text-primary" />
                              {link.title}
@@ -334,13 +334,13 @@ export default function Home() {
                       notices.map((notice) => (
                         <Link href={`/notices/${notice.id}`} key={notice.id} className="block text-base text-foreground hover:text-primary gap-2">
                            <div className="flex items-start gap-2">
-                             <Target className="w-4 h-4 mt-1 flex-shrink-0 text-muted-foreground" />
+                             <Target className="w-4 h-4 mt-1 flex-shrink-0 text-primary" />
                              <p>{notice.title}</p>
                            </div>
                         </Link>
                       ))
                     ) : (
-                      <p className="text-sm text-muted-foreground text-center py-4">কোনো নোটিশ নেই।</p>
+                      <p className="text-sm text-center text-foreground py-4">কোনো নোটিশ নেই।</p>
                     )}
                 </CardContent>
               </Card>
