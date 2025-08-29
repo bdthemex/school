@@ -50,7 +50,7 @@ export default function NoticesPage() {
                             ))
                         ) : notices.length > 0 ? (
                            notices.map((notice) => (
-                            <Link href="#" key={notice.id}>
+                            <Link href={`/notices/${notice.id}`} key={notice.id}>
                                 <div className="p-4 border rounded-lg hover:bg-muted/50 transition-colors flex items-center justify-between">
                                     <div>
                                         <p className="font-semibold text-primary">{notice.title}</p>

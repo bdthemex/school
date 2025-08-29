@@ -16,7 +16,7 @@ export default function PrincipalsMessagePage() {
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="md:w-1/4 text-center">
                     <Image
-                        src="https://picsum.photos/300/300?random=1"
+                        src="https://kjsghs.edu.bd/wp-content/uploads/2022/10/Mr.-Baten-Sir-3-1.jpg"
                         alt="Principal's Photo"
                         width={300}
                         height={300}

@@ -16,7 +16,7 @@ export default function AboutPage() {
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="md:w-1/3">
                     <Image
-                        src="https://picsum.photos/600/400"
+                        src="https://kjsghs.edu.bd/wp-content/uploads/2022/10/school-front-gate-1.jpg"
                         alt="School Building"
                         width={600}
                         height={400}
