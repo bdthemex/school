@@ -73,6 +73,7 @@ export default function Home() {
     const [notices, setNotices] = useState<Notice[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [showMarquee, setShowMarquee] = useState(true);
+    const marqueeText = "সরকারি ও বেসরকারি মাধ্যমিক বিদ্যালয়ে-২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি ও নিয়মাবলী সংক্রান্ত। আমাদের ওয়েবসাইটে আপনাকে স্বাগত…(সাইট ডেভেলপমেন্টের কাজ চলছে) *** "
 
 
     const getNotices = React.useCallback(async () => {
@@ -100,8 +101,6 @@ export default function Home() {
     useEffect(() => {
         getNotices();
     }, [getNotices]);
-
-    const marqueeNotices = notices.length > 0 ? notices.map(n => n.title).join(' *** ') : '';
 
   return (
     <div className="flex flex-col min-h-screen bg-muted/20">
@@ -145,23 +144,19 @@ export default function Home() {
         </section>
 
         {/* Marquee */}
-       {showMarquee && notices.length > 0 && (
+       {showMarquee && (
         <div className="bg-blue-600 text-white shadow-md my-4">
           <div className="container mx-auto flex h-12 items-center overflow-hidden">
             <span className="text-sm font-bold bg-blue-800 text-white px-3 py-1.5 rounded-md flex-shrink-0 whitespace-nowrap">
               জরুরী ঘোষণা
             </span>
             <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
-              {isLoading ? (
-                <Skeleton className="h-4 w-full bg-blue-500/50" />
-              ) : (
                 <div className="w-full flex items-center">
                    <div className="animate-marquee whitespace-nowrap flex">
-                      <span className="mx-4">{marqueeNotices}</span>
-                      <span className="mx-4">{marqueeNotices}</span>
+                      <span className="mx-4">{marqueeText}</span>
+                      <span className="mx-4">{marqueeText}</span>
                   </div>
                 </div>
-              )}
             </div>
             <button onClick={() => setShowMarquee(false)} className='text-white hover:bg-blue-700 p-1 rounded-full'>
                 <X className='w-4 h-4' />
@@ -225,7 +220,7 @@ export default function Home() {
              {/* Corner Cards */}
              <div className="grid md:grid-cols-2 gap-6">
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-red-600 text-white rounded-t-lg'>
+                    <CardHeader className='bg-red-600 text-white rounded-t-lg border-b-4 border-red-800'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <GraduationCap className="w-5 h-5" />
                             শিক্ষার্থীদের কর্নার
@@ -249,7 +244,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-green-600 text-white rounded-t-lg'>
+                    <CardHeader className='bg-green-600 text-white rounded-t-lg border-b-4 border-green-800'>
                         <CardTitle className="text-lg flex items-center gap-2">
                            <Users className="w-5 h-5" />
                             শিক্ষকমন্ডলীদের কর্ণার
@@ -273,7 +268,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-orange-500 text-white rounded-t-lg'>
+                    <CardHeader className='bg-orange-500 text-white rounded-t-lg border-b-4 border-orange-700'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <Download className="w-5 h-5" />
                             সকল ডাউনলোড
@@ -296,7 +291,7 @@ export default function Home() {
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-purple-600 text-white rounded-t-lg'>
+                    <CardHeader className='bg-purple-600 text-white rounded-t-lg border-b-4 border-purple-800'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <BookOpen className="w-5 h-5" />
                              একাডেমিক তথ্য
@@ -408,3 +403,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
