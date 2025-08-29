@@ -99,21 +99,43 @@ export default function Home() {
       <main className="flex-1">
         
         <section className="relative w-full shadow-md">
-            <Image
-              src="https://placehold.co/1920x400"
-              alt="School building"
-              width={1920}
-              height={400}
-              className="w-full h-auto max-h-[400px] object-cover"
-              data-ai-hint="school building"
-            />
-            <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
-                <p className='font-bold text-lg'>প্রশাসনিক ভবন</p>
-            </div>
+            <Carousel
+                plugins={[plugin.current]}
+                className="w-full"
+                >
+                <CarouselContent>
+                    <CarouselItem>
+                        <Image
+                            src="https://placehold.co/1920x400"
+                            alt="School building"
+                            width={1920}
+                            height={400}
+                            className="w-full h-auto max-h-[400px] object-cover"
+                            data-ai-hint="school building"
+                        />
+                         <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
+                            <p className='font-bold text-lg'>প্রশাসনিক ভবন</p>
+                        </div>
+                    </CarouselItem>
+                    <CarouselItem>
+                         <Image
+                            src="https://placehold.co/1920x400"
+                            alt="School campus"
+                            width={1920}
+                            height={400}
+                            className="w-full h-auto max-h-[400px] object-cover"
+                            data-ai-hint="school campus"
+                        />
+                         <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
+                            <p className='font-bold text-lg'>স্কুল ক্যাম্পাস</p>
+                        </div>
+                    </CarouselItem>
+                </CarouselContent>
+            </Carousel>
         </section>
 
         {/* Marquee */}
-       {showMarquee && (
+       {showMarquee && notices.length > 0 && (
         <div className="bg-blue-600 text-white shadow-md my-4">
           <div className="container mx-auto flex h-12 items-center overflow-hidden">
             <span className="text-sm font-bold bg-blue-800 text-white px-3 py-1.5 rounded-md flex-shrink-0 whitespace-nowrap">
@@ -122,16 +144,12 @@ export default function Home() {
             <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
               {isLoading ? (
                 <Skeleton className="h-4 w-full bg-blue-500/50" />
-              ) : notices.length > 0 ? (
+              ) : (
                 <div className="w-full flex items-center">
                    <div className="animate-marquee whitespace-nowrap flex">
                       <span className="mx-4">{marqueeNotices}</span>
                       <span className="mx-4">{marqueeNotices}</span>
                   </div>
-                </div>
-              ) : (
-                <div className="w-full">
-                  <span>কোনো নতুন নোটিশ নেই</span>
                 </div>
               )}
             </div>
@@ -211,7 +229,7 @@ export default function Home() {
                           {label: 'নোটিশ', href: '/notices'}
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-red-600" />
+                                <Check className="w-4 h-4 text-red-500" />
                                 {item.label}
                             </Link>
                         ))}
@@ -232,7 +250,7 @@ export default function Home() {
                           {label: 'SMS ALERT', href: '#'}
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-green-600" />
+                                <Check className="w-4 h-4 text-green-500" />
                                 {item.label}
                             </Link>
                         ))}
@@ -252,7 +270,7 @@ export default function Home() {
                             {label: 'ভর্তি', href: '#'},
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-orange-500" />
+                                <Check className="w-4 h-4 text-orange-400" />
                                 {item.label}
                             </Link>
                         ))}
@@ -274,7 +292,7 @@ export default function Home() {
                           {label: 'একাডেমিক ক্যালেন্ডার', href: '#'}, 
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-purple-600" />
+                                <Check className="w-4 h-4 text-purple-500" />
                                 {item.label}
                             </Link>
                         ))}
@@ -352,6 +370,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-    

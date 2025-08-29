@@ -1,7 +1,6 @@
 
 import Link from 'next/link';
-import { Mail, MapPin, Phone, Facebook, Youtube, Twitter, Plus } from 'lucide-react';
-import Logo from '../icons/logo';
+import { Mail, MapPin, Phone, Star, Code, Plus } from 'lucide-react';
 
 const footerLinksCol1 = [
     { href: "/about", label: "প্রতিষ্ঠানের ইতিহাস" },
@@ -27,7 +26,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
           <div>
-            <h3 className="text-lg font-bold text-gray-300 mb-4 border-b border-gray-700 pb-2">অন্যান্য লিংক</h3>
+            <h3 className="text-lg font-bold text-gray-300 mb-4 border-b border-green-700 pb-2">অন্যান্য লিংক</h3>
             <ul className="space-y-2">
                 {footerLinksCol1.map(link => (
                     <li key={link.label}>
@@ -52,7 +51,7 @@ export default function Footer() {
           </div>
 
           <div>
-             <h3 className="text-lg font-bold text-gray-300 mb-4 border-b border-gray-700 pb-2">যোগাযোগের ঠিকানা</h3>
+             <h3 className="text-lg font-bold text-gray-300 mb-4 border-b border-green-700 pb-2">যোগাযোগের ঠিকানা</h3>
             <address className="not-italic space-y-3 text-gray-300">
               <p className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 mt-1 text-green-400 flex-shrink-0" />
@@ -77,7 +76,7 @@ export default function Footer() {
             </address>
           </div>
            <div>
-             <h3 className="text-lg font-bold text-gray-300 mb-4 border-b border-gray-700 pb-2">ফেসবুক পেজ</h3>
+             <h3 className="text-lg font-bold text-gray-300 mb-4 border-b border-green-700 pb-2">ফেসবুক পেজ</h3>
              <div className="bg-white rounded-lg overflow-hidden">
                 <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fkjhsgovt.school&tabs=timeline&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="100%" height="130" style={{border:'none', overflow:'hidden'}} scrolling="no" frameBorder="0" allowFullScreen={true} allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
              </div>
@@ -93,8 +92,3 @@ export default function Footer() {
     </footer>
   );
 }
-
-// Add imports for Star and Code icons
-import { Star, Code } from 'lucide-react';
-
-    
