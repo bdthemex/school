@@ -166,7 +166,7 @@ export default function Home() {
           <div className="lg:col-span-3 space-y-6">
             {/* About Section */}
             <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
+                <CardHeader className='bg-blue-600 text-white rounded-t-lg'>
                     <CardTitle className="text-xl flex items-center gap-2">
                         <HomeIcon className="w-5 h-5" />
                         প্রতিষ্ঠানের ইতিহাস
@@ -193,7 +193,7 @@ export default function Home() {
              <div className="grid md:grid-cols-2 gap-6">
                  {facultyData.map((faculty, index) => (
                     <Card key={index} className="shadow-lg">
-                        <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
+                        <CardHeader className='bg-blue-600 text-white rounded-t-lg'>
                             <CardTitle className="text-xl flex items-center gap-2">
                                 <Users className="w-5 h-5" />
                                 {index === 0 ? 'প্রধান শিক্ষকের বাণী' : 'সহকারী প্রধান শিক্ষকের বাণী' }
@@ -215,13 +215,15 @@ export default function Home() {
              {/* Corner Cards */}
              <div className="grid md:grid-cols-2 gap-6">
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-red-600 text-white rounded-t-sm'>
+                    <CardHeader className='bg-red-600 text-white rounded-t-lg'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <GraduationCap className="w-5 h-5" />
                             শিক্ষার্থীদের কর্নার
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2 pt-6">
+                    <CardContent className="space-y-4 pt-6">
+                        <Image src="https://placehold.co/600x400" alt="শিক্ষার্থীদের কর্নার" width={600} height={400} className="w-full h-auto object-cover rounded-lg shadow-md mb-4" data-ai-hint="students classroom" />
+                        <div className="space-y-2">
                         {[
                           {label: 'শ্রেণিভিত্তিক শিক্ষার্থী', href: '#'}, 
                           {label: 'ক্লাস রুটিন', href: '/class-routine'}, 
@@ -233,16 +235,19 @@ export default function Home() {
                                 {item.label}
                             </Link>
                         ))}
+                        </div>
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-green-600 text-white rounded-t-sm'>
+                    <CardHeader className='bg-green-600 text-white rounded-t-lg'>
                         <CardTitle className="text-lg flex items-center gap-2">
                            <Users className="w-5 h-5" />
                             শিক্ষকমন্ডলীদের কর্ণার
                         </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2 pt-6">
+                    <CardContent className="space-y-4 pt-6">
+                         <Image src="https://placehold.co/600x400" alt="শিক্ষকমন্ডলীদের কর্ণার" width={600} height={400} className="w-full h-auto object-cover rounded-lg shadow-md mb-4" data-ai-hint="teachers meeting" />
+                        <div className="space-y-2">
                         {[
                           {label: 'শিক্ষকমন্ডলী', href: '/teachers'}, 
                           {label: 'স্টাফ', href: '/staff'}, 
@@ -254,10 +259,11 @@ export default function Home() {
                                 {item.label}
                             </Link>
                         ))}
+                        </div>
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-orange-500 text-white rounded-t-sm'>
+                    <CardHeader className='bg-orange-500 text-white rounded-t-lg'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <Download className="w-5 h-5" />
                             সকল ডাউনলোড
@@ -270,14 +276,14 @@ export default function Home() {
                             {label: 'ভর্তি', href: '#'},
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-sm text-gray-700 hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-orange-400" />
+                                <Check className="w-4 h-4 text-orange-500" />
                                 {item.label}
                             </Link>
                         ))}
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
-                    <CardHeader className='bg-purple-600 text-white rounded-t-sm'>
+                    <CardHeader className='bg-purple-600 text-white rounded-t-lg'>
                         <CardTitle className="text-lg flex items-center gap-2">
                             <BookOpen className="w-5 h-5" />
                              একাডেমিক তথ্য
@@ -303,7 +309,7 @@ export default function Home() {
 
           <aside className="lg:col-span-1 space-y-6">
               <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
+                <CardHeader className='bg-blue-600 text-white rounded-t-lg'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <Megaphone className="w-5 h-5" />
                         নোটিশ বোর্ড
@@ -331,7 +337,7 @@ export default function Home() {
               </Card>
 
                <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
+                <CardHeader className='bg-blue-600 text-white rounded-t-lg'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <LinkIcon className="w-5 h-5" />
                         গুরুত্বপূর্ণ লিংক
@@ -348,7 +354,7 @@ export default function Home() {
               </Card>
 
               <Card className="shadow-lg">
-                <CardHeader className='bg-blue-600 text-white rounded-t-sm'>
+                <CardHeader className='bg-blue-600 text-white rounded-t-lg'>
                     <CardTitle className="text-lg flex items-center gap-2">
                         <LinkIcon className="w-5 h-5" />
                         অফিসিয়াল লিংক
