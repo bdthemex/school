@@ -156,7 +156,7 @@ export default function Home() {
                          <Image src="https://kjsghs.edu.bd/wp-content/uploads/2022/10/school-front-gate-1.jpg" alt="প্রতিষ্ঠানের ইতিহাস" width={400} height={300} className="w-full h-auto object-cover rounded-lg shadow-md" data-ai-hint="historic building" />
                     </div>
                     <div className="md:col-span-3 space-y-3">
-                      <p className="text-foreground leading-relaxed text-base">
+                      <p className="text-foreground leading-relaxed text-base text-justify">
                       কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ সালে প্রতিষ্ঠিত হয়। এটি এই অঞ্চলের অন্যতম প্রাচীন এবং স্বনামধন্য একটি শিক্ষা প্রতিষ্ঠান। ১৯ মার্চ, ১৯৯১ সালে প্রতিষ্ঠানটি জাতীয়করণ করা হয়। বর্তমানে বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয় এবং প্রায় ৭১৭ জন শিক্ষার্থী অধ্যয়নরত আছে। অভিজ্ঞ শিক্ষকমণ্ডলীর মাধ্যমে পরিচালিত এই বিদ্যালয়ে বর্তমানে ১২ জন শিক্ষক কর্মরত রয়েছেন। বিদ্যালয়টিতে একটি তিন তলা ভবন, একটি দোতলা ভবন, তিনটি হাফ বিল্ডিং, একটি খেলার মাঠ এবং দুইটি শহীদ মিনার রয়েছে।
                       </p>
                        <Button asChild variant="link" size="sm" className="p-0 h-auto">
