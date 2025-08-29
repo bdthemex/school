@@ -4,12 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Camera } from 'lucide-react'
 
 const galleryImages = [
-  { src: 'https://placehold.co/600x400', alt: 'Annual Sports Day', dataAiHint: 'school sports students' },
-  { src: 'https://placehold.co/600x400', alt: 'Science Fair', dataAiHint: 'science fair students' },
-  { src: 'https://placehold.co/600x400', alt: 'Cultural Program', dataAiHint: 'cultural event stage' },
-  { src: 'https://placehold.co/600x400', alt: 'Victory Day Celebration', dataAiHint: 'celebration event crowd' },
-  { src: 'https://placehold.co/600x400', alt: 'Tree Plantation Program', dataAiHint: 'tree plantation students' },
-  { src: 'https://placehold.co/600x400', alt: 'School Campus', dataAiHint: 'school campus' },
+  { src: 'https://picsum.photos/600/400?random=1', alt: 'Annual Sports Day', dataAiHint: 'school sports students' },
+  { src: 'https://picsum.photos/600/400?random=2', alt: 'Science Fair', dataAiHint: 'science fair students' },
+  { src: 'https://picsum.photos/600/400?random=3', alt: 'Cultural Program', dataAiHint: 'cultural event stage' },
+  { src: 'https://picsum.photos/600/400?random=4', alt: 'Victory Day Celebration', dataAiHint: 'celebration event crowd' },
+  { src: 'https://picsum.photos/600/400?random=5', alt: 'Tree Plantation Program', dataAiHint: 'tree plantation students' },
+  { src: 'https://picsum.photos/600/400?random=6', alt: 'School Campus', dataAiHint: 'school campus' },
 ]
 
 export default function GalleryPage() {

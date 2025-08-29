@@ -16,7 +16,7 @@ export default function PrincipalsMessagePage() {
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="md:w-1/4 text-center">
                     <Image
-                        src="https://placehold.co/300x300"
+                        src="https://picsum.photos/300/300?random=1"
                         alt="Principal's Photo"
                         width={300}
                         height={300}

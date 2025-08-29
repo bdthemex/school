@@ -24,7 +24,7 @@ export default function HistoryPage() {
                 <div className="flex flex-col lg:flex-row gap-8 items-center">
                     <div className="lg:w-2/5">
                         <Image
-                            src="https://placehold.co/600x800"
+                            src="https://picsum.photos/600/800"
                             alt="Historic photo of the school"
                             width={600}
                             height={800}

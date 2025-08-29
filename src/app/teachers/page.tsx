@@ -4,12 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, GraduationCap, Phone, Mail } from 'lucide-react'
 
 const teachers = [
-  { name: 'মোঃ আব্দুল বাতেন', designation: 'প্রধান শিক্ষক', subject: 'গণিত', phone: '01712-345678', email: 'principal@example.com', image: 'https://placehold.co/200x200', dataAiHint: 'teacher portrait' },
-  { name: 'শিক্ষক খ', designation: 'সহকারী প্রধান শিক্ষক', subject: 'ইংরেজি', phone: '01712-345678', email: 'teacher2@example.com', image: 'https://placehold.co/200x200', dataAiHint: 'teacher portrait' },
-  { name: 'শিক্ষক গ', designation: 'সিনিয়র শিক্ষক', subject: 'বাংলা', phone: '01712-345678', email: 'teacher3@example.com', image: 'https://placehold.co/200x200', dataAiHint: 'teacher portrait' },
-  { name: 'শিক্ষক ঘ', designation: 'সহকারী শিক্ষক', subject: 'বিজ্ঞান', phone: '01712-345678', email: 'teacher4@example.com', image: 'https://placehold.co/200x200', dataAiHint: 'teacher portrait' },
-  { name: 'শিক্ষক ঙ', designation: 'সহকারী শিক্ষক', subject: 'সমাজ বিজ্ঞান', phone: '01712-345678', email: 'teacher5@example.com', image: 'https://placehold.co/200x200', dataAiHint: 'teacher portrait' },
-  { name: 'শিক্ষক চ', designation: 'সহকারী শিক্ষক', subject: 'ধর্ম', phone: '01712-345678', email: 'teacher6@example.com', image: 'https://placehold.co/200x200', dataAiHint: 'teacher portrait' },
+  { name: 'মোঃ আব্দুল বাতেন', designation: 'প্রধান শিক্ষক', subject: 'গণিত', phone: '01712-345678', email: 'principal@example.com', image: 'https://picsum.photos/200/200?random=1', dataAiHint: 'teacher portrait' },
+  { name: 'শিক্ষক খ', designation: 'সহকারী প্রধান শিক্ষক', subject: 'ইংরেজি', phone: '01712-345678', email: 'teacher2@example.com', image: 'https://picsum.photos/200/200?random=2', dataAiHint: 'teacher portrait' },
+  { name: 'শিক্ষক গ', designation: 'সিনিয়র শিক্ষক', subject: 'বাংলা', phone: '01712-345678', email: 'teacher3@example.com', image: 'https://picsum.photos/200/200?random=3', dataAiHint: 'teacher portrait' },
+  { name: 'শিক্ষক ঘ', designation: 'সহকারী শিক্ষক', subject: 'বিজ্ঞান', phone: '01712-345678', email: 'teacher4@example.com', image: 'https://picsum.photos/200/200?random=4', dataAiHint: 'teacher portrait' },
+  { name: 'শিক্ষক ঙ', designation: 'সহকারী শিক্ষক', subject: 'সমাজ বিজ্ঞান', phone: '01712-345678', email: 'teacher5@example.com', image: 'https://picsum.photos/200/200?random=5', dataAiHint: 'teacher portrait' },
+  { name: 'শিক্ষক চ', designation: 'সহকারী শিক্ষক', subject: 'ধর্ম', phone: '01712-345678', email: 'teacher6@example.com', image: 'https://picsum.photos/200/200?random=6', dataAiHint: 'teacher portrait' },
 ]
 
 export default function TeachersPage() {

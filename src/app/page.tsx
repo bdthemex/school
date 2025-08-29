@@ -41,8 +41,8 @@ const demoNotices: Notice[] = [
 ];
 
 const facultyData = [
-  { name: 'প্রধান শিক্ষক', title: 'প্রধান শিক্ষকের বাণী', message: 'দীর্ঘদিন পরে কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়ের ওয়েব সাইট সম্প্রতি খোলা হয়েছে। এটা বিদ্যালয়ের জন্য উজ্জ্বল মাইল ফলক।', image: 'https://placehold.co/100x100', dataAiHint: 'teacher portrait', link: '/principals-message' },
-  { name: 'সহকারী প্রধান শিক্ষক', title: 'সহকারী প্রধান শিক্ষকের বাণী', message: 'তথ্য প্রযুক্তির যুগে প্রবেশ করতে পেরে আমরা আনন্দিত। এর মাধ্যমে স্কুলের কার্যক্রম আরও গতিশীল হবে।', image: 'https://placehold.co/100x100', dataAiHint: 'teacher portrait', link: '/vice-principals-message' },
+  { name: 'প্রধান শিক্ষক', title: 'প্রধান শিক্ষকের বাণী', message: 'দীর্ঘদিন পরে কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়ের ওয়েব সাইট সম্প্রতি খোলা হয়েছে। এটা বিদ্যালয়ের জন্য উজ্জ্বল মাইল ফলক।', image: 'https://picsum.photos/100/100?random=1', dataAiHint: 'teacher portrait', link: '/principals-message' },
+  { name: 'সহকারী প্রধান শিক্ষক', title: 'সহকারী প্রধান শিক্ষকের বাণী', message: 'তথ্য প্রযুক্তির যুগে প্রবেশ করতে পেরে আমরা আনন্দিত। এর মাধ্যমে স্কুলের কার্যক্রম আরও গতিশীল হবে।', image: 'https://picsum.photos/100/100?random=2', dataAiHint: 'teacher portrait', link: '/vice-principals-message' },
 ];
 
 const importantSiteLinks = [
@@ -90,9 +90,9 @@ export default function Home() {
                 <CarouselContent>
                     <CarouselItem>
                         <Image
-                            src="https://placehold.co/1920x400"
+                            src="https://picsum.photos/1280/400?random=1"
                             alt="School building"
-                            width={1920}
+                            width={1280}
                             height={400}
                             className="w-full h-auto max-h-[400px] object-cover"
                             data-ai-hint="school building"
@@ -103,9 +103,9 @@ export default function Home() {
                     </CarouselItem>
                     <CarouselItem>
                         <Image
-                            src="https://placehold.co/1920x400"
+                            src="https://picsum.photos/1280/400?random=2"
                             alt="School campus"
-                            width={1920}
+                            width={1280}
                             height={400}
                             className="w-full h-auto max-h-[400px] object-cover"
                             data-ai-hint="school campus"
@@ -153,7 +153,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="grid md:grid-cols-5 gap-6 pt-6">
                     <div className='md:col-span-2'>
-                         <Image src="https://placehold.co/400x300" alt="প্রতিষ্ঠানের ইতিহাস" width={400} height={300} className="w-full h-auto object-cover rounded-lg shadow-md" data-ai-hint="historic building" />
+                         <Image src="https://picsum.photos/400/300" alt="প্রতিষ্ঠানের ইতিহাস" width={400} height={300} className="w-full h-auto object-cover rounded-lg shadow-md" data-ai-hint="historic building" />
                     </div>
                     <div className="md:col-span-3 space-y-3">
                       <p className="text-foreground leading-relaxed text-base">
@@ -209,7 +209,7 @@ export default function Home() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center gap-4 pt-6">
-                        <Image src="https://placehold.co/100x100" alt="শিক্ষার্থীদের কর্নার" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="students icon" />
+                        <Image src="https://picsum.photos/100/100?random=3" alt="শিক্ষার্থীদের কর্নার" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="students icon" />
                         <div className="space-y-2">
                         {[
                           {label: 'শ্রেণিভিত্তিক শিক্ষার্থী', href: '#'}, 
@@ -233,7 +233,7 @@ export default function Home() {
                         </CardTitle>
                     </CardHeader>
                      <CardContent className="flex items-center gap-4 pt-6">
-                         <Image src="https://placehold.co/100x100" alt="শিক্ষকমন্ডলীদের কর্ণার" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="teachers icon" />
+                         <Image src="https://picsum.photos/100/100?random=4" alt="শিক্ষকমন্ডলীদের কর্ণার" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="teachers icon" />
                         <div className="space-y-2">
                         {[
                           {label: 'শিক্ষকমন্ডলী', href: '/teachers'}, 
@@ -257,7 +257,7 @@ export default function Home() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center gap-4 pt-6">
-                        <Image src="https://placehold.co/100x100" alt="সকল ডাউনলোড" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="download icon" />
+                        <Image src="https://picsum.photos/100/100?random=5" alt="সকল ডাউনলোড" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="download icon" />
                         <div className="space-y-2">
                         {[
                             {label: 'ডাউনলোড', href: '#'},
@@ -280,7 +280,7 @@ export default function Home() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="flex items-center gap-4 pt-6">
-                        <Image src="https://placehold.co/100x100" alt="একাডেমিক তথ্য" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="calendar icon" />
+                        <Image src="https://picsum.photos/100/100?random=6" alt="একাডেমিক তথ্য" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="calendar icon" />
                         <div className="space-y-2">
                         {[
                           {label: 'প্রতিষ্ঠানের ইতিহাস', href: '/history'}, 

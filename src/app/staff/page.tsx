@@ -4,11 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { UserSquare } from 'lucide-react'
 
 const staffMembers = [
-  { name: 'কর্মচারী ক', designation: 'অফিস সহকারী', image: 'https://placehold.co/200x200', dataAiHint: 'person portrait' },
-  { name: 'কর্মচারী খ', designation: 'হিসাবরক্ষক', image: 'https://placehold.co/200x200', dataAiHint: 'person portrait' },
-  { name: 'কর্মচারী গ', designation: 'গ্রন্থাগারিক', image: 'https://placehold.co/200x200', dataAiHint: 'person portrait' },
-  { name: 'কর্মচারী ঘ', designation: 'অফিস সহায়ক', image: 'https://placehold.co/200x200', dataAiHint: 'person portrait' },
-  { name: 'কর্মচারী ঙ', designation: 'নিরাপত্তা প্রহরী', image: 'https://placehold.co/200x200', dataAiHint: 'person portrait' },
+  { name: 'কর্মচারী ক', designation: 'অফিস সহকারী', image: 'https://picsum.photos/200/200?random=1', dataAiHint: 'person portrait' },
+  { name: 'কর্মচারী খ', designation: 'হিসাবরক্ষক', image: 'https://picsum.photos/200/200?random=2', dataAiHint: 'person portrait' },
+  { name: 'কর্মচারী গ', designation: 'গ্রন্থাগারিক', image: 'https://picsum.photos/200/200?random=3', dataAiHint: 'person portrait' },
+  { name: 'কর্মচারী ঘ', designation: 'অফিস সহায়ক', image: 'https://picsum.photos/200/200?random=4', dataAiHint: 'person portrait' },
+  { name: 'কর্মচারী ঙ', designation: 'নিরাপত্তা প্রহরী', image: 'https://picsum.photos/200/200?random=5', dataAiHint: 'person portrait' },
 ]
 
 export default function StaffPage() {
