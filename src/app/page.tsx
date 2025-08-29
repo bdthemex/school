@@ -96,9 +96,8 @@ export default function Home() {
     }, [getNotices]);
 
   return (
-    <main className="flex-1">
-      <div className="max-w-7xl mx-auto shadow-lg bg-background p-4">
-        
+    <main className="flex-1 p-4">
+      
         <section className="relative w-full shadow-md">
             <Carousel
                 plugins={[plugin.current]}
@@ -391,7 +390,6 @@ export default function Home() {
               </Card>
           </aside>
         </div>
-      </div>
     </main>
   );
 }

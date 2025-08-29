@@ -14,7 +14,7 @@ const staffMembers = [
 export default function StaffPage() {
   return (
     <main className="flex-1">
-        <div className="max-w-7xl mx-auto shadow-lg bg-background p-4">
+        <div className="p-4">
             <div className="container mx-auto px-4 py-12">
                 <Card className="shadow-lg">
                     <CardHeader className="text-center bg-primary text-primary-foreground">

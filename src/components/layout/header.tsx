@@ -31,8 +31,8 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white shadow-md">
-      <div className="bg-gradient-to-r from-green-600 to-green-400 text-white py-2">
-        <div className="container mx-auto px-4 flex flex-col items-center justify-center">
+      <div className="bg-gradient-to-r from-green-600 to-green-400 text-white py-2 px-4">
+        <div className="flex flex-col items-center justify-center">
           <p className='text-lg'>গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</p>
           <div className="flex items-center gap-4 pt-2">
             <Link href="/" className='flex-shrink-0'>
@@ -46,8 +46,8 @@ export default function Header() {
         </div>
       </div>
       
-      <div className="bg-gray-800 text-gray-100 hidden md:block">
-        <div className="container mx-auto flex h-14 items-center justify-start px-4">
+      <div className="bg-gray-800 text-gray-100 hidden md:block px-4">
+        <div className="flex h-14 items-center justify-start">
             <nav className="flex items-center gap-1">
             {navLinks.map((link) => (
                 <Button key={link.label} asChild variant="ghost" 
@@ -65,7 +65,7 @@ export default function Header() {
         </div>
       </div>
 
-       <div className="md:hidden container mx-auto px-4 flex justify-end items-center h-16 bg-gray-800 text-white">
+       <div className="md:hidden flex justify-end items-center h-16 bg-gray-800 text-white px-4">
             <Sheet>
                 <SheetTrigger asChild>
                 <Button variant="outline" size="icon" className='bg-transparent text-white border-white'>
