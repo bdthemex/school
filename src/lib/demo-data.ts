@@ -5,7 +5,7 @@ export const demoData = [
   // Site Settings
   {
     _id: "siteSettings",
-    _type: "siteSettings", // This was missing
+    _type: "siteSettings", 
     footerAddress: "কেন্দুয়া বাজার, কেন্দুয়া, নেত্রকোণা, বাংলাদেশ।",
     footerPhone: "০১৭১৭-৪০৭৫৮৫",
     footerEmail: "joyharisprygovtschool@gmail.com",
@@ -16,25 +16,22 @@ export const demoData = [
   // Homepage
   {
     _id: "homepage",
-    _type: "homepage", // This was missing
+    _type: "homepage",
     heroSlider: [
       { 
         _key: 'slide1', 
         caption: 'প্রতিষ্ঠানের দৃষ্টিনন্দন প্রধান ফটক', 
         alt: 'School main gate',
-        image: { _type: 'image', asset: { _ref: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x1333-jpg', _type: 'reference' } }
       },
       { 
         _key: 'slide2', 
         caption: 'বার্ষিক ক্রীড়া প্রতিযোগিতা', 
         alt: 'Annual sports day',
-        image: { _type: 'image', asset: { _ref: 'image-ACEf_LAbI8E8aB-962x541-jpg', _type: 'reference' } }
       },
       { 
         _key: 'slide3', 
         caption: 'সাংস্কৃতিক অনুষ্ঠানে শিক্ষার্থীদের অংশগ্রহণ', 
         alt: 'Students in a cultural event',
-        image: { _type: 'image', asset: { _ref: 'image-qz3fL9P4f-800x450-jpg', _type: 'reference' } }
       },
     ],
     historySection: {
@@ -42,6 +39,70 @@ export const demoData = [
       linkText: "বিস্তারিত পড়ুন",
       linkHref: "/history",
     },
+    importantLinks: [
+        { _key: 'il1', title: 'নোটিশ', href: '/notices', icon: 'Megaphone' },
+        { _key: 'il2', title: 'পরীক্ষার ফলাফল', href: '/results', icon: 'Trophy' },
+        { _key: 'il3', title: 'কৃতি শিক্ষার্থী', href: '/successful-students', icon: 'Award' },
+        { _key: 'il4', title: 'ছুটির দিন', href: '/holiday-list', icon: 'Plane' },
+        { _key: 'il5', title: 'যোগাযোগ', href: '/contact', icon: 'Phone' },
+    ],
+    resourceLinks: [
+        { _key: 'rl1', title: 'প্রধানমন্ত্রীর শিক্ষা সহায়তা ট্রাস্ট', href: '#' },
+        { _key: 'rl2', title: 'উপবৃত্তি তথ্য', href: '#' },
+        { _key: 'rl3', title: 'বৃত্তি তথ্য', href: '#' },
+    ],
+    officialLinks: [
+        { _key: 'ol1', title: 'ভর্তির আবেদন', href: '#' },
+        { _key: 'ol2', title: 'পরীক্ষার ফলাফল', href: '#' },
+        { _key: 'ol3', title: 'ময়মনসিংহ বোর্ড', href: '#' },
+        { _key: 'ol4', title: 'মাধ্যমিক ও উচ্চ শিক্ষা অধিদপ্তর', href: '#' },
+        { _key: 'ol5', title: 'ব্যানবেইস', href: '#' },
+    ],
+    infoBoxes: [
+        { 
+            _key: 'ib1', 
+            title: 'শিক্ষার্থীদের কর্নার',
+            icon: 'GraduationCap',
+            links: [
+              {_key: 'ibl1', label: 'শ্রেণিভিত্তিক শিক্ষার্থী', href: '#'}, 
+              {_key: 'ibl2', label: 'ক্লাস রুটিন', href: '/class-routine'}, 
+              {_key: 'ibl3', label: 'ছুটির তালিকা', href: '/holiday-list'}, 
+              {_key: 'ibl4', label: 'নোটিশ', href: '/notices'}
+            ]
+        },
+        { 
+            _key: 'ib2', 
+            title: 'শিক্ষকমন্ডলীদের কর্ণার',
+            icon: 'Users',
+            links: [
+              {_key: 'ibl5', label: 'শিক্ষকমন্ডলী', href: '/teachers'}, 
+              {_key: 'ibl6', label: 'স্টাফ', href: '/staff'}, 
+              {_key: 'ibl7', label: 'শিক্ষক/কর্মচারী সংখ্যা', href: '#'}, 
+              {_key: 'ibl8', label: 'SMS ALERT', href: '#'}
+            ]
+        },
+        { 
+            _key: 'ib3', 
+            title: 'সকল ডাউনলোড',
+            icon: 'Download',
+            links: [
+                {_key: 'ibl9', label: 'ডাউনলোড', href: '#'},
+                {_key: 'ibl10', label: 'পরীক্ষার রুটিন', href: '#'},
+                {_key: 'ibl11', label: 'ভর্তি', href: '#'},
+            ]
+        },
+        { 
+            _key: 'ib4', 
+            title: 'একাডেমিক তথ্য',
+            icon: 'BookMarked',
+            links: [
+              {_key: 'ibl12', label: 'প্রতিষ্ঠানের ইতিহাস', href: '/history'}, 
+              {_key: 'ibl13', label: 'পরীক্ষার ফলাফল', href: '/results'}, 
+              {_key: 'ibl14', label: 'নোটিশ', href: '/notices'}, 
+              {_key: 'ibl15', label: 'একাডেমিক ক্যালেন্ডার', href: '/academic-calendar'}, 
+            ]
+        }
+    ]
   },
   // Header Navigation
   {
@@ -177,7 +238,6 @@ export const demoData = [
   },
   // Teacher
   {
-    _id: "teacher_1",
     _type: "teacher",
     name: "মোঃ আব্দুল বাতেন",
     designation: "প্রধান শিক্ষক",
@@ -186,7 +246,6 @@ export const demoData = [
     email: "principal@example.com",
   },
    {
-    _id: "teacher_2",
     _type: "teacher",
     name: "মোঃ আব্দুল হামিদ",
     designation: "সহকারী প্রধান শিক্ষক",
@@ -196,40 +255,34 @@ export const demoData = [
   },
   // Staff
   {
-    _id: "staff_1",
     _type: "staff",
     name: "মোঃ রহিম উদ্দিন",
     designation: "অফিস সহকারী",
   },
   {
-    _id: "staff_2",
     _type: "staff",
     name: "মোঃ করিম শেখ",
     designation: "হিসাবরক্ষক",
   },
   // Successful Student
   {
-    _id: "student_1",
     _type: "successfulStudent",
     name: "আব্দুল্লাহ আল মামুন",
     achievement: "ঢাকা বিশ্ববিদ্যালয়ে ভর্তি (২০২৩)",
   },
    {
-    _id: "student_2",
     _type: "successfulStudent",
     name: "ফাতেমা আক্তার",
     achievement: "বুয়েটে ভর্তি (২০২৩)",
   },
   // Video Item
   {
-    _id: "video_1",
     _type: "videoItem",
     title: "বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৩",
     youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   // Class Routine
   {
-    _id: "routine_class_10",
     _type: "classRoutine",
     className: "১০ম শ্রেণী",
     order: 1,
@@ -239,7 +292,6 @@ export const demoData = [
     ],
   },
     {
-    _id: "routine_class_9",
     _type: "classRoutine",
     className: "৯ম শ্রেণী",
     order: 2,
@@ -250,27 +302,23 @@ export const demoData = [
   },
   // Academic Calendar Event
   {
-    _id: "event_1",
     _type: "academicCalendarEvent",
     date: "০১ জানুয়ারি, ২০২৫",
     event: "নতুন বছরের ক্লাস শুরু",
   },
   {
-    _id: "event_2",
     _type: "academicCalendarEvent",
     date: "২১ ফেব্রুয়ারি, ২০২৫",
     event: "শহীদ দিবস ও আন্তর্জাতিক মাতৃভাষা দিবস",
   },
   // Holiday
   {
-    _id: "holiday_1",
     _type: "holiday",
     occasion: "ঈদুল ফিতর",
     from: "১০ এপ্রিল, ২০২৫",
     to: "১৫ এপ্রিল, ২০২৫",
   },
   {
-    _id: "holiday_2",
     _type: "holiday",
     occasion: "ঈদুল আযহা",
     from: "১৭ জুন, ২০২৫",
@@ -278,14 +326,12 @@ export const demoData = [
   },
   // Notice
   {
-    _id: "notice_1",
     _type: "notice",
     title: "২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি",
     date: "2024-11-01T10:00:00Z",
     details: "২০২৫ শিক্ষাবর্ষে ৬ষ্ঠ থেকে ৯ম শ্রেণিতে ভর্তির জন্য আবেদন গ্রহণ শুরু হয়েছে। বিস্তারিত জানতে বিদ্যালয়ের অফিসে যোগাযোগ করুন।",
   },
    {
-    _id: "notice_2",
     _type: "notice",
     title: "বার্ষিক পরীক্ষার রুটিন",
     date: "2024-11-15T10:00:00Z",
@@ -293,12 +339,10 @@ export const demoData = [
   },
   // Gallery Image
   {
-    _id: "gallery_1",
     _type: "galleryImage",
     alt: "বার্ষিক ক্রীড়া প্রতিযোগিতা",
   },
    {
-    _id: "gallery_2",
     _type: "galleryImage",
     alt: "বিজ্ঞান মেলা",
   },

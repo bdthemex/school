@@ -17,17 +17,47 @@ import {
   HomeIcon,
   GraduationCap,
   ChevronRight,
+  BookMarked,
+  ClipboardList,
 } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
 import React, { useState, useEffect, useRef } from 'react';
 import { sanityClient, urlFor } from '@/lib/sanity'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import * as LucideIcons from 'lucide-react';
+
+type IconName = keyof typeof LucideIcons;
 
 interface Notice {
   _id: string;
   title: string;
 }
+
+interface FacultyMessage {
+    _id: string;
+    name: string;
+    quote: string;
+    image: SanityImageSource;
+    link: string;
+    title: string;
+}
+
+interface LinkItem {
+    _key: string;
+    title: string;
+    href: string;
+    icon: IconName;
+}
+
+interface InfoBox {
+    _key: string;
+    title: string;
+    image: SanityImageSource;
+    icon: IconName;
+    links: { _key: string; label: string; href: string }[];
+}
+
 
 interface HomepageContent {
     heroSlider: {
@@ -42,61 +72,45 @@ interface HomepageContent {
         linkText: string;
         linkHref: string;
     };
+    importantLinks: LinkItem[];
+    resourceLinks: LinkItem[];
+    officialLinks: LinkItem[];
+    infoBoxes: InfoBox[];
 }
 
-const facultyData = [
-  { name: 'প্রধান শিক্ষক', title: 'প্রধান শিক্ষকের বাণী', message: 'দীর্ঘদিন পরে কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়ের ওয়েব সাইট সম্প্রতি খোলা হয়েছে। এটা বিদ্যালয়ের জন্য উজ্জ্বল মাইল ফলক।', image: 'https://kjsghs.edu.bd/wp-content/uploads/2022/10/Mr.-Baten-Sir-3-1.jpg', dataAiHint: 'teacher portrait', link: '/principals-message' },
-  { name: 'সহকারী প্রধান শিক্ষক', title: 'সহকারী প্রধান শিক্ষকের বাণী', message: 'তথ্য প্রযুক্তির যুগে প্রবেশ করতে পেরে আমরা আনন্দিত। এর মাধ্যমে স্কুলের কার্যক্রম আরও গতিশীল হবে।', image: 'https://picsum.photos/100/100?random=2', dataAiHint: 'teacher portrait', link: '/vice-principals-message' },
-];
-
-const importantSiteLinks = [
-    { title: 'নোটিশ', href: '/notices' },
-    { title: 'পরীক্ষার ফলাফল', href: '/results' },
-    { title: 'কৃতি শিক্ষার্থী', href: '/successful-students' },
-    { title: 'ছুটির দিন', href: '/holiday-list' },
-    { title: 'যোগাযোগ', href: '/contact' },
-]
-
-const resourceLinks = [
-    { title: 'প্রধানমন্ত্রীর শিক্ষা সহায়তা ট্রাস্ট'},
-    { title: 'উপবৃত্তি তথ্য'},
-    { title: 'বৃত্তি তথ্য'},
-]
-
-const officialLinks = [
-    { title: 'ভর্তির আবেদন'},
-    { title: 'পরীক্ষার ফলাফল'},
-    { title: 'ময়মনসিংহ বোর্ড'},
-    { title: 'মাধ্যমিক ও উচ্চ শিক্ষা অধিদপ্তর'},
-    { title: 'ব্যানবেইস'},
-]
-
-async function getNotices(): Promise<Notice[]> {
+async function getHomepageData(): Promise<{ notices: Notice[], content: HomepageContent | null, faculty: FacultyMessage[] }> {
   try {
-    const query = `*[_type == "notice" && !(_id in path("drafts.**"))] | order(date desc) [0...5] {_id, title}`;
-    const notices = await sanityClient.fetch(query);
-    return notices || [];
+    const query = `{
+        "notices": *[_type == "notice" && !(_id in path("drafts.**"))] | order(date desc) [0...5] {_id, title},
+        "content": *[_type == "homepage" && _id == "homepage"][0],
+        "faculty": [
+            *[_type == "principalMessage"][0] {..., "link": "/principals-message", "title": "প্রধান শিক্ষকের বাণী"},
+            *[_type == "vicePrincipalMessage"][0] {..., "link": "/vice-principals-message", "title": "সহকারী প্রধান শিক্ষকের বাণী"}
+        ]
+    }`;
+    const data = await sanityClient.fetch(query);
+    return {
+        notices: data.notices || [],
+        content: data.content || null,
+        faculty: data.faculty.filter(Boolean) || []
+    };
   } catch (error) {
-    console.error("Error fetching notices from Sanity:", error);
-    return [];
+    console.error("Error fetching homepage data from Sanity:", error);
+    return { notices: [], content: null, faculty: [] };
   }
 }
 
-async function getHomepageContent(): Promise<HomepageContent | null> {
-    try {
-        const query = `*[_type == "homepage" && _id == "homepage"][0]`;
-        const content = await sanityClient.fetch(query);
-        return content;
-    } catch (error) {
-        console.error("Error fetching homepage content:", error);
-        return null;
-    }
-}
+const IconComponent = ({ name, ...props }: { name: IconName } & React.ComponentProps<"svg">) => {
+    const Icon = LucideIcons[name] as React.ElementType;
+    if (!Icon) return <BookOpen {...props} />; // Fallback icon
+    return <Icon {...props} />;
+};
 
 
 export default function Home() {
     const [notices, setNotices] = useState<Notice[]>([]);
     const [homepageContent, setHomepageContent] = useState<HomepageContent | null>(null);
+    const [facultyMessages, setFacultyMessages] = useState<FacultyMessage[]>([]);
     const heroCarouselPlugin = useRef(
         Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
     );
@@ -106,16 +120,13 @@ export default function Home() {
     const [showMarquee, setShowMarquee] = useState(true);
 
     useEffect(() => {
-        const fetchNotices = async () => {
-            const noticesData = await getNotices();
-            setNotices(noticesData);
-        };
-        const fetchHomepageContent = async () => {
-            const content = await getHomepageContent();
+        const fetchHomepageData = async () => {
+            const { notices, content, faculty } = await getHomepageData();
+            setNotices(notices);
             setHomepageContent(content);
+            setFacultyMessages(faculty);
         };
-        fetchNotices();
-        fetchHomepageContent();
+        fetchHomepageData();
     }, []);
 
     const marqueeText = "সরকারি ও বেসরকারি মাধ্যমিক বিদ্যালয়ে-২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি ও নিয়মাবলী সংক্রান্ত। আমাদের ওয়েবসাইটে আপনাকে স্বাগত…(সাইট ডেভেলপমেন্টের কাজ চলছে) *** "
@@ -220,8 +231,8 @@ export default function Home() {
                 className="w-full"
              >
                 <CarouselContent className="-ml-2 md:-ml-4">
-                     {facultyData.map((faculty, index) => (
-                        <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2">
+                     {facultyMessages.map((faculty, index) => (
+                        <CarouselItem key={faculty._id || index} className="pl-2 md:pl-4 md:basis-1/2">
                             <Card className="shadow-lg h-full">
                                 <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                                     <CardTitle className="text-xl flex items-center gap-2">
@@ -230,9 +241,16 @@ export default function Home() {
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="flex flex-col sm:flex-row items-center gap-4 pt-6">
-                                   <Image src={faculty.image} alt={faculty.name} width={80} height={80} className="rounded-md border-2 border-accent" data-ai-hint={faculty.dataAiHint} />
+                                   <Image 
+                                    src={faculty.image ? urlFor(faculty.image).width(80).height(80).url() : `https://picsum.photos/80/80?random=${index}`} 
+                                    alt={faculty.name} 
+                                    width={80} 
+                                    height={80} 
+                                    className="rounded-md border-2 border-accent"
+                                    data-ai-hint="teacher portrait"
+                                   />
                                    <div className='space-y-2 text-center sm:text-left'>
-                                       <p className='text-base text-foreground italic text-justify leading-relaxed'>"{faculty.message}"</p>
+                                       <p className='text-base text-foreground italic text-justify leading-relaxed'>"{faculty.quote}"</p>
                                        <Button asChild variant="link" className="p-0 h-auto text-primary hover:underline">
                                          <Link href={faculty.link}>বিস্তারিত</Link>
                                        </Button>
@@ -245,115 +263,46 @@ export default function Home() {
              </Carousel>
 
              <div className="grid md:grid-cols-2 gap-6">
-                <Card className="shadow-lg">
-                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                            <GraduationCap className="w-5 h-5" />
-                            শিক্ষার্থীদের কর্নার
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex items-center gap-4 pt-6">
-                        <Image src="https://picsum.photos/100/100?random=3" alt="শিক্ষার্থীদের কর্নার" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="students icon" />
-                        <div className="space-y-2">
-                        {[
-                          {label: 'শ্রেণিভিত্তিক শিক্ষার্থী', href: '#'}, 
-                          {label: 'ক্লাস রুটিন', href: '/class-routine'}, 
-                          {label: 'ছুটির তালিকা', href: '/holiday-list'}, 
-                          {label: 'নোটিশ', href: '/notices'}
-                        ].map(item => (
-                             <Link href={item.href} key={item.label} className="flex items-center text-base text-foreground hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-accent" />
-                                {item.label}
-                            </Link>
-                        ))}
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="shadow-lg">
-                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                           <Users className="w-5 h-5" />
-                            শিক্ষকমন্ডলীদের কর্ণার
-                        </CardTitle>
-                    </CardHeader>
-                     <CardContent className="flex items-center gap-4 pt-6">
-                         <Image src="https://picsum.photos/100/100?random=4" alt="শিক্ষকমন্ডলীদের কর্ণার" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="teachers icon" />
-                        <div className="space-y-2">
-                        {[
-                          {label: 'শিক্ষকমন্ডলী', href: '/teachers'}, 
-                          {label: 'স্টাফ', href: '/staff'}, 
-                          {label: 'শিক্ষক/কর্মচারী সংখ্যা', href: '#'}, 
-                          {label: 'SMS ALERT', href: '#'}
-                        ].map(item => (
-                             <Link href={item.href} key={item.label} className="flex items-center text-base text-foreground hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-accent" />
-                                {item.label}
-                            </Link>
-                        ))}
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="shadow-lg">
-                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                            <Download className="w-5 h-5" />
-                            সকল ডাউনলোড
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex items-center gap-4 pt-6">
-                        <Image src="https://picsum.photos/100/100?random=5" alt="সকল ডাউনলোড" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="download icon" />
-                        <div className="space-y-2">
-                        {[
-                            {label: 'ডাউনলোড', href: '#'},
-                            {label: 'পরীক্ষার রুটিন', href: '#'},
-                            {label: 'ভর্তি', href: '#'},
-                        ].map(item => (
-                             <Link href={item.href} key={item.label} className="flex items-center text-base text-foreground hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-accent" />
-                                {item.label}
-                            </Link>
-                        ))}
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card className="shadow-lg">
-                    <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                            <BookOpen className="w-5 h-5" />
-                             একাডেমিক তথ্য
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex items-center gap-4 pt-6">
-                        <Image src="https://picsum.photos/100/100?random=6" alt="একাডেমিক তথ্য" width={100} height={100} className="w-20 h-20 object-cover rounded-lg" data-ai-hint="calendar icon" />
-                        <div className="space-y-2">
-                        {[
-                          {label: 'প্রতিষ্ঠানের ইতিহাস', href: '/history'}, 
-                          {label: 'পরীক্ষার ফলাফল', href: '/results'}, 
-                          {label: 'নোটিশ', href: '/notices'}, 
-                          {label: 'ছুটির দিন', href: '/holiday-list'},
-                          {label: 'একাডেমিক ক্যালেন্ডার', href: '/academic-calendar'}, 
-                        ].map(item => (
-                             <Link href={item.href} key={item.label} className="flex items-center text-base text-foreground hover:text-primary gap-2">
-                                <Check className="w-4 h-4 text-accent" />
-                                {item.label}
-                            </Link>
-                        ))}
-                        </div>
-                    </CardContent>
-                </Card>
+                {homepageContent?.infoBoxes?.map(box => (
+                    <Card key={box._key} className="shadow-lg">
+                        <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
+                            <CardTitle className="text-lg flex items-center gap-2">
+                                <IconComponent name={box.icon} className="w-5 h-5" />
+                                {box.title}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex items-center gap-4 pt-6">
+                            <Image 
+                                src={box.image ? urlFor(box.image).width(100).height(100).url() : `https://picsum.photos/100/100?random=${box._key}`} 
+                                alt={box.title} 
+                                width={100} 
+                                height={100} 
+                                className="w-20 h-20 object-cover rounded-lg" 
+                            />
+                            <div className="space-y-2">
+                                {box.links.map(link => (
+                                    <Link href={link.href} key={link._key} className="flex items-center text-base text-foreground hover:text-primary gap-2">
+                                        <Check className="w-4 h-4 text-accent" />
+                                        {link.label}
+                                    </Link>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
+                ))}
              </div>
           </div>
 
           <aside className="lg:col-span-1 space-y-6">
                <Card className="shadow-lg">
                  <CardContent className="p-2 space-y-2">
-                    {importantSiteLinks.map((link) => (
+                    {homepageContent?.importantLinks?.map((link) => (
                         <Link
                             href={link.href}
-                            key={link.title}
+                            key={link._key}
                             className="flex items-center gap-2 p-2.5 text-base font-medium border rounded-md hover:bg-muted transition-colors text-foreground"
                         >
-                             <Target className="w-4 h-4 text-primary" />
+                             <IconComponent name={link.icon} className="w-4 h-4 text-primary" />
                              {link.title}
                         </Link>
                     ))}
@@ -390,8 +339,8 @@ export default function Home() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 space-y-2">
-                     {resourceLinks.map((link, index) => (
-                        <Link href="#" key={index} className="flex items-center text-base text-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
+                     {homepageContent?.resourceLinks?.map((link) => (
+                        <Link href={link.href} key={link._key} className="flex items-center text-base text-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
                             <ChevronRight className="w-4 h-4 text-primary" />
                             {link.title}
                         </Link>
@@ -407,8 +356,8 @@ export default function Home() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 space-y-2">
-                     {officialLinks.map((link, index) => (
-                        <Link href="#" key={index} className="flex items-center text-base text-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
+                     {homepageContent?.officialLinks?.map((link) => (
+                        <Link href={link.href} key={link._key} className="flex items-center text-base text-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
                             <ChevronRight className="w-4 h-4 text-primary" />
                             {link.title}
                         </Link>

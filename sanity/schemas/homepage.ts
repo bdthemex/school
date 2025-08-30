@@ -30,5 +30,67 @@ export default {
         { name: 'linkHref', title: 'Link Href', type: 'string', description: 'e.g., "/about"' },
       ],
     },
+    {
+        name: 'importantLinks',
+        title: 'Important Site Links Sidebar',
+        type: 'array',
+        of: [{
+            type: 'object',
+            fields: [
+                { name: 'title', title: 'Title', type: 'string' },
+                { name: 'href', title: 'Link', type: 'string' },
+                { name: 'icon', title: 'Icon Name', type: 'string', description: 'e.g., "Megaphone", "Trophy" from lucide-react' },
+            ]
+        }]
+    },
+    {
+        name: 'resourceLinks',
+        title: 'Resource Links Sidebar',
+        type: 'array',
+        of: [{
+            type: 'object',
+            fields: [
+                { name: 'title', title: 'Title', type: 'string' },
+                { name: 'href', title: 'Link', type: 'string' },
+            ]
+        }]
+    },
+    {
+        name: 'officialLinks',
+        title: 'Official Links Sidebar',
+        type: 'array',
+        of: [{
+            type: 'object',
+            fields: [
+                { name: 'title', title: 'Title', type: 'string' },
+                { name: 'href', title: 'Link', type: 'string' },
+            ]
+        }]
+    },
+    {
+        name: 'infoBoxes',
+        title: 'Information Boxes',
+        type: 'array',
+        of: [{
+            type: 'object',
+            fields: [
+                { name: 'title', title: 'Title', type: 'string' },
+                { name: 'icon', title: 'Icon Name', type: 'string', description: 'e.g., "GraduationCap", "Users"' },
+                { name: 'image', title: 'Image', type: 'image' },
+                {
+                    name: 'links',
+                    title: 'Links',
+                    type: 'array',
+                    of: [{
+                        type: 'object',
+                        fields: [
+                            { name: 'label', title: 'Label', type: 'string' },
+                            { name: 'href', title: 'Link', type: 'string' },
+                        ]
+                    }]
+                }
+            ]
+        }]
+    }
   ],
 }
