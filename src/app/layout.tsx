@@ -27,7 +27,7 @@ export default function RootLayout({
       <body className="font-body antialiased bg-muted/40">
         <Header />
         <main className="max-w-7xl mx-auto bg-background shadow-lg">
-          <div className="p-4">
+          <div className="pt-0 px-4 pb-4">
             {children}
           </div>
         </main>
