@@ -1,10 +1,9 @@
 
-'use client'
-
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Users,
   Megaphone,
@@ -23,7 +22,6 @@ import Autoplay from "embla-carousel-autoplay"
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, orderBy, limit, Timestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
-import { Skeleton } from '@/components/ui/skeleton';
 
 interface Notice {
   id: string;
@@ -31,14 +29,6 @@ interface Notice {
   title: string;
   createdAt?: Timestamp;
 }
-
-const demoNotices: Notice[] = [
-    { id: '1', date: '২০২৪-০৭-২৬', title: '২০২৫ শিক্ষাবর্ষে ৬ষ্ঠ থেকে ৯ম শ্রেণিতে ভর্তির বিজ্ঞপ্তি।' },
-    { id: '2', date: '২০২৪-০৭-২৫', title: 'বার্ষিক ক্রীড়া প্রতিযোগিতা-২০২৪ এর পুরস্কার বিতরণী অনুষ্ঠান।' },
-    { id: '3', date: '২০২৪-০৭-২৪', title: 'অভিভাবক সমাবেশ এবং ফলাফল প্রকাশ সংক্রান্ত নোটিশ।' },
-    { id: '4', date: '২০২৪-০৭-২৩', title: 'ডেঙ্গু প্রতিরোধে সচেতনতামূলক কার্যক্রম গ্রহণ প্রসঙ্গে।' },
-    { id: '5', date: '২০২৪-০৭-২২', title: 'বর্ষাকালীন ছুটি ও গ্রীষ্মকালীন অবকাশের নোটিশ।' },
-];
 
 const facultyData = [
   { name: 'প্রধান শিক্ষক', title: 'প্রধান শিক্ষকের বাণী', message: 'দীর্ঘদিন পরে কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়ের ওয়েব সাইট সম্প্রতি খোলা হয়েছে। এটা বিদ্যালয়ের জন্য উজ্জ্বল মাইল ফলক।', image: 'https://kjsghs.edu.bd/wp-content/uploads/2022/10/Mr.-Baten-Sir-3-1.jpg', dataAiHint: 'teacher portrait', link: '/principals-message' },
@@ -67,21 +57,52 @@ const officialLinks = [
     { title: 'ব্যানবেইস'},
 ]
 
+async function getNotices(): Promise<Notice[]> {
+  try {
+    const noticesCollectionRef = collection(db, 'notices');
+    const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'), limit(5));
+    const data = await getDocs(q);
+    
+    return data.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    } as Notice));
+  } catch (error) {
+    console.error("Error fetching notices:", error);
+    return [];
+  }
+}
+
 export default function Home() {
+    const [notices, setNotices] = useState<Notice[]>([]);
+
+    useEffect(() => {
+        const fetchNotices = async () => {
+            const noticesData = await getNotices();
+            setNotices(noticesData);
+        };
+        fetchNotices();
+    }, []);
+
+    return (
+        <main>
+            <HomePageContent notices={notices} />
+        </main>
+    );
+}
+
+function HomePageContent({ notices }: { notices: Notice[] }) {
     const heroCarouselPlugin = React.useRef(
         Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
     )
      const facultyCarouselPlugin = React.useRef(
         Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true })
     )
-    const [notices, setNotices] = useState<Notice[]>(demoNotices.slice(0, 5))
-    const [isLoading, setIsLoading] = useState(false)
     const [showMarquee, setShowMarquee] = useState(true);
     const marqueeText = "সরকারি ও বেসরকারি মাধ্যমিক বিদ্যালয়ে-২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি ও নিয়মাবলী সংক্রান্ত। আমাদের ওয়েবসাইটে আপনাকে স্বাগত…(সাইট ডেভেলপমেন্টের কাজ চলছে) *** "
 
   return (
-    <main>
-      <div className="pt-0 px-4 pb-4">
+     <div className="pt-0 px-4 pb-4">
         <section className="relative w-full">
             <Carousel
                 plugins={[heroCarouselPlugin.current]}
@@ -143,7 +164,6 @@ export default function Home() {
         <div className="grid lg:grid-cols-4 gap-6 pb-4">
           
           <div className="lg:col-span-3 space-y-6">
-            {/* About Section */}
             <Card className="shadow-lg">
                 <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                     <CardTitle className="text-xl flex items-center gap-2">
@@ -168,7 +188,6 @@ export default function Home() {
                 </CardContent>
             </Card>
 
-            {/* Teachers Messages Carousel */}
              <Carousel
                 opts={{ loop: true, align: "start" }}
                 plugins={[facultyCarouselPlugin.current]}
@@ -199,7 +218,6 @@ export default function Home() {
                 </CarouselContent>
              </Carousel>
 
-             {/* Corner Cards */}
              <div className="grid md:grid-cols-2 gap-6">
                 <Card className="shadow-lg">
                     <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
@@ -323,14 +341,7 @@ export default function Home() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 space-y-3 bg-muted/50">
-                    {isLoading ? (
-                        <div className="space-y-2">
-                            <Skeleton className="h-8 w-full" />
-                            <Skeleton className="h-8 w-full" />
-                            <Skeleton className="h-8 w-full" />
-                            <Skeleton className="h-8 w-full" />
-                        </div>
-                    ) : notices.length > 0 ? (
+                    {notices.length > 0 ? (
                       notices.map((notice) => (
                         <Link href={`/notices/${notice.id}`} key={notice.id} className="block text-base text-foreground hover:text-primary gap-2">
                            <div className="flex items-start gap-2">
@@ -381,7 +392,5 @@ export default function Home() {
           </aside>
         </div>
       </div>
-    </main>
-  );
-
+  )
 }
