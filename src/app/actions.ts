@@ -13,9 +13,14 @@ export async function importDemoData() {
     for (const doc of demoData) {
       // Skip image assets as they need to be uploaded, not created as documents
       if (doc._type === 'sanity.imageAsset') continue
-      if (!doc._id) continue // Skip documents without an ID for createOrReplace
 
-      transaction.createOrReplace(doc)
+      if (doc._id) {
+        // Use createOrReplace for documents with a specific ID (e.g., settings, homepage)
+        transaction.createOrReplace(doc)
+      } else {
+        // Use create for documents without a specific ID, letting Sanity generate one
+        transaction.create(doc)
+      }
       createdCount++
     }
 
