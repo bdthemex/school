@@ -77,7 +77,7 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 200) { // Adjust this value as needed
+      if (window.scrollY > 200) {
         setIsSticky(true);
       } else {
         setIsSticky(false);
@@ -91,12 +91,9 @@ export default function Header() {
   }, []);
   
   return (
-      <header className={cn(
-        "w-full z-40 px-4 pt-4 transition-all duration-300",
-        isSticky && "fixed top-0 left-0 right-0 bg-background shadow-lg !p-0"
-      )}>
+      <header className="w-full z-40 px-4 pt-4">
         <div className={cn(
-          "hidden md:block relative w-full h-[150px] md:h-[200px]",
+          "hidden md:block relative w-full h-[200px]",
           isSticky && "hidden"
         )}>
             <Image 
@@ -110,8 +107,8 @@ export default function Header() {
           </div>
           
           <div className={cn(
-            "w-full bg-[#0a2342] text-primary-foreground",
-             isSticky && "container mx-auto"
+            "sticky top-0 z-10 w-full bg-[#0a2342] text-primary-foreground transition-all duration-300",
+            isSticky && "shadow-lg bg-background"
             )}>
             <div className="hidden md:block p-2.5">
                 <nav className="container mx-auto flex items-center gap-1">
@@ -119,7 +116,7 @@ export default function Header() {
                     link.children ? (
                         <DropdownMenu key={link.label}>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="hover:bg-[#8B0000] text-base text-white hover:text-white flex items-center gap-1">
+                                <Button variant="ghost" className={cn("hover:bg-[#8B0000] text-base hover:text-white flex items-center gap-1", isSticky ? "text-foreground hover:text-primary-foreground" : "text-white")}>
                                     <link.icon className='w-4 h-4' />
                                     {link.label}
                                     <ChevronDown className="h-4 w-4" />
@@ -139,7 +136,8 @@ export default function Header() {
                     ) : (
                         <Button key={link.label} asChild variant="ghost" 
                         className={cn(
-                            "hover:bg-[#8B0000] text-base text-white hover:text-white",
+                            "hover:bg-[#8B0000] text-base hover:text-white",
+                            isSticky ? "text-foreground hover:text-primary-foreground" : "text-white",
                             link.href === pathname ? 'bg-[#8B0000]' : ''
                         )}>
                             <Link href={link.href!} className="flex items-center gap-2">
