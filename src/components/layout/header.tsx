@@ -91,8 +91,8 @@ export default function Header() {
   }, []);
   
   return (
-      <header className="w-full z-40">
-        <div className="hidden md:block relative w-full h-[200px] px-4 pt-4">
+      <header className="w-full z-40 px-4 pt-4">
+        <div className="hidden md:block relative w-full h-[200px]">
             <Image 
                 src="https://picsum.photos/1280/250"
                 alt="Header Banner"
@@ -104,11 +104,11 @@ export default function Header() {
           </div>
           
           <div className={cn(
-            "sticky top-0 z-10 w-full transition-all duration-300",
-            isSticky && "shadow-lg bg-background"
+            "sticky top-0 z-50 w-full transition-all duration-300",
+             isSticky ? "shadow-lg bg-background" : "bg-[#0a2342]"
             )}>
-            <div className="hidden md:block p-2.5">
-                <nav className="container mx-auto flex items-center gap-1">
+            <div className="hidden md:block">
+                <nav className="container mx-auto flex items-center gap-1 p-2.5">
                 {navLinks.map((link) => (
                     link.children ? (
                         <DropdownMenu key={link.label}>
