@@ -36,7 +36,7 @@ const managementItems = [
     href: '/admin/gallery',
   },
   {
-    title: 'অন্যান্য কনটেন্ট',
+    title: 'অন্যান্য কনটেন্ট (CMS)',
     description: 'Sanity Studio-তে অন্যান্য তথ্য (শিক্ষক, কর্মচারী ইত্যাদি) ম্যানেজ করুন।',
     icon: LinkIcon,
     href: '/studio', 
@@ -113,7 +113,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
         ))}
-         <DemoContentImporter />
+        <DemoContentImporter />
       </div>
     </div>
   )
