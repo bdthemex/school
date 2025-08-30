@@ -1,14 +1,14 @@
 // src/app/actions.ts
 'use server'
 
-import { sanityClient } from '@/lib/sanity'
+import { sanityWriteClient } from '@/lib/sanity.server'
 import { demoData } from '@/lib/demo-data'
 import { revalidatePath } from 'next/cache'
 
 // Helper to prevent duplicate imports
 async function documentExists(id: string) {
   try {
-    const doc = await sanityClient.fetch(`*[_id == $id][0]`, { id });
+    const doc = await sanityWriteClient.fetch(`*[_id == $id][0]`, { id });
     return !!doc;
   } catch (error) {
     console.error(`Error checking document existence for ID ${id}:`, error);
@@ -18,12 +18,16 @@ async function documentExists(id: string) {
 
 export async function importDemoData() {
   try {
-    const transaction = sanityClient.transaction();
+    const transaction = sanityWriteClient.transaction();
     let createdCount = 0;
 
     for (const doc of demoData) {
         // Sanity IDs must not have dots
         const docId = doc._id.replace(/\./g, '-');
+        
+        // Skip image assets as they need to be uploaded, not created as documents
+        if (doc._type === 'sanity.imageAsset') continue;
+
         const docWithSanitizedId = { ...doc, _id: docId };
         
         const exists = await documentExists(docId);
@@ -37,7 +41,7 @@ export async function importDemoData() {
         return { success: true, message: 'সমস্ত ডেমো কনটেন্ট আগে থেকেই যোগ করা আছে।' };
     }
 
-    await transaction.commit();
+    await transaction.commit({ returnDocuments: false });
 
     // Revalidate all paths to show new content
     revalidatePath('/', 'layout')
@@ -47,8 +51,13 @@ export async function importDemoData() {
     console.error('Error importing demo data to Sanity:', error);
     let errorMessage = 'ডেমো কনটেন্ট যোগ করতে সমস্যা হয়েছে।';
     if (error instanceof Error) {
-        errorMessage = error.message;
+        // Provide a more specific error message if available
+        if ('details' in error && typeof (error as any).details === 'object' && (error as any).details !== null) {
+            errorMessage = (error as any).details.description || errorMessage;
+        } else {
+            errorMessage = error.message;
+        }
     }
-    return { success: false, message: errorMessage };
+    return { success: false, message: `ত্রুটি: ${errorMessage}` };
   }
 }
