@@ -91,8 +91,8 @@ export default function Header() {
   }, []);
   
   return (
-      <header className="w-full z-40 px-4 pt-4">
-        <div className="hidden md:block relative w-full h-[200px]">
+      <header className="w-full z-40">
+        <div className="hidden md:block relative w-full h-[200px] px-4 pt-4">
             <Image 
                 src="https://picsum.photos/1280/250"
                 alt="Header Banner"
