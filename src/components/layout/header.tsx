@@ -76,7 +76,7 @@ export default function Header() {
   return (
       <header className="w-full bg-white z-40">
         <div className="container mx-auto">
-          <div className="hidden md:relative w-full h-[150px] md:h-[200px]">
+          <div className="relative w-full h-[150px] md:h-[200px]">
             <Image 
                 src="https://kjsghs.edu.bd/wp-content/uploads/2022/10/cropped-KJSGHS-Banner-2-2.jpg"
                 alt="Header Banner"
