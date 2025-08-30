@@ -78,7 +78,7 @@ export default function Header() {
         <div className="container mx-auto">
           <div className="relative w-full h-[150px] md:h-[200px]">
             <Image 
-                src="https://kjsghs.edu.bd/wp-content/uploads/2022/10/cropped-KJSGHS-Banner-2-2.jpg"
+                src="https://picsum.photos/1280/250"
                 alt="Header Banner"
                 fill
                 style={{objectFit: 'cover'}}
