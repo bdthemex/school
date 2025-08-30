@@ -74,7 +74,7 @@ export default function Header() {
   const pathname = usePathname();
   
   return (
-      <header className="w-full bg-white z-40">
+      <header className="w-full bg-white z-40 px-4 pt-4">
         <div className="w-full h-[150px] md:h-[200px] relative">
           <Image 
               src="https://kjsghs.edu.bd/wp-content/uploads/2022/10/cropped-KJSGHS-Banner-2-2.jpg"
