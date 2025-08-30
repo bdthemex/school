@@ -19,7 +19,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Logo from '../icons/logo';
 
 const navLinks = [
@@ -73,22 +73,6 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
-  const [isSticky, setIsSticky] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 200) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
   
   return (
       <header className="w-full z-40 px-4 pt-4">
@@ -101,117 +85,119 @@ export default function Header() {
                 data-ai-hint="school banner"
                 priority
             />
-          </div>
-          
-          <div className={cn(
-            "sticky top-0 z-50 w-full transition-all duration-300",
-             isSticky ? "shadow-lg bg-background" : "bg-[#0a2342]"
-            )}>
-            <div className="hidden md:block">
-                <nav className="container mx-auto flex items-center gap-1 p-2.5">
-                {navLinks.map((link) => (
-                    link.children ? (
-                        <DropdownMenu key={link.label}>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className={cn("hover:bg-[#8B0000] text-base hover:text-white flex items-center gap-1", isSticky ? "text-foreground hover:text-primary-foreground" : "text-white")}>
-                                    <link.icon className='w-4 h-4' />
-                                    {link.label}
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className={cn("border-none", isSticky ? "bg-background text-foreground" : "bg-[#0a2342] text-white")}>
-                                {link.children.map(child => (
-                                    <DropdownMenuItem key={child.label} asChild className={cn('hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white', isSticky ? "focus:!text-white hover:!text-white" : "")}>
-                                        <Link href={child.href} className='flex items-center gap-2'>
-                                            <child.icon className='w-4 h-4' />
-                                            {child.label}
-                                        </Link>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    ) : (
-                        <Button key={link.label} asChild variant="ghost" 
-                        className={cn(
-                            "hover:bg-[#8B0000] text-base hover:text-white",
-                            isSticky ? "text-foreground hover:text-primary-foreground" : "text-white",
-                            link.href === pathname ? 'bg-[#8B0000]' : ''
-                        )}>
-                            <Link href={link.href!} className="flex items-center gap-2">
-                                <link.icon className='w-4 h-4' />
-                                {link.label}
-                            </Link>
-                        </Button>
-                    )
-                ))}
-                </nav>
-              </div>
+        </div>
+        
+        {/* Placeholder for fixed menu on desktop */}
+        <div className="hidden md:block h-16" />
 
-              <div className="md:hidden flex justify-between items-center h-16 bg-[#0a2342] text-white px-4">
-                    <Link href="/" className="flex items-center gap-2">
-                      <Logo className="w-10 h-10" />
-                    </Link>
-                    <Sheet>
-                        <SheetTrigger asChild>
-                        <Button variant="outline" size="icon" className='bg-transparent text-white border-white hover:bg-opacity-80 hover:text-white'>
-                            <Menu className="h-6 w-6" />
-                            <span className="sr-only">মেনু খুলুন</span>
-                        </Button>
-                        </SheetTrigger>
-                        <SheetContent side="left" className='bg-[#0a2342] text-white border-r-gray-700 p-0 pt-6'>
-                            <nav className="flex flex-col gap-1 px-2">
-                                {navLinks.map((link) => (
-                                  link.children ? (
-                                    <Collapsible key={link.label} className="w-full">
-                                      <CollapsibleTrigger asChild>
-                                        <div className={cn(
-                                            "text-lg font-medium transition-colors hover:bg-opacity-80 flex items-center justify-between gap-3 p-2 rounded-md group",
-                                            pathname.startsWith(link.children.map(c => c.href).join()) ? 'bg-[#8B0000] text-white' : 'text-white'
-                                          )}>
-                                          <div className="flex items-center gap-3">
-                                            <link.icon className='w-5 h-5' />
-                                            {link.label}
-                                          </div>
-                                          <ChevronRight className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-90" />
+        <div className={cn(
+          "w-full transition-all duration-300",
+          "fixed top-0 left-1/2 -translate-x-1/2 max-w-7xl z-50 md:shadow-lg md:bg-background md:px-4"
+          )}>
+          <div className="hidden md:block">
+              <nav className="container mx-auto flex items-center gap-1 p-2.5">
+              {navLinks.map((link) => (
+                  link.children ? (
+                      <DropdownMenu key={link.label}>
+                          <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" className="hover:bg-[#8B0000] text-base hover:text-white flex items-center gap-1 text-foreground hover:text-primary-foreground">
+                                  <link.icon className='w-4 h-4' />
+                                  {link.label}
+                                  <ChevronDown className="h-4 w-4" />
+                              </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="bg-background text-foreground border-none">
+                              {link.children.map(child => (
+                                  <DropdownMenuItem key={child.label} asChild className={'hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white'}>
+                                      <Link href={child.href} className='flex items-center gap-2'>
+                                          <child.icon className='w-4 h-4' />
+                                          {child.label}
+                                      </Link>
+                                  </DropdownMenuItem>
+                              ))}
+                          </DropdownMenuContent>
+                      </DropdownMenu>
+                  ) : (
+                      <Button key={link.label} asChild variant="ghost" 
+                      className={cn(
+                          "hover:bg-[#8B0000] text-base hover:text-white text-foreground hover:text-primary-foreground",
+                          link.href === pathname ? 'bg-[#8B0000]' : ''
+                      )}>
+                          <Link href={link.href!} className="flex items-center gap-2">
+                              <link.icon className='w-4 h-4' />
+                              {link.label}
+                          </Link>
+                      </Button>
+                  )
+              ))}
+              </nav>
+            </div>
+
+            <div className="md:hidden flex justify-between items-center h-16 bg-[#0a2342] text-white px-4">
+                  <Link href="/" className="flex items-center gap-2">
+                    <Logo className="w-10 h-10" />
+                  </Link>
+                  <Sheet>
+                      <SheetTrigger asChild>
+                      <Button variant="outline" size="icon" className='bg-transparent text-white border-white hover:bg-opacity-80 hover:text-white'>
+                          <Menu className="h-6 w-6" />
+                          <span className="sr-only">মেনু খুলুন</span>
+                      </Button>
+                      </SheetTrigger>
+                      <SheetContent side="left" className='bg-[#0a2342] text-white border-r-gray-700 p-0 pt-6'>
+                          <nav className="flex flex-col gap-1 px-2">
+                              {navLinks.map((link) => (
+                                link.children ? (
+                                  <Collapsible key={link.label} className="w-full">
+                                    <CollapsibleTrigger asChild>
+                                      <div className={cn(
+                                          "text-lg font-medium transition-colors hover:bg-opacity-80 flex items-center justify-between gap-3 p-2 rounded-md group",
+                                          pathname.startsWith(link.children.map(c => c.href).join()) ? 'bg-[#8B0000] text-white' : 'text-white'
+                                        )}>
+                                        <div className="flex items-center gap-3">
+                                          <link.icon className='w-5 h-5' />
+                                          {link.label}
                                         </div>
-                                      </CollapsibleTrigger>
-                                      <CollapsibleContent>
-                                        <div className="flex flex-col gap-1 pl-8 pr-2 py-2 border-l border-gray-600 ml-4">
-                                        {link.children.map(child => (
-                                          <Link 
-                                            key={child.label} 
-                                            href={child.href} 
-                                            className={cn(
-                                              "text-base font-medium transition-colors hover:bg-opacity-80 flex items-center gap-3 p-2 rounded-md",
-                                              pathname === child.href ? 'bg-[#8B0000] text-white' : 'text-white'
-                                            )}
-                                          >
-                                            <child.icon className='w-4 h-4' />
-                                            {child.label}
-                                          </Link>
-                                        ))}
-                                        </div>
-                                      </CollapsibleContent>
-                                    </Collapsible>
-                                  ) : (
-                                    <Link 
-                                      key={link.label} 
-                                      href={link.href!}
-                                      className={cn(
-                                        "text-lg font-medium transition-colors hover:bg-opacity-80 flex items-center gap-3 p-2 rounded-md",
-                                        pathname === link.href ? 'bg-[#8B0000] text-white' : 'text-white'
-                                      )}
-                                    >
-                                      <link.icon className='w-5 h-5' />
-                                      {link.label}
-                                    </Link>
-                                  )
-                                ))}
-                            </nav>
-                        </SheetContent>
-                    </Sheet>
-                </div>
-          </div>
+                                        <ChevronRight className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-90" />
+                                      </div>
+                                    </CollapsibleTrigger>
+                                    <CollapsibleContent>
+                                      <div className="flex flex-col gap-1 pl-8 pr-2 py-2 border-l border-gray-600 ml-4">
+                                      {link.children.map(child => (
+                                        <Link 
+                                          key={child.label} 
+                                          href={child.href} 
+                                          className={cn(
+                                            "text-base font-medium transition-colors hover:bg-opacity-80 flex items-center gap-3 p-2 rounded-md",
+                                            pathname === child.href ? 'bg-[#8B0000] text-white' : 'text-white'
+                                          )}
+                                        >
+                                          <child.icon className='w-4 h-4' />
+                                          {child.label}
+                                        </Link>
+                                      ))}
+                                      </div>
+                                    </CollapsibleContent>
+                                  </Collapsible>
+                                ) : (
+                                  <Link 
+                                    key={link.label} 
+                                    href={link.href!}
+                                    className={cn(
+                                      "text-lg font-medium transition-colors hover:bg-opacity-80 flex items-center gap-3 p-2 rounded-md",
+                                      pathname === link.href ? 'bg-[#8B0000] text-white' : 'text-white'
+                                    )}
+                                  >
+                                    <link.icon className='w-5 h-5' />
+                                    {link.label}
+                                  </Link>
+                                )
+                              ))}
+                          </nav>
+                      </SheetContent>
+                  </Sheet>
+              </div>
+        </div>
       </header>
   );
 }
