@@ -81,8 +81,8 @@ export default function Home() {
 
   return (
     <main>
-      <div>
-        <section className="relative w-full shadow-md">
+      <div className="pt-0 px-4 pb-4">
+        <section className="relative w-full">
             <Carousel
                 plugins={[heroCarouselPlugin.current]}
                 className="w-full"

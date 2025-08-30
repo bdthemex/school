@@ -38,7 +38,7 @@ const navLinks = [
     icon: GraduationCap,
     children: [
         { href: '/class-routine', label: 'ক্লাস রুটিন', icon: UserSquare },
-        { href: '/#', label: 'কৃতি শিক্ষার্থী', icon: Star },
+        { href: '#', label: 'কৃতি শিক্ষার্থী', icon: Star },
     ]
   },
   {
@@ -75,7 +75,7 @@ export default function Header() {
   const pathname = usePathname();
   
   return (
-      <header className="w-full bg-white z-40 shadow-lg">
+      <header className="w-full z-40">
         <div className="container mx-auto">
           <div className="relative w-full h-[150px] md:h-[200px]">
             <Image 
