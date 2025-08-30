@@ -22,9 +22,13 @@ export async function importDemoData() {
     let createdCount = 0;
 
     for (const doc of demoData) {
-        const exists = await documentExists(doc._id);
+        // Sanity IDs must not have dots
+        const docId = doc._id.replace(/\./g, '-');
+        const docWithSanitizedId = { ...doc, _id: docId };
+        
+        const exists = await documentExists(docId);
         if (!exists) {
-            transaction.createOrReplace(doc);
+            transaction.createOrReplace(docWithSanitizedId);
             createdCount++;
         }
     }
