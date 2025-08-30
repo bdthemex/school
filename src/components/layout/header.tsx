@@ -88,8 +88,8 @@ export default function Header() {
           </div>
           
           <div className="w-full bg-[#0a2342] text-primary-foreground">
-            <div className="container mx-auto">
-                <div className="hidden md:block p-2.5">
+            <div className="hidden md:block">
+                <div className="container mx-auto p-2.5">
                     <nav className="flex items-center gap-1">
                     {navLinks.map((link) => (
                         link.children ? (
@@ -127,6 +127,7 @@ export default function Header() {
                     ))}
                     </nav>
                 </div>
+              </div>
 
               <div className="md:hidden flex justify-between items-center h-16 bg-[#0a2342] text-white px-4">
                     <Link href="/" className="flex items-center gap-2">
@@ -192,7 +193,6 @@ export default function Header() {
                         </SheetContent>
                     </Sheet>
                 </div>
-            </div>
           </div>
       </header>
   );
