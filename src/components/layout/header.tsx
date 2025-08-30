@@ -88,45 +88,43 @@ export default function Header() {
           </div>
           
           <div className="w-full bg-[#0a2342] text-primary-foreground">
-            <div className="hidden md:block">
-                <div className="container mx-auto p-2.5">
-                    <nav className="flex items-center gap-1">
-                    {navLinks.map((link) => (
-                        link.children ? (
-                            <DropdownMenu key={link.label}>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="hover:bg-[#8B0000] text-base text-white hover:text-white flex items-center gap-1">
-                                        <link.icon className='w-4 h-4' />
-                                        {link.label}
-                                        <ChevronDown className="h-4 w-4" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="bg-[#0a2342] text-white border-none">
-                                    {link.children.map(child => (
-                                        <DropdownMenuItem key={child.label} asChild className='hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white'>
-                                            <Link href={child.href} className='flex items-center gap-2'>
-                                                <child.icon className='w-4 h-4' />
-                                                {child.label}
-                                            </Link>
-                                        </DropdownMenuItem>
-                                    ))}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        ) : (
-                            <Button key={link.label} asChild variant="ghost" 
-                            className={cn(
-                                "hover:bg-[#8B0000] text-base text-white hover:text-white",
-                                link.href === pathname ? 'bg-[#8B0000]' : ''
-                            )}>
-                                <Link href={link.href!} className="flex items-center gap-2">
+            <div className="hidden md:block p-2.5">
+                <nav className="container mx-auto flex items-center gap-1">
+                {navLinks.map((link) => (
+                    link.children ? (
+                        <DropdownMenu key={link.label}>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="hover:bg-[#8B0000] text-base text-white hover:text-white flex items-center gap-1">
                                     <link.icon className='w-4 h-4' />
                                     {link.label}
-                                </Link>
-                            </Button>
-                        )
-                    ))}
-                    </nav>
-                </div>
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="bg-[#0a2342] text-white border-none">
+                                {link.children.map(child => (
+                                    <DropdownMenuItem key={child.label} asChild className='hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white'>
+                                        <Link href={child.href} className='flex items-center gap-2'>
+                                            <child.icon className='w-4 h-4' />
+                                            {child.label}
+                                        </Link>
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    ) : (
+                        <Button key={link.label} asChild variant="ghost" 
+                        className={cn(
+                            "hover:bg-[#8B0000] text-base text-white hover:text-white",
+                            link.href === pathname ? 'bg-[#8B0000]' : ''
+                        )}>
+                            <Link href={link.href!} className="flex items-center gap-2">
+                                <link.icon className='w-4 h-4' />
+                                {link.label}
+                            </Link>
+                        </Button>
+                    )
+                ))}
+                </nav>
               </div>
 
               <div className="md:hidden flex justify-between items-center h-16 bg-[#0a2342] text-white px-4">
