@@ -30,10 +30,11 @@ const managementItems = [
     href: '/admin/gallery',
   },
   {
-    title: 'লিঙ্ক ম্যানেজ করুন',
-    description: 'গুরুত্বপূর্ণ লিঙ্ক এবং রিসোর্স সম্পাদনা করুন।',
+    title: 'অন্যান্য কনটেন্ট',
+    description: 'Sanity Studio-তে অন্যান্য তথ্য (শিক্ষক, কর্মচারী ইত্যাদি) ম্যানেজ করুন।',
     icon: LinkIcon,
-    href: '/admin/links',
+    href: 'https://kjsghs-info-hub.sanity.studio', // Placeholder, user will replace with actual studio URL
+    isExternal: true,
   },
 ]
 
@@ -55,7 +56,7 @@ export default function AdminDashboard() {
             <CardContent>
               <CardDescription>{item.description}</CardDescription>
               <Button asChild className="mt-4" variant="outline">
-                <Link href={item.href}>
+                <Link href={item.href} target={item.isExternal ? '_blank' : '_self'}>
                   <Edit className="mr-2 h-4 w-4" />
                   ম্যানেজ করুন
                 </Link>

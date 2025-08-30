@@ -18,20 +18,25 @@ async function getGalleryImages(): Promise<GalleryImage[]> {
     const q = query(imagesCollectionRef, orderBy('createdAt', 'desc'));
     const data = await getDocs(q);
     
-    return data.docs.map((doc) => ({
+    const firestoreImages = data.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     } as GalleryImage));
+
+    if (firestoreImages.length > 0) {
+        return firestoreImages;
+    }
   } catch (error) {
-    console.error("Error fetching gallery images:", error);
-    // Return fallback data if firestore fails
-    return Array.from({ length: 6 }).map((_, i) => ({
-        id: `fallback-${i}`,
-        alt: `Fallback Image ${i + 1}`,
-        imageUrl: `https://picsum.photos/600/400?random=${i + 1}`,
-        createdAt: Timestamp.now()
-    }));
+    console.error("Error fetching gallery images from Firestore:", error);
   }
+  
+  // Fallback data if firestore fails or is empty
+  return Array.from({ length: 6 }).map((_, i) => ({
+      id: `fallback-${i}`,
+      alt: `Fallback Image ${i + 1}`,
+      imageUrl: `https://picsum.photos/600/400?random=${i + 1}`,
+      createdAt: Timestamp.now()
+  }));
 }
 
 export default async function GalleryPage() {
