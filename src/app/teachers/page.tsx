@@ -2,17 +2,36 @@
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, GraduationCap, Phone, Mail } from 'lucide-react'
+import { sanityClient, urlFor } from '@/lib/sanity'
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
-const teachers = [
-  { name: 'মোঃ আব্দুল বাতেন', designation: 'প্রধান শিক্ষক', subject: 'গণিত', phone: '01712-345678', email: 'principal@example.com', image: 'https://kjsghs.edu.bd/wp-content/uploads/2022/10/Mr.-Baten-Sir-3-1.jpg', dataAiHint: 'teacher portrait' },
-  { name: 'শিক্ষক খ', designation: 'সহকারী প্রধান শিক্ষক', subject: 'ইংরেজি', phone: '01712-345678', email: 'teacher2@example.com', image: 'https://picsum.photos/200/200?random=2', dataAiHint: 'teacher portrait' },
-  { name: 'শিক্ষক গ', designation: 'সিনিয়র শিক্ষক', subject: 'বাংলা', phone: '01712-345678', email: 'teacher3@example.com', image: 'https://picsum.photos/200/200?random=3', dataAiHint: 'teacher portrait' },
-  { name: 'শিক্ষক ঘ', designation: 'সহকারী শিক্ষক', subject: 'বিজ্ঞান', phone: '01712-345678', email: 'teacher4@example.com', image: 'https://picsum.photos/200/200?random=4', dataAiHint: 'teacher portrait' },
-  { name: 'শিক্ষক ঙ', designation: 'সহকারী শিক্ষক', subject: 'সমাজ বিজ্ঞান', phone: '01712-345678', email: 'teacher5@example.com', image: 'https://picsum.photos/200/200?random=5', dataAiHint: 'teacher portrait' },
-  { name: 'শিক্ষক চ', designation: 'সহকারী শিক্ষক', subject: 'ধর্ম', phone: '01712-345678', email: 'teacher6@example.com', image: 'https://picsum.photos/200/200?random=6', dataAiHint: 'teacher portrait' },
-]
+interface Teacher {
+  _id: string;
+  name: string;
+  designation: string;
+  subject: string;
+  phone?: string;
+  email?: string;
+  image: SanityImageSource;
+}
 
-export default function TeachersPage() {
+async function getTeachers(): Promise<Teacher[]> {
+  const query = `*[_type == "teacher"]{
+    _id,
+    name,
+    designation,
+    subject,
+    phone,
+    email,
+    image
+  }`;
+  const teachers = await sanityClient.fetch(query);
+  return teachers;
+}
+
+export default async function TeachersPage() {
+  const teachers = await getTeachers();
+
   return (
     <main className="flex-1">
         <div>
@@ -25,36 +44,43 @@ export default function TeachersPage() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="p-8">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                            {teachers.map((teacher, index) => (
-                            <Card key={index} className="text-center shadow-md hover:shadow-xl transition-shadow">
-                                <CardContent className="p-6">
-                                <Image
-                                    src={teacher.image}
-                                    alt={teacher.name}
-                                    width={120}
-                                    height={120}
-                                    className="rounded-full mx-auto mb-4 border-4 border-accent"
-                                    data-ai-hint={teacher.dataAiHint}
-                                />
-                                <h3 className="text-lg font-bold text-primary">{teacher.name}</h3>
-                                <p className="text-sm text-muted-foreground">{teacher.designation}</p>
-                                <p className="text-sm font-medium text-accent mt-2 flex items-center justify-center gap-2">
-                                    <GraduationCap className="w-4 h-4" />
-                                    {teacher.subject}
-                                </p>
-                                <div className="mt-4 text-xs text-muted-foreground space-y-1">
-                                    <p className="flex items-center justify-center gap-2">
-                                        <Phone className="w-3 h-3" /> {teacher.phone}
+                        {teachers.length > 0 ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                                {teachers.map((teacher) => (
+                                <Card key={teacher._id} className="text-center shadow-md hover:shadow-xl transition-shadow">
+                                    <CardContent className="p-6">
+                                    <Image
+                                        src={urlFor(teacher.image).width(200).height(200).fit('crop').url()}
+                                        alt={teacher.name}
+                                        width={120}
+                                        height={120}
+                                        className="rounded-full mx-auto mb-4 border-4 border-accent"
+                                    />
+                                    <h3 className="text-lg font-bold text-primary">{teacher.name}</h3>
+                                    <p className="text-sm text-muted-foreground">{teacher.designation}</p>
+                                    <p className="text-sm font-medium text-accent mt-2 flex items-center justify-center gap-2">
+                                        <GraduationCap className="w-4 h-4" />
+                                        {teacher.subject}
                                     </p>
-                                    <p className="flex items-center justify-center gap-2">
-                                        <Mail className="w-3 h-3" /> {teacher.email}
-                                    </p>
-                                </div>
-                                </CardContent>
-                            </Card>
-                            ))}
-                        </div>
+                                    <div className="mt-4 text-xs text-muted-foreground space-y-1">
+                                        {teacher.phone && (
+                                            <p className="flex items-center justify-center gap-2">
+                                                <Phone className="w-3 h-3" /> {teacher.phone}
+                                            </p>
+                                        )}
+                                        {teacher.email && (
+                                            <p className="flex items-center justify-center gap-2">
+                                                <Mail className="w-3 h-3" /> {teacher.email}
+                                            </p>
+                                        )}
+                                    </div>
+                                    </CardContent>
+                                </Card>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-center text-muted-foreground">কোনো শিক্ষকের তথ্য পাওয়া যায়নি।</p>
+                        )}
                     </CardContent>
                 </Card>
             </div>
