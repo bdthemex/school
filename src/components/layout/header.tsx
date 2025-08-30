@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Home, Info, Users, Newspaper, ImageIcon as GalleryIcon, Phone, GraduationCap, ChevronDown, ChevronRight, MessageSquare, Video, BookOpen, Star, UserSquare, History } from 'lucide-react';
+import { Menu, Home, Info, Users, Newspaper, ImageIcon as GalleryIcon, Phone, GraduationCap, ChevronDown, ChevronRight, MessageSquare, Video, BookOpen, Star, UserSquare, History, CalendarCheck, Plane } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,7 +38,7 @@ const navLinks = [
     icon: GraduationCap,
     children: [
         { href: '/class-routine', label: 'ক্লাস রুটিন', icon: UserSquare },
-        { href: '#', label: 'কৃতি শিক্ষার্থী', icon: Star },
+        { href: '/successful-students', label: 'কৃতি শিক্ষার্থী', icon: Star },
     ]
   },
   {
@@ -56,15 +56,15 @@ const navLinks = [
     icon: GalleryIcon,
     children: [
       { href: '/gallery', label: 'ফটো গ্যালারি', icon: GalleryIcon },
-      { href: '#', label: 'ভিডিও গ্যালারি', icon: Video },
+      { href: '/video-gallery', label: 'ভিডিও গ্যালারি', icon: Video },
     ],
   },
    {
     label: 'অন্যান্য',
     icon: BookOpen,
     children: [
-        { href: '#', label: 'একাডেমিক ক্যালেন্ডার', icon: UserSquare },
-        { href: '#', label: 'ছুটির তালিকা', icon: Star },
+        { href: '/academic-calendar', label: 'একাডেমিক ক্যালেন্ডার', icon: CalendarCheck },
+        { href: '/holiday-list', label: 'ছুটির তালিকা', icon: Plane },
     ]
   },
   { href: '/contact', label: 'যোগাযোগ', icon: Phone },

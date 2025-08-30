@@ -3,20 +3,20 @@ import Link from 'next/link';
 import { Mail, MapPin, Phone, Star, Code, Plus } from 'lucide-react';
 
 const footerLinksCol1 = [
-    { href: "/about", label: "প্রতিষ্ঠানের ইতিহাস" },
-    { href: "/#", label: "একাডেমিক ক্যালেন্ডার" },
+    { href: "/history", label: "প্রতিষ্ঠানের ইতিহাস" },
+    { href: "/academic-calendar", label: "একাডেমিক ক্যালেন্ডার" },
     { href: "/contact", label: "যোগাযোগ" },
-    { href: "/#", label: "ছুটির দিন" },
-    { href: "/#", label: "কৃতি শিক্ষার্থী" },
+    { href: "/holiday-list", label: "ছুটির দিন" },
+    { href: "/successful-students", label: "কৃতি শিক্ষার্থী" },
     { href: "/notices", label: "নোটিশ" },
 ]
 const footerLinksCol2 = [
     { href: "/results", label: "পরীক্ষার ফলাফল" },
-    { href: "/#", label: "ব্লগ" },
-    { href: "/#", label: "ডাউনলোড" },
-    { href: "/#", label: "পরীক্ষার রুটিন" },
-    { href: "/#", label: "ভর্তি" },
-    { href: "/#", label: "বাংলা টিউটোরিয়াল" },
+    { href: "/gallery", label: "ফটো গ্যালারি" },
+    { href: "/video-gallery", label: "ভিডিও গ্যালারি" },
+    { href: "/class-routine", label: "ক্লাস রুটিন" },
+    { href: "/teachers", label: "শিক্ষক পরিচিতি" },
+    { href: "/staff", label: "কর্মচারী পরিচিতি" },
 ]
 
 

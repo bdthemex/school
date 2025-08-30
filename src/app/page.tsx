@@ -1,5 +1,6 @@
 
-'use client';
+'use client'
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -19,7 +20,7 @@ import {
 } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { collection, getDocs, query, orderBy, limit, Timestamp } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 
@@ -38,8 +39,8 @@ const facultyData = [
 const importantSiteLinks = [
     { title: 'নোটিশ', href: '/notices' },
     { title: 'পরীক্ষার ফলাফল', href: '/results' },
-    { title: 'কৃতি শিক্ষার্থী', href: '#' },
-    { title: 'ছুটির দিন', href: '#' },
+    { title: 'কৃতি শিক্ষার্থী', href: '/successful-students' },
+    { title: 'ছুটির দিন', href: '/holiday-list' },
     { title: 'যোগাযোগ', href: '/contact' },
 ]
 
@@ -75,6 +76,13 @@ async function getNotices(): Promise<Notice[]> {
 
 export default function Home() {
     const [notices, setNotices] = useState<Notice[]>([]);
+    const heroCarouselPlugin = useRef(
+        Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
+    );
+    const facultyCarouselPlugin = useRef(
+        Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true })
+    );
+    const [showMarquee, setShowMarquee] = useState(true);
 
     useEffect(() => {
         const fetchNotices = async () => {
@@ -84,25 +92,11 @@ export default function Home() {
         fetchNotices();
     }, []);
 
-    return (
-        <main>
-            <HomePageContent notices={notices} />
-        </main>
-    );
-}
-
-function HomePageContent({ notices }: { notices: Notice[] }) {
-    const heroCarouselPlugin = React.useRef(
-        Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
-    )
-     const facultyCarouselPlugin = React.useRef(
-        Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true })
-    )
-    const [showMarquee, setShowMarquee] = useState(true);
     const marqueeText = "সরকারি ও বেসরকারি মাধ্যমিক বিদ্যালয়ে-২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি ও নিয়মাবলী সংক্রান্ত। আমাদের ওয়েবসাইটে আপনাকে স্বাগত…(সাইট ডেভেলপমেন্টের কাজ চলছে) *** "
 
   return (
-     <div className="pt-0 px-4 pb-4">
+    <main>
+      <div className="pt-0 px-4 pb-4">
         <section className="relative w-full">
             <Carousel
                 plugins={[heroCarouselPlugin.current]}
@@ -232,7 +226,7 @@ function HomePageContent({ notices }: { notices: Notice[] }) {
                         {[
                           {label: 'শ্রেণিভিত্তিক শিক্ষার্থী', href: '#'}, 
                           {label: 'ক্লাস রুটিন', href: '/class-routine'}, 
-                          {label: 'ছুটির তালিকা', href: '#'}, 
+                          {label: 'ছুটির তালিকা', href: '/holiday-list'}, 
                           {label: 'নোটিশ', href: '/notices'}
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-base text-foreground hover:text-primary gap-2">
@@ -304,8 +298,8 @@ function HomePageContent({ notices }: { notices: Notice[] }) {
                           {label: 'প্রতিষ্ঠানের ইতিহাস', href: '/history'}, 
                           {label: 'পরীক্ষার ফলাফল', href: '/results'}, 
                           {label: 'নোটিশ', href: '/notices'}, 
-                          {label: 'ছুটির দিন', href: '#'},
-                          {label: 'একাডেমিক ক্যালেন্ডার', href: '#'}, 
+                          {label: 'ছুটির দিন', href: '/holiday-list'},
+                          {label: 'একাডেমিক ক্যালেন্ডার', href: '/academic-calendar'}, 
                         ].map(item => (
                              <Link href={item.href} key={item.label} className="flex items-center text-base text-foreground hover:text-primary gap-2">
                                 <Check className="w-4 h-4 text-accent" />
@@ -392,5 +386,6 @@ function HomePageContent({ notices }: { notices: Notice[] }) {
           </aside>
         </div>
       </div>
+    </main>
   )
 }
