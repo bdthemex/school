@@ -1,7 +1,7 @@
 
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Building, Target, BookOpen, Clock } from 'lucide-react'
+import { Building, Target, BookOpen } from 'lucide-react'
 
 export default function AboutPage() {
   return (

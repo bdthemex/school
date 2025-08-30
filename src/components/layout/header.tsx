@@ -28,6 +28,7 @@ const navLinks = [
     label: 'আমাদের সম্পর্কে',
     icon: Info,
     children: [
+      { href: '/about', label: 'আমাদের সম্পর্কে', icon: Info },
       { href: '/history', label: 'প্রতিষ্ঠানের ইতিহাস', icon: History },
       { href: '/principals-message', label: 'প্রধান শিক্ষকের বাণী', icon: MessageSquare },
       { href: '/vice-principals-message', label: 'সহকারী প্রধান শিক্ষকের বাণী', icon: MessageSquare },
@@ -116,7 +117,7 @@ export default function Header() {
                   link.children ? (
                       <DropdownMenu key={link.label}>
                           <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" className={cn("hover:bg-[#8B0000] text-base hover:text-white flex items-center gap-1 text-white")}>
+                              <Button variant="ghost" className={cn("hover:bg-[#8B0000] text-base hover:text-white flex items-center gap-1", isSticky ? 'text-white' : 'text-white')}>
                                   <link.icon className='w-4 h-4' />
                                   {link.label}
                                   <ChevronDown className="h-4 w-4" />
@@ -136,7 +137,8 @@ export default function Header() {
                   ) : (
                       <Button key={link.label} asChild variant="ghost" 
                       className={cn(
-                          "hover:bg-[#8B0000] text-base hover:text-white text-white",
+                          "hover:bg-[#8B0000] text-base hover:text-white",
+                           isSticky ? 'text-white' : 'text-white',
                           link.href === pathname ? 'bg-[#8B0000] text-white' : ''
                       )}>
                           <Link href={link.href!} className="flex items-center gap-2">
