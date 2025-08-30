@@ -19,7 +19,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from '../icons/logo';
 
 const navLinks = [
@@ -73,6 +73,22 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   
   return (
       <header className="w-full z-40 px-4 pt-4">
@@ -88,11 +104,11 @@ export default function Header() {
         </div>
         
         {/* Placeholder for fixed menu on desktop */}
-        <div className="hidden md:block h-16" />
+        <div className={cn("hidden md:block", isSticky && "h-16")} />
 
         <div className={cn(
           "w-full transition-all duration-300",
-          "fixed top-0 left-1/2 -translate-x-1/2 max-w-7xl z-50 md:shadow-lg md:bg-background md:px-4"
+          isSticky ? "fixed top-0 left-1/2 -translate-x-1/2 max-w-7xl z-50 md:shadow-lg md:bg-background md:px-4" : ""
           )}>
           <div className="hidden md:block">
               <nav className="container mx-auto flex items-center gap-1 p-2.5">
