@@ -19,7 +19,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from '../icons/logo';
 
 const navLinks = [
@@ -73,10 +73,32 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) { // Adjust this value as needed
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   
   return (
-      <header className="w-full z-40 px-4 pt-4">
-        <div className="hidden md:block relative w-full h-[150px] md:h-[200px]">
+      <header className={cn(
+        "w-full z-40 px-4 pt-4 transition-all duration-300",
+        isSticky && "fixed top-0 left-0 right-0 bg-background shadow-lg !p-0"
+      )}>
+        <div className={cn(
+          "hidden md:block relative w-full h-[150px] md:h-[200px]",
+          isSticky && "hidden"
+        )}>
             <Image 
                 src="https://picsum.photos/1280/250"
                 alt="Header Banner"
@@ -87,7 +109,10 @@ export default function Header() {
             />
           </div>
           
-          <div className="w-full bg-[#0a2342] text-primary-foreground">
+          <div className={cn(
+            "w-full bg-[#0a2342] text-primary-foreground",
+             isSticky && "container mx-auto"
+            )}>
             <div className="hidden md:block p-2.5">
                 <nav className="container mx-auto flex items-center gap-1">
                 {navLinks.map((link) => (
