@@ -1,6 +1,108 @@
 // src/lib/demo-data.ts
 
 export const demoData = [
+  // Site Settings
+  {
+    _id: "siteSettings",
+    _type: "siteSettings",
+    footerAddress: "কেন্দুয়া বাজার, কেন্দুয়া, নেত্রকোণা, বাংলাদেশ।",
+    footerPhone: "০১৭১৭-৪০৭৫৮৫",
+    footerEmail: "joyharisprygovtschool@gmail.com",
+    eiinNumber: "113026",
+    schoolCode: "8300",
+    facebookPageUrl: "https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fkjhsgovt.school&tabs=timeline&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId",
+  },
+  // Homepage
+  {
+    _id: "homepage",
+    _type: "homepage",
+    historySection: {
+      summary: "কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ সালে প্রতিষ্ঠিত হয়। এটি এই অঞ্চলের অন্যতম প্রাচীন এবং স্বনামধন্য একটি শিক্ষা প্রতিষ্ঠান। ১৯ মার্চ, ১৯৯১ সালে প্রতিষ্ঠানটি জাতীয়করণ করা হয়। বর্তমানে বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয় এবং প্রায় ৭১৭ জন শিক্ষার্থী অধ্যয়নরত আছে। অভিজ্ঞ শিক্ষকমণ্ডলীর মাধ্যমে পরিচালিত এই বিদ্যালয়ে বর্তমানে ১২ জন শিক্ষক কর্মরত রয়েছেন। বিদ্যালয়টিতে একটি তিন তলা ভবন, একটি দোতলা ভবন, তিনটি হাফ বিল্ডিং, একটি খেলার মাঠ এবং দুইটি শহীদ মিনার রয়েছে।",
+      linkText: "বিস্তারিত পড়ুন",
+      linkHref: "/about",
+    },
+  },
+  // Header Navigation
+  {
+    _id: "headerNavigation",
+    _type: "navigation",
+    title: "Header Navigation",
+    navItems: [
+      { _key: "n1", label: "প্রচ্ছদ", href: "/" },
+      { 
+        _key: "n2", 
+        label: "আমাদের সম্পর্কে",
+        children: [
+          { _key: "s1", label: "আমাদের সম্পর্কে", href: "/about" },
+          { _key: "s2", label: "প্রতিষ্ঠানের ইতিহাস", href: "/history" },
+          { _key: "s3", label: "প্রধান শিক্ষকের বাণী", href: "/principals-message" },
+          { _key: "s4", label: "সহকারী প্রধান শিক্ষকের বাণী", href: "/vice-principals-message" },
+        ]
+      },
+      { 
+        _key: "n3", 
+        label: "শিক্ষার্থী",
+        children: [
+            { _key: "s5", label: 'ক্লাস রুটিন', href: '/class-routine' },
+            { _key: "s6", label: 'কৃতি শিক্ষার্থী', href: '/successful-students' },
+        ]
+      },
+      { 
+        _key: "n4", 
+        label: "শিক্ষকমন্ডলী",
+        children: [
+          { _key: "s7", label: "শিক্ষক পরিচিতি", href: "/teachers" },
+          { _key: "s8", label: "কর্মচারী পরিচিতি", href: "/staff" },
+        ]
+      },
+      { _key: "n5", label: "নোটিশ", href: "/notices" },
+      { _key: "n6", label: "পরীক্ষার ফলাফল", href: "/results" },
+      { 
+        _key: "n7", 
+        label: "গ্যালারি",
+        children: [
+          { _key: "s9", label: "ফটো গ্যালারি", href: "/gallery" },
+          { _key: "s10", label: "ভিডিও গ্যালারি", href: "/video-gallery" },
+        ]
+      },
+      { 
+        _key: "n8", 
+        label: "অন্যান্য",
+        children: [
+            { _key: "s11", label: "একাডেমিক ক্যালেন্ডার", href: "/academic-calendar" },
+            { _key: "s12", label: "ছুটির তালিকা", href: "/holiday-list" },
+        ]
+      },
+      { _key: "n9", label: "যোগাযোগ", href: "/contact" },
+    ]
+  },
+  // Footer Links
+  {
+    _id: "footerLinksCol1",
+    _type: "navigation",
+    title: "Footer Links Column 1",
+    navItems: [
+      { _key: "f1", label: "প্রতিষ্ঠানের ইতিহাস", href: "/history" },
+      { _key: "f2", label: "একাডেমিক ক্যালেন্ডার", href: "/academic-calendar" },
+      { _key: "f3", label: "যোগাযোগ", href: "/contact" },
+      { _key: "f4", label: "ছুটির দিন", href: "/holiday-list" },
+      { _key: "f5", label: "কৃতি শিক্ষার্থী", href: "/successful-students" },
+      { _key: "f6", label: "নোটিশ", href: "/notices" },
+    ]
+  },
+  {
+    _id: "footerLinksCol2",
+    _type: "navigation",
+    title: "Footer Links Column 2",
+    navItems: [
+      { _key: "f7", label: "পরীক্ষার ফলাফল", href: "/results" },
+      { _key: "f8", label: "ফটো গ্যালারি", href: "/gallery" },
+      { _key: "f9", label: "ভিডিও গ্যালারি", href: "/video-gallery" },
+      { _key: "f10", label: "ক্লাস রুটিন", href: "/class-routine" },
+      { _key: "f11", label: "শিক্ষক পরিচিতি", href: "/teachers" },
+      { _key: "f12", label: "কর্মচারী পরিচিতি", href: "/staff" },
+    ]
+  },
   // About Page
   {
     _id: "aboutPage",

@@ -11,8 +11,17 @@ import successfulStudent from './schemas/successfulStudent'
 import teacher from './schemas/teacher'
 import vicePrincipalMessage from './schemas/vicePrincipalMessage'
 import videoItem from './schemas/videoItem'
+import siteSettings from './schemas/siteSettings'
+import homepage from './schemas/homepage'
+import navigation from './schemas/navigation'
 
 export const schemaTypes = [
+  // Site-wide settings
+  siteSettings,
+  homepage,
+  navigation,
+
+  // Page-specific content
   teacher,
   staff,
   successfulStudent,

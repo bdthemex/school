@@ -20,63 +20,76 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
-import Logo from '../icons/logo';
+import { sanityClient, urlFor } from '@/lib/sanity';
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
-const navLinks = [
-  { href: '/', label: 'প্রচ্ছদ', icon: Home },
-  {
-    label: 'আমাদের সম্পর্কে',
-    icon: Info,
-    children: [
-      { href: '/about', label: 'আমাদের সম্পর্কে', icon: Info },
-      { href: '/history', label: 'প্রতিষ্ঠানের ইতিহাস', icon: History },
-      { href: '/principals-message', label: 'প্রধান শিক্ষকের বাণী', icon: MessageSquare },
-      { href: '/vice-principals-message', label: 'সহকারী প্রধান শিক্ষকের বাণী', icon: MessageSquare },
-    ],
-  },
-   {
-    label: 'শিক্ষার্থী',
-    icon: GraduationCap,
-    children: [
-        { href: '/class-routine', label: 'ক্লাস রুটিন', icon: UserSquare },
-        { href: '/successful-students', label: 'কৃতি শিক্ষার্থী', icon: Star },
-    ]
-  },
-  {
-    label: 'শিক্ষকমন্ডলী',
-    icon: Users,
-    children: [
-      { href: '/teachers', label: 'শিক্ষক পরিচিতি', icon: Users },
-      { href: '/staff', label: 'কর্মচারী পরিচিতি', icon: UserSquare },
-    ],
-  },
-  { href: '/notices', label: 'নোটিশ', icon: Newspaper },
-  { href: '/results', label: 'পরীক্ষার ফলাফল', icon: GraduationCap },
-  {
-    label: 'গ্যালারি',
-    icon: GalleryIcon,
-    children: [
-      { href: '/gallery', label: 'ফটো গ্যালারি', icon: GalleryIcon },
-      { href: '/video-gallery', label: 'ভিডিও গ্যালারি', icon: Video },
-    ],
-  },
-   {
-    label: 'অন্যান্য',
-    icon: BookOpen,
-    children: [
-        { href: '/academic-calendar', label: 'একাডেমিক ক্যালেন্ডার', icon: CalendarCheck },
-        { href: '/holiday-list', label: 'ছুটির তালিকা', icon: Plane },
-    ]
-  },
-  { href: '/contact', label: 'যোগাযোগ', icon: Phone },
-];
+interface NavItem {
+    _key: string;
+    label: string;
+    href?: string;
+    children?: NavItem[];
+}
 
+interface Navigation {
+    navItems: NavItem[];
+}
+
+interface SiteSettings {
+    logo: SanityImageSource;
+    headerBanner: SanityImageSource;
+}
+
+// A map to get icons for navigation items
+const iconMap: { [key: string]: React.ElementType } = {
+  'প্রচ্ছদ': Home,
+  'আমাদের সম্পর্কে': Info,
+  'প্রতিষ্ঠানের ইতিহাস': History,
+  'প্রধান শিক্ষকের বাণী': MessageSquare,
+  'সহকারী প্রধান শিক্ষকের বাণী': MessageSquare,
+  'শিক্ষার্থী': GraduationCap,
+  'ক্লাস রুটিন': UserSquare,
+  'কৃতি শিক্ষার্থী': Star,
+  'শিক্ষকমন্ডলী': Users,
+  'শিক্ষক পরিচিতি': Users,
+  'কর্মচারী পরিচিতি': UserSquare,
+  'নোটিশ': Newspaper,
+  'পরীক্ষার ফলাফল': GraduationCap,
+  'গ্যালারি': GalleryIcon,
+  'ফটো গ্যালারি': GalleryIcon,
+  'ভিডিও গ্যালারি': Video,
+  'অন্যান্য': BookOpen,
+  'একাডেমিক ক্যালেন্ডার': CalendarCheck,
+  'ছুটির তালিকা': Plane,
+  'যোগাযোগ': Phone,
+};
+
+
+async function getHeaderData(): Promise<{ nav: Navigation | null, settings: SiteSettings | null }> {
+    const query = `{
+        "nav": *[_type == "navigation" && _id == "headerNavigation"][0],
+        "settings": *[_type == "siteSettings" && _id == "siteSettings"][0]
+    }`;
+    try {
+        const data = await sanityClient.fetch(query);
+        return data;
+    } catch (error) {
+        console.error("Error fetching header data:", error);
+        return { nav: null, settings: null };
+    }
+}
 
 export default function Header() {
   const pathname = usePathname();
   const [isSticky, setIsSticky] = useState(false);
+  const [navLinks, setNavLinks] = useState<NavItem[]>([]);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
+    getHeaderData().then(data => {
+        if(data.nav) setNavLinks(data.nav.navItems);
+        if(data.settings) setSiteSettings(data.settings);
+    });
+
     const handleScroll = () => {
       if (window.scrollY > 200) {
         setIsSticky(true);
@@ -91,17 +104,36 @@ export default function Header() {
     };
   }, []);
   
+  const renderIcon = (label: string) => {
+    const Icon = iconMap[label] || Info; // Default icon
+    return <Icon className="w-4 h-4" />;
+  };
+
+  const renderMobileIcon = (label: string) => {
+      const Icon = iconMap[label] || Info;
+      return <Icon className="w-5 h-5" />;
+  }
+
   return (
       <header className="w-full z-40 px-4 pt-4">
         <div className="hidden md:block relative w-full h-[200px]">
-            <Image 
-                src="https://picsum.photos/1280/250"
-                alt="Header Banner"
-                fill
-                style={{objectFit: 'cover'}}
-                data-ai-hint="school banner"
-                priority
-            />
+            {siteSettings?.headerBanner ? (
+                <Image 
+                    src={urlFor(siteSettings.headerBanner).url()}
+                    alt="Header Banner"
+                    fill
+                    style={{objectFit: 'cover'}}
+                    priority
+                />
+            ) : (
+                 <Image 
+                    src="https://picsum.photos/1280/250"
+                    alt="Header Banner"
+                    fill
+                    style={{objectFit: 'cover'}}
+                    priority
+                />
+            )}
         </div>
         
         {/* Placeholder for fixed menu on desktop */}
@@ -118,7 +150,7 @@ export default function Header() {
                       <DropdownMenu key={link.label}>
                           <DropdownMenuTrigger asChild>
                               <Button variant="ghost" className={cn("hover:bg-[#8B0000] text-base hover:text-white flex items-center gap-1", isSticky ? 'text-white' : 'text-white')}>
-                                  <link.icon className='w-4 h-4' />
+                                  {renderIcon(link.label)}
                                   {link.label}
                                   <ChevronDown className="h-4 w-4" />
                               </Button>
@@ -126,8 +158,8 @@ export default function Header() {
                           <DropdownMenuContent className="bg-background text-foreground border-none">
                               {link.children.map(child => (
                                   <DropdownMenuItem key={child.label} asChild className={'hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white'}>
-                                      <Link href={child.href} className='flex items-center gap-2'>
-                                          <child.icon className='w-4 h-4' />
+                                      <Link href={child.href || '#'} className='flex items-center gap-2'>
+                                          {renderIcon(child.label)}
                                           {child.label}
                                       </Link>
                                   </DropdownMenuItem>
@@ -141,8 +173,8 @@ export default function Header() {
                            isSticky ? 'text-white' : 'text-white',
                           link.href === pathname ? 'bg-[#8B0000] text-white' : ''
                       )}>
-                          <Link href={link.href!} className="flex items-center gap-2">
-                              <link.icon className='w-4 h-4' />
+                          <Link href={link.href || '#'} className="flex items-center gap-2">
+                              {renderIcon(link.label)}
                               {link.label}
                           </Link>
                       </Button>
@@ -153,7 +185,11 @@ export default function Header() {
 
             <div className="md:hidden flex justify-between items-center h-16 bg-[#0a2342] text-white px-4">
                   <Link href="/" className="flex items-center gap-2">
-                    <Logo className="w-10 h-10" />
+                    {siteSettings?.logo ? (
+                        <Image src={urlFor(siteSettings.logo).width(40).height(40).url()} alt="logo" width={40} height={40} />
+                    ) : (
+                        <Home className="w-8 h-8" />
+                    )}
                   </Link>
                   <Sheet>
                       <SheetTrigger asChild>
@@ -169,11 +205,10 @@ export default function Header() {
                                   <Collapsible key={link.label} className="w-full">
                                     <CollapsibleTrigger asChild>
                                       <div className={cn(
-                                          "text-lg font-medium transition-colors hover:bg-opacity-80 flex items-center justify-between gap-3 p-2 rounded-md group",
-                                          pathname.startsWith(link.children.map(c => c.href).join()) ? 'bg-[#8B0000] text-white' : 'text-white'
+                                          "text-lg font-medium transition-colors hover:bg-opacity-80 flex items-center justify-between gap-3 p-2 rounded-md group"
                                         )}>
                                         <div className="flex items-center gap-3">
-                                          <link.icon className='w-5 h-5' />
+                                          {renderMobileIcon(link.label)}
                                           {link.label}
                                         </div>
                                         <ChevronRight className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-90" />
@@ -184,13 +219,13 @@ export default function Header() {
                                       {link.children.map(child => (
                                         <Link 
                                           key={child.label} 
-                                          href={child.href} 
+                                          href={child.href || '#'}
                                           className={cn(
                                             "text-base font-medium transition-colors hover:bg-opacity-80 flex items-center gap-3 p-2 rounded-md",
                                             pathname === child.href ? 'bg-[#8B0000] text-white' : 'text-white'
                                           )}
                                         >
-                                          <child.icon className='w-4 h-4' />
+                                          {renderMobileIcon(child.label)}
                                           {child.label}
                                         </Link>
                                       ))}
@@ -200,13 +235,13 @@ export default function Header() {
                                 ) : (
                                   <Link 
                                     key={link.label} 
-                                    href={link.href!}
+                                    href={link.href || '#'}
                                     className={cn(
                                       "text-lg font-medium transition-colors hover:bg-opacity-80 flex items-center gap-3 p-2 rounded-md",
                                       pathname === link.href ? 'bg-[#8B0000] text-white' : 'text-white'
                                     )}
                                   >
-                                    <link.icon className='w-5 h-5' />
+                                    {renderMobileIcon(link.label)}
                                     {link.label}
                                   </Link>
                                 )

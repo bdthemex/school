@@ -21,11 +21,27 @@ import {
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
 import React, { useState, useEffect, useRef } from 'react';
-import { sanityClient } from '@/lib/sanity'
+import { sanityClient, urlFor } from '@/lib/sanity'
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
 interface Notice {
   _id: string;
   title: string;
+}
+
+interface HomepageContent {
+    heroSlider: {
+        _key: string;
+        image: SanityImageSource;
+        caption: string;
+        alt: string;
+    }[];
+    historySection: {
+        image: SanityImageSource;
+        summary: string;
+        linkText: string;
+        linkHref: string;
+    };
 }
 
 const facultyData = [
@@ -66,8 +82,21 @@ async function getNotices(): Promise<Notice[]> {
   }
 }
 
+async function getHomepageContent(): Promise<HomepageContent | null> {
+    try {
+        const query = `*[_type == "homepage" && _id == "homepage"][0]`;
+        const content = await sanityClient.fetch(query);
+        return content;
+    } catch (error) {
+        console.error("Error fetching homepage content:", error);
+        return null;
+    }
+}
+
+
 export default function Home() {
     const [notices, setNotices] = useState<Notice[]>([]);
+    const [homepageContent, setHomepageContent] = useState<HomepageContent | null>(null);
     const heroCarouselPlugin = useRef(
         Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
     );
@@ -81,7 +110,12 @@ export default function Home() {
             const noticesData = await getNotices();
             setNotices(noticesData);
         };
+        const fetchHomepageContent = async () => {
+            const content = await getHomepageContent();
+            setHomepageContent(content);
+        };
         fetchNotices();
+        fetchHomepageContent();
     }, []);
 
     const marqueeText = "সরকারি ও বেসরকারি মাধ্যমিক বিদ্যালয়ে-২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি ও নিয়মাবলী সংক্রান্ত। আমাদের ওয়েবসাইটে আপনাকে স্বাগত…(সাইট ডেভেলপমেন্টের কাজ চলছে) *** "
@@ -95,32 +129,30 @@ export default function Home() {
                 className="w-full"
                 >
                 <CarouselContent>
-                    <CarouselItem>
-                        <Image
-                            src="https://picsum.photos/1280/400?random=11"
-                            alt="School classroom"
-                            width={1280}
-                            height={400}
-                            className="w-full h-auto max-h-[400px] object-cover"
-                            data-ai-hint="school classroom students"
-                        />
-                        <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
-                            <p className='font-bold text-lg'>আমাদের শ্রেণীকক্ষ</p>
-                        </div>
-                    </CarouselItem>
-                    <CarouselItem>
-                        <Image
-                            src="https://picsum.photos/1280/400?random=12"
-                            alt="School library"
-                            width={1280}
-                            height={400}
-                            className="w-full h-auto max-h-[400px] object-cover"
-                            data-ai-hint="school library books"
-                        />
-                        <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
-                            <p className='font-bold text-lg'>সমৃদ্ধ লাইব্রেরি</p>
-                        </div>
-                    </CarouselItem>
+                    {homepageContent?.heroSlider ? homepageContent.heroSlider.map(slide => (
+                         <CarouselItem key={slide._key}>
+                            <Image
+                                src={urlFor(slide.image).width(1280).height(400).url()}
+                                alt={slide.alt}
+                                width={1280}
+                                height={400}
+                                className="w-full h-auto max-h-[400px] object-cover"
+                            />
+                            <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
+                                <p className='font-bold text-lg'>{slide.caption}</p>
+                            </div>
+                        </CarouselItem>
+                    )) : (
+                        <CarouselItem>
+                            <Image
+                                src="https://picsum.photos/1280/400?random=11"
+                                alt="Placeholder"
+                                width={1280}
+                                height={400}
+                                className="w-full h-auto max-h-[400px] object-cover"
+                            />
+                        </CarouselItem>
+                    )}
                 </CarouselContent>
             </Carousel>
         </section>
@@ -159,15 +191,21 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="grid md:grid-cols-5 gap-6 pt-6">
                     <div className='md:col-span-2'>
-                         <Image src="https://kjsghs.edu.bd/wp-content/uploads/2022/10/school-front-gate-1.jpg" alt="প্রতিষ্ঠানের ইতিহাস" width={400} height={300} className="w-full h-auto object-cover rounded-lg shadow-md" data-ai-hint="historic building" />
+                         <Image 
+                            src={homepageContent?.historySection?.image ? urlFor(homepageContent.historySection.image).width(400).height(300).url() : "https://picsum.photos/400/300"} 
+                            alt="প্রতিষ্ঠানের ইতিহাস" 
+                            width={400} 
+                            height={300} 
+                            className="w-full h-auto object-cover rounded-lg shadow-md" 
+                         />
                     </div>
                     <div className="md:col-span-3 space-y-3">
                       <p className="text-foreground leading-relaxed text-base text-justify">
-                      কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ সালে প্রতিষ্ঠিত হয়। এটি এই অঞ্চলের অন্যতম প্রাচীন এবং স্বনামধন্য একটি শিক্ষা প্রতিষ্ঠান। ১৯ মার্চ, ১৯৯১ সালে প্রতিষ্ঠানটি জাতীয়করণ করা হয়। বর্তমানে বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয় এবং প্রায় ৭১৭ জন শিক্ষার্থী অধ্যয়নরত আছে। অভিজ্ঞ শিক্ষকমণ্ডলীর মাধ্যমে পরিচালিত এই বিদ্যালয়ে বর্তমানে ১২ জন শিক্ষক কর্মরত রয়েছেন। বিদ্যালয়টিতে একটি তিন তলা ভবন, একটি দোতলা ভবন, তিনটি হাফ বিল্ডিং, একটি খেলার মাঠ এবং দুইটি শহীদ মিনার রয়েছে।
+                        {homepageContent?.historySection?.summary || "লোড হচ্ছে..."}
                       </p>
                        <Button asChild variant="link" size="sm" className="p-0 h-auto">
-                            <Link href="/about">
-                                বিস্তারিত পড়ুন <ChevronRight className="ml-1 h-4 w-4" />
+                            <Link href={homepageContent?.historySection?.linkHref || "/about"}>
+                                {homepageContent?.historySection?.linkText || "বিস্তারিত পড়ুন"} <ChevronRight className="ml-1 h-4 w-4" />
                             </Link>
                        </Button>
                     </div>
