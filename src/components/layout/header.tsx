@@ -92,10 +92,7 @@ export default function Header() {
   
   return (
       <header className="w-full z-40 px-4 pt-4">
-        <div className={cn(
-          "hidden md:block relative w-full h-[200px]",
-          isSticky && "hidden"
-        )}>
+        <div className="hidden md:block relative w-full h-[200px]">
             <Image 
                 src="https://picsum.photos/1280/250"
                 alt="Header Banner"
@@ -107,7 +104,7 @@ export default function Header() {
           </div>
           
           <div className={cn(
-            "sticky top-0 z-10 w-full bg-[#0a2342] text-primary-foreground transition-all duration-300",
+            "sticky top-0 z-10 w-full transition-all duration-300",
             isSticky && "shadow-lg bg-background"
             )}>
             <div className="hidden md:block p-2.5">
@@ -122,9 +119,9 @@ export default function Header() {
                                     <ChevronDown className="h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-[#0a2342] text-white border-none">
+                            <DropdownMenuContent className={cn("border-none", isSticky ? "bg-background text-foreground" : "bg-[#0a2342] text-white")}>
                                 {link.children.map(child => (
-                                    <DropdownMenuItem key={child.label} asChild className='hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white'>
+                                    <DropdownMenuItem key={child.label} asChild className={cn('hover:!bg-[#8B0000] focus:!bg-[#8B0000] focus:!text-white hover:!text-white', isSticky ? "focus:!text-white hover:!text-white" : "")}>
                                         <Link href={child.href} className='flex items-center gap-2'>
                                             <child.icon className='w-4 h-4' />
                                             {child.label}
