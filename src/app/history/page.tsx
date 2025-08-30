@@ -6,8 +6,9 @@ import { sanityClient, urlFor } from '@/lib/sanity'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
 interface Milestone {
-  year: number;
-  event: string;
+    _key: string;
+    year: number;
+    event: string;
 }
 
 interface HistoryContent {
@@ -21,40 +22,40 @@ interface HistoryContent {
   milestones: Milestone[];
 }
 
-const fallbackContent: Omit<HistoryContent, '_id'> = {
-  title: 'প্রতিষ্ঠানের গৌরবময় ইতিহাস',
-  historicalImage: "https://picsum.photos/600/800",
-  journeyTitle: 'সময়ের পথ ধরে আমাদের যাত্রা',
-  description1: 'কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয় প্রায় দুই শতাব্দীর এক গৌরবময় ইতিহাসের সাক্ষী। ১৮৩২ সালে শিক্ষানুরাগী শ্রী জয়হরি স্প্রাই কর্তৃক প্রতিষ্ঠিত এই বিদ্যালয়টি এই অঞ্চলের অন্যতম প্রাচীন শিক্ষা প্রতিষ্ঠান। প্রতিষ্ঠার পর থেকে এটি বহু জ্ঞানী, গুণী এবং দেশবরেণ্য ব্যক্তিত্ব তৈরি করেছে।',
-  description2: 'সময়ের সাথে সাথে বিদ্যালয়টি অনেক পরিবর্তনের মধ্য দিয়ে গিয়েছে। ব্রিটিশ আমল, পাকিস্তান আমল এবং স্বাধীন বাংলাদেশের অভ্যুদয়ের প্রতিটি পর্যায়ে এর ভূমিকা ছিল অত্যন্ত গুরুত্বপূর্ণ। ১৯৯۱ সালে জাতীয়করণ হওয়ার পর এর কার্যক্রম আরও বিস্তৃত হয় এবং শিক্ষার মানোন্নয়নে নতুন মাত্রা যোগ হয়।',
-  milestonesTitle: 'ঐতিহাসিক মাইলফলক',
-  milestones: [
-    { year: 1832, event: 'বিদ্যালয় প্রতিষ্ঠা করেন শ্রী জয়হরি স্প্রাই।' },
-    { year: 1947, event: 'দেশভাগের পর শিক্ষার প্রসারে নতুন ভূমিকা পালন।' },
-    { year: 1971, event: 'মুক্তিযুদ্ধে বিদ্যালয়ের গৌরবময় ভূমিকা।' },
-    { year: 1991, event: 'বিদ্যালয়টি জাতীয়করণ করা হয়।' },
-    { year: 2020, event: 'ডিজিটাল শিক্ষা কার্যক্রমের সূচনা।' },
-  ]
-};
-
-async function getHistoryContent(): Promise<HistoryContent> {
+async function getHistoryContent(): Promise<HistoryContent | null> {
   const query = `*[_type == "historyPage" && !(_id in path("drafts.**"))][0]`;
   try {
     const content = await sanityClient.fetch(query);
-    return content || fallbackContent;
+    return content;
   } catch (error) {
     console.error("Error fetching history page content from Sanity:", error);
-    return fallbackContent;
+    return null;
   }
 }
 
 
 export default async function HistoryPage() {
   const content = await getHistoryContent();
+
+  if (!content) {
+    return (
+       <main className="flex-1">
+        <div className="container mx-auto px-4 py-12">
+            <Card className="shadow-lg">
+                <CardHeader className="text-center bg-primary text-primary-foreground">
+                    <CardTitle className="text-3xl">প্রতিষ্ঠানের গৌরবময় ইতিহাস</CardTitle>
+                </CardHeader>
+                <CardContent className="p-8">
+                    <p className="text-center text-muted-foreground">এই পেইজের জন্য কোনো তথ্য পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
+                </CardContent>
+            </Card>
+        </div>
+      </main>
+    )
+  }
+
   const imageUrl = content.historicalImage
-    ? typeof content.historicalImage === 'string'
-      ? content.historicalImage
-      : urlFor(content.historicalImage).width(600).height(800).url()
+    ? urlFor(content.historicalImage).width(600).height(800).url()
     : "https://picsum.photos/600/800";
 
   return (
@@ -93,8 +94,8 @@ export default async function HistoryPage() {
                         <div className="mt-8">
                             <h3 className="text-xl font-semibold text-primary mb-4">{content.milestonesTitle}</h3>
                             <div className="relative border-l-2 border-accent space-y-8 pl-6">
-                                {content.milestones.map((item, index) => (
-                                    <div key={index} className="relative">
+                                {content.milestones.map((item) => (
+                                    <div key={item._key} className="relative">
                                         <div className="absolute -left-[35px] top-1.5 w-4 h-4 bg-accent rounded-full border-4 border-muted/40"></div>
                                         <p className="font-bold text-primary">{item.year}</p>
                                         <p className="text-foreground leading-relaxed text-base">{item.event}</p>

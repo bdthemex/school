@@ -15,24 +15,14 @@ interface Teacher {
   image: SanityImageSource;
 }
 
-const fallbackTeachers: Omit<Teacher, '_id' | 'image'>[] = [
-    { name: 'মোঃ আব্দুল বাতেন', designation: 'প্রধান শিক্ষক', subject: 'গণিত', phone: '01712345678', email: 'headmaster@example.com'},
-    { name: 'সহকারী শিক্ষক (নাম)', designation: 'সহকারী প্রধান শিক্ষক', subject: 'ইংরেজি', phone: '01712345679', email: 'asst.head@example.com'},
-    { name: 'শিক্ষক ক', designation: 'সহকারী শিক্ষক', subject: 'বাংলা', phone: '01712345680', email: 'teacher.a@example.com'},
-    { name: 'শিক্ষক খ', designation: 'সহকারী শিক্ষক', subject: 'বিজ্ঞান', phone: '01712345681', email: 'teacher.b@example.com'},
-];
-
 async function getTeachers(): Promise<Teacher[]> {
   const query = `*[_type == "teacher" && !(_id in path("drafts.**"))] | order(name asc)`;
   try {
     const teachers = await sanityClient.fetch(query);
-    if (teachers && teachers.length > 0) {
-        return teachers;
-    }
-    return fallbackTeachers.map((t, i) => ({ ...t, _id: `fallback-${i}`, image: `https://picsum.photos/200/200?random=${i+21}` }));
+    return teachers || [];
   } catch (error) {
     console.error("Error fetching teachers from Sanity:", error);
-    return fallbackTeachers.map((t, i) => ({ ...t, _id: `fallback-${i}`, image: `https://picsum.photos/200/200?random=${i+21}` }));
+    return [];
   }
 }
 
@@ -55,9 +45,7 @@ export default async function TeachersPage() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
                                 {teachers.map((teacher, index) => {
                                      const imageUrl = teacher.image 
-                                      ? typeof teacher.image === 'string'
-                                        ? teacher.image
-                                        : urlFor(teacher.image).width(200).height(200).fit('crop').url()
+                                      ? urlFor(teacher.image).width(200).height(200).fit('crop').url()
                                       : `https://picsum.photos/200/200?random=${index + 21}`;
                                     return (
                                         <Card key={teacher._id} className="text-center shadow-md hover:shadow-xl transition-shadow">
@@ -93,7 +81,7 @@ export default async function TeachersPage() {
                                 })}
                             </div>
                         ) : (
-                            <p className="text-center text-muted-foreground">কোনো শিক্ষকের তথ্য পাওয়া যায়নি।</p>
+                            <p className="text-center text-muted-foreground">কোনো শিক্ষকের তথ্য পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
                         )}
                     </CardContent>
                 </Card>

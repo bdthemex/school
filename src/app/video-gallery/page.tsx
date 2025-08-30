@@ -9,21 +9,14 @@ interface VideoItem {
   youtubeUrl: string;
 }
 
-const fallbackVideos: Omit<VideoItem, '_id'>[] = [
-  { title: 'বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৩', youtubeUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { title: 'সাংস্কৃতিক অনুষ্ঠান', youtubeUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { title: 'বিজ্ঞান মেলা', youtubeUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { title: 'বিজয় দিবস উদযাপন', youtubeUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-]
-
 async function getVideos(): Promise<VideoItem[]> {
   const query = `*[_type == "videoItem" && !(_id in path("drafts.**"))] | order(_createdAt desc)`;
   try {
     const videos = await sanityClient.fetch(query);
-    return videos.length > 0 ? videos : fallbackVideos;
+    return videos || [];
   } catch (error) {
     console.error("Error fetching videos from Sanity:", error);
-    return fallbackVideos;
+    return [];
   }
 }
 
@@ -33,12 +26,17 @@ const getEmbedUrl = (url: string) => {
   if (url.includes('/embed/')) {
     return url;
   }
-  const videoId = url.split('v=')[1] || url.split('/').pop();
-  const ampersandPosition = videoId?.indexOf('&');
-  if (ampersandPosition !== -1) {
-    return `https://www.youtube.com/embed/${videoId?.substring(0, ampersandPosition)}`;
+  const videoIdMatch = url.match(/(?:v=|\/)([a-zA-Z0-9_-]{11})(?:\?|&|#|$)/);
+  const videoId = videoIdMatch ? videoIdMatch[1] : url.split('/').pop();
+  
+  if (videoId) {
+    const ampersandPosition = videoId.indexOf('&');
+    if (ampersandPosition !== -1) {
+      return `https://www.youtube.com/embed/${videoId.substring(0, ampersandPosition)}`;
+    }
+    return `https://www.youtube.com/embed/${videoId}`;
   }
-  return `https://www.youtube.com/embed/${videoId}`;
+  return '';
 }
 
 
@@ -57,23 +55,27 @@ export default async function VideoGalleryPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {videos.map((video, index) => (
-                  <div key={video._id || index}>
-                    <div className="aspect-video overflow-hidden rounded-lg shadow-md">
-                      <iframe
-                        src={getEmbedUrl(video.youtubeUrl)}
-                        title={video.title}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        className="w-full h-full"
-                      ></iframe>
+              {videos.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {videos.map((video) => (
+                    <div key={video._id}>
+                      <div className="aspect-video overflow-hidden rounded-lg shadow-md">
+                        <iframe
+                          src={getEmbedUrl(video.youtubeUrl)}
+                          title={video.title}
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          className="w-full h-full"
+                        ></iframe>
+                      </div>
+                      <h3 className="text-lg font-semibold text-primary mt-4 text-center">{video.title}</h3>
                     </div>
-                    <h3 className="text-lg font-semibold text-primary mt-4 text-center">{video.title}</h3>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center text-muted-foreground">কোনো ভিডিও পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
+              )}
             </CardContent>
           </Card>
         </div>

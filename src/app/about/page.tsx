@@ -16,30 +16,14 @@ interface AboutContent {
   academicDescription: string;
 }
 
-const fallbackContent: Omit<AboutContent, '_id'> = {
-  schoolName: 'কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়',
-  description: '১৮৩২ সালে প্রতিষ্ঠিত, কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয় একটি ঐতিহাসিক এবং স্বনামধন্য শিক্ষা প্রতিষ্ঠান। নেত্রকোণা জেলার কেন্দুয়া উপজেলায় অবস্থিত এই বিদ্যালয়টি দীর্ঘদিন ধরে এই অঞ্চলে শিক্ষার আলো ছড়িয়ে আসছে। ১৯৯১ সালে এটি জাতীয়করণ করা হয়, যা এর মান এবং গুরুত্বকে আরও বাড়িয়ে তোলে।',
-  mainImage: "https://kjsghs.edu.bd/wp-content/uploads/2022/10/school-front-gate-1.jpg",
-  missionTitle: 'আমাদের লক্ষ্য ও উদ্দেশ্য',
-  missionPoints: [
-      'শিক্ষার্থীদের মধ্যে জ্ঞান, শৃঙ্খলা এবং নৈতিকতার বিকাশ ঘটানো।',
-      'আধুনিক ও যুগোপযোগী শিক্ষা প্রদান করে ডিজিটাল বাংলাদেশ গঠনে ভূমিকা রাখা।',
-      'শিক্ষার্থীদের সুপ্ত প্রতিভা বিকাশে সহশিক্ষা কার্যক্রম পরিচালনা করা।',
-      'একটি নিরাপদ ও শিক্ষাবান্ধব পরিবেশ নিশ্চিত করা।',
-  ],
-  academicTitle: 'একাডেমিক কার্যক্রম',
-  academicDescription: 'বর্তমানে বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয়। অভিজ্ঞ শিক্ষকমণ্ডলী দ্বারা পরিচালিত এই প্রতিষ্ঠানে জাতীয় শিক্ষাক্রম অনুসরণ করে পাঠদান করা হয়। নিয়মিত পরীক্ষা, ক্লাসের মূল্যায়ন এবং অভিভাবকদের সাথে মতবিনিময়ের মাধ্যমে শিক্ষার্থীদের সার্বিক মানোন্নয়নে আমরা সর্বদা সচেষ্ট।',
-};
-
-
-async function getAboutContent(): Promise<AboutContent> {
+async function getAboutContent(): Promise<AboutContent | null> {
   const query = `*[_type == "aboutPage" && !(_id in path("drafts.**"))][0]`;
   try {
     const content = await sanityClient.fetch(query);
-    return content || fallbackContent;
+    return content;
   } catch (error) {
     console.error("Error fetching about page content from Sanity:", error);
-    return fallbackContent;
+    return null;
   }
 }
 
@@ -47,11 +31,26 @@ async function getAboutContent(): Promise<AboutContent> {
 export default async function AboutPage() {
   const content = await getAboutContent();
 
+  if (!content) {
+    return (
+       <main className="flex-1">
+        <div className="container mx-auto px-4 py-12">
+            <Card className="shadow-lg">
+                <CardHeader className="text-center bg-primary text-primary-foreground rounded-t-lg">
+                    <CardTitle className="text-3xl">আমাদের সম্পর্কে</CardTitle>
+                </CardHeader>
+                <CardContent className="p-8">
+                    <p className="text-center text-muted-foreground">এই পেইজের জন্য কোনো তথ্য পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
+                </CardContent>
+            </Card>
+        </div>
+      </main>
+    )
+  }
+
   const imageUrl = content.mainImage
-    ? typeof content.mainImage === 'string'
-      ? content.mainImage
-      : urlFor(content.mainImage).width(600).height(400).url()
-    : "https://kjsghs.edu.bd/wp-content/uploads/2022/10/school-front-gate-1.jpg";
+    ? urlFor(content.mainImage).width(600).height(400).url()
+    : "https://picsum.photos/600/400";
 
 
   return (

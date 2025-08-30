@@ -18,21 +18,14 @@ interface Holiday {
   to: string;
 }
 
-const fallbackHolidays: Omit<Holiday, '_id'>[] = [
-  { occasion: 'শীতকালীন অবকাশ', from: 'ডিসেম্বর ২২, ২০২৪', to: 'জানুয়ারি ০২, ২০২৫' },
-  { occasion: 'ঈদুল ফিতর', from: 'এপ্রিল ১০, ২০২৫', to: 'এপ্রিল ১৪, ২০২৫' },
-  { occasion: 'গ্রীষ্মকালীন অবকাশ ও ঈদুল আযহা', from: 'জুন ১৫, ২০২৫', to: 'জুন ৩০, ২০২৫' },
-  { occasion: 'শারদীয় দুর্গা পূজা', from: 'অক্টোবর ০১, ২০২৫', to: 'অক্টোবর ০৫, ২০২৫' },
-]
-
 async function getHolidays(): Promise<Holiday[]> {
   const query = `*[_type == "holiday" && !(_id in path("drafts.**"))] | order(from asc)`;
   try {
     const holidays = await sanityClient.fetch(query);
-    return holidays.length > 0 ? holidays : fallbackHolidays;
+    return holidays || [];
   } catch (error) {
     console.error("Error fetching holidays from Sanity:", error);
-    return fallbackHolidays;
+    return [];
   }
 }
 
@@ -50,29 +43,35 @@ export default async function HolidayListPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8">
-              <p className="text-center text-muted-foreground mb-8">
-                ২০২৫ সালের জন্য বিদ্যালয়ের বাৎসরিক ছুটির তালিকা।
-              </p>
-              <div className="border rounded-lg overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>উপলক্ষ</TableHead>
-                      <TableHead>শুরু</TableHead>
-                      <TableHead>শেষ</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {holidays.map((holiday, index) => (
-                      <TableRow key={holiday._id || index}>
-                        <TableCell className="font-medium">{holiday.occasion}</TableCell>
-                        <TableCell>{holiday.from}</TableCell>
-                        <TableCell>{holiday.to}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+                {holidays.length > 0 ? (
+                <>
+                <p className="text-center text-muted-foreground mb-8">
+                    বিদ্যালয়ের বাৎসরিক ছুটির তালিকা।
+                </p>
+                <div className="border rounded-lg overflow-hidden">
+                    <Table>
+                    <TableHeader>
+                        <TableRow>
+                        <TableHead>উপলক্ষ</TableHead>
+                        <TableHead>শুরু</TableHead>
+                        <TableHead>শেষ</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {holidays.map((holiday) => (
+                        <TableRow key={holiday._id}>
+                            <TableCell className="font-medium">{holiday.occasion}</TableCell>
+                            <TableCell>{holiday.from}</TableCell>
+                            <TableCell>{holiday.to}</TableCell>
+                        </TableRow>
+                        ))}
+                    </TableBody>
+                    </Table>
+                </div>
+                </>
+              ) : (
+                <p className="text-center text-muted-foreground">কোনো ছুটির তালিকা পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
+              )}
             </CardContent>
           </Card>
         </div>
