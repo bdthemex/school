@@ -21,14 +21,11 @@ import {
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
 import React, { useState, useEffect, useRef } from 'react';
-import { collection, getDocs, query, orderBy, limit, Timestamp } from 'firebase/firestore'
-import { db } from '@/lib/firebase'
+import { sanityClient } from '@/lib/sanity'
 
 interface Notice {
-  id: string;
-  date: string;
+  _id: string;
   title: string;
-  createdAt?: Timestamp;
 }
 
 const facultyData = [
@@ -60,16 +57,11 @@ const officialLinks = [
 
 async function getNotices(): Promise<Notice[]> {
   try {
-    const noticesCollectionRef = collection(db, 'notices');
-    const q = query(noticesCollectionRef, orderBy('createdAt', 'desc'), limit(5));
-    const data = await getDocs(q);
-    
-    return data.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    } as Notice));
+    const query = `*[_type == "notice" && !(_id in path("drafts.**"))] | order(date desc) [0...5] {_id, title}`;
+    const notices = await sanityClient.fetch(query);
+    return notices || [];
   } catch (error) {
-    console.error("Error fetching notices:", error);
+    console.error("Error fetching notices from Sanity:", error);
     return [];
   }
 }
@@ -337,7 +329,7 @@ export default function Home() {
                 <CardContent className="p-4 space-y-3 bg-muted/50">
                     {notices.length > 0 ? (
                       notices.map((notice) => (
-                        <Link href={`/notices/${notice.id}`} key={notice.id} className="block text-base text-foreground hover:text-primary gap-2">
+                        <Link href={`/notices/${notice._id}`} key={notice._id} className="block text-base text-foreground hover:text-primary gap-2">
                            <div className="flex items-start gap-2">
                              <Target className="w-4 h-4 mt-1 flex-shrink-0 text-primary" />
                              <p>{notice.title}</p>

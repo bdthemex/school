@@ -1,8 +1,10 @@
 import aboutPage from './schemas/aboutPage'
 import academicCalendarEvent from './schemas/academicCalendarEvent'
 import classRoutine from './schemas/classRoutine'
+import galleryImage from './schemas/galleryImage'
 import historyPage from './schemas/historyPage'
 import holiday from './schemas/holiday'
+import notice from './schemas/notice'
 import principalMessage from './schemas/principalMessage'
 import staff from './schemas/staff'
 import successfulStudent from './schemas/successfulStudent'
@@ -22,4 +24,6 @@ export const schemaTypes = [
   classRoutine,
   academicCalendarEvent,
   holiday,
+  notice,
+  galleryImage,
 ]

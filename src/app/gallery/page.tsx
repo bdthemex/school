@@ -2,41 +2,24 @@
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Camera } from 'lucide-react'
-import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { sanityClient, urlFor } from '@/lib/sanity'
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
 interface GalleryImage {
-  id: string;
+  _id: string;
   alt: string;
-  imageUrl: string;
-  createdAt: Timestamp;
+  image: SanityImageSource;
 }
 
 async function getGalleryImages(): Promise<GalleryImage[]> {
+  const query = `*[_type == "galleryImage" && !(_id in path("drafts.**"))] | order(_createdAt desc)`;
   try {
-    const imagesCollectionRef = collection(db, 'gallery');
-    const q = query(imagesCollectionRef, orderBy('createdAt', 'desc'));
-    const data = await getDocs(q);
-    
-    const firestoreImages = data.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    } as GalleryImage));
-
-    if (firestoreImages.length > 0) {
-        return firestoreImages;
-    }
+    const images = await sanityClient.fetch(query);
+    return images || [];
   } catch (error) {
-    console.error("Error fetching gallery images from Firestore:", error);
+    console.error("Error fetching gallery images from Sanity:", error);
+    return [];
   }
-  
-  // Fallback data if firestore fails or is empty
-  return Array.from({ length: 6 }).map((_, i) => ({
-      id: `fallback-${i}`,
-      alt: `Fallback Image ${i + 1}`,
-      imageUrl: `https://picsum.photos/600/400?random=${i + 1}`,
-      createdAt: Timestamp.now()
-  }));
 }
 
 export default async function GalleryPage() {
@@ -54,11 +37,12 @@ export default async function GalleryPage() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="p-8">
+                       {galleryImages.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             {galleryImages.map((image) => (
-                                <div key={image.id} className="overflow-hidden rounded-lg shadow-md group">
+                                <div key={image._id} className="overflow-hidden rounded-lg shadow-md group">
                                     <Image
-                                        src={image.imageUrl}
+                                        src={urlFor(image.image).width(600).height(400).url()}
                                         alt={image.alt}
                                         width={600}
                                         height={400}
@@ -67,6 +51,9 @@ export default async function GalleryPage() {
                                 </div>
                             ))}
                         </div>
+                        ) : (
+                             <p className="text-center text-muted-foreground">কোনো ছবি পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে ছবি যোগ করুন।</p>
+                        )}
                     </CardContent>
                 </Card>
             </div>
