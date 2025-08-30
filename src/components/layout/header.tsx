@@ -75,7 +75,7 @@ export default function Header() {
   const pathname = usePathname();
   
   return (
-      <header className="w-full bg-white z-40">
+      <header className="w-full bg-white z-40 shadow-lg">
         <div className="container mx-auto">
           <div className="relative w-full h-[150px] md:h-[200px]">
             <Image 
@@ -88,7 +88,7 @@ export default function Header() {
             />
           </div>
           
-          <div className="w-full shadow-md bg-[#0a2342] text-primary-foreground">
+          <div className="w-full bg-[#0a2342] text-primary-foreground">
             <div className="hidden md:block p-2.5">
                 <nav className="flex items-center gap-1">
                 {navLinks.map((link) => (
