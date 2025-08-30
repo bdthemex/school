@@ -108,7 +108,7 @@ export default function Header() {
 
         <div className={cn(
           "w-full transition-all duration-300",
-          isSticky ? "fixed top-0 left-1/2 -translate-x-1/2 max-w-7xl z-50 md:shadow-lg md:bg-[#0a2342] md:px-4" : ""
+          isSticky ? "fixed top-0 left-1/2 -translate-x-1/2 max-w-7xl z-50 md:shadow-lg md:bg-[#0a2342] md:px-4" : "bg-[#0a2342]"
           )}>
           <div className="hidden md:block">
               <nav className="container mx-auto flex items-center gap-1 p-2.5">
@@ -116,7 +116,7 @@ export default function Header() {
                   link.children ? (
                       <DropdownMenu key={link.label}>
                           <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" className={cn("hover:bg-[#8B0000] text-base hover:text-white flex items-center gap-1", isSticky ? "text-white" : "text-foreground")}>
+                              <Button variant="ghost" className={cn("hover:bg-[#8B0000] text-base hover:text-white flex items-center gap-1 text-white")}>
                                   <link.icon className='w-4 h-4' />
                                   {link.label}
                                   <ChevronDown className="h-4 w-4" />
@@ -136,8 +136,7 @@ export default function Header() {
                   ) : (
                       <Button key={link.label} asChild variant="ghost" 
                       className={cn(
-                          "hover:bg-[#8B0000] text-base hover:text-white",
-                          isSticky ? "text-white" : "text-foreground",
+                          "hover:bg-[#8B0000] text-base hover:text-white text-white",
                           link.href === pathname ? 'bg-[#8B0000] text-white' : ''
                       )}>
                           <Link href={link.href!} className="flex items-center gap-2">
