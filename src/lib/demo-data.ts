@@ -4,7 +4,7 @@ export const demoData = [
   // Site Settings
   {
     _id: "siteSettings",
-    _type: "siteSettings",
+    _type: "siteSettings", // This was missing
     footerAddress: "কেন্দুয়া বাজার, কেন্দুয়া, নেত্রকোণা, বাংলাদেশ।",
     footerPhone: "০১৭১৭-৪০৭৫৮৫",
     footerEmail: "joyharisprygovtschool@gmail.com",
@@ -15,7 +15,7 @@ export const demoData = [
   // Homepage
   {
     _id: "homepage",
-    _type: "homepage",
+    _type: "homepage", // This was missing
     heroSlider: [
       { 
         _key: 'slide1', 
