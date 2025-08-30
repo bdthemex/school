@@ -75,7 +75,7 @@ export default function Header() {
   const pathname = usePathname();
   
   return (
-      <header className="w-full z-40">
+      <header className="w-full z-40 px-4 pt-4">
         <div className="hidden md:block relative w-full h-[150px] md:h-[200px]">
             <Image 
                 src="https://picsum.photos/1280/250"
