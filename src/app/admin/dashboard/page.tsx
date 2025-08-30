@@ -1,4 +1,6 @@
 
+'use client'
+
 import {
   Card,
   CardContent,
@@ -7,8 +9,12 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ClipboardList, Images, FileText, Link as LinkIcon, Edit } from 'lucide-react'
+import { ClipboardList, Images, FileText, Link as LinkIcon, Edit, Upload, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { importDemoData } from '@/app/actions'
+import { useToast } from "@/hooks/use-toast"
+import { useState } from 'react'
+
 
 const managementItems = [
   {
@@ -33,10 +39,53 @@ const managementItems = [
     title: 'অন্যান্য কনটেন্ট',
     description: 'Sanity Studio-তে অন্যান্য তথ্য (শিক্ষক, কর্মচারী ইত্যাদি) ম্যানেজ করুন।',
     icon: LinkIcon,
-    href: 'https://kjsghs-info-hub.sanity.studio', // Placeholder, user will replace with actual studio URL
+    href: '/studio', 
     isExternal: true,
   },
 ]
+
+function DemoContentImporter() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleImport = async () => {
+    setIsLoading(true);
+    const result = await importDemoData();
+    setIsLoading(false);
+
+    if (result.success) {
+      toast({
+        title: "সফল",
+        description: result.message,
+      });
+    } else {
+      toast({
+        title: "ত্রুটি",
+        description: result.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  return (
+    <Card className="shadow-lg hover:shadow-xl transition-shadow bg-secondary">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-lg font-medium">ডেমো কনটেন্ট যোগ করুন</CardTitle>
+        <Upload className="h-6 w-6 text-accent" />
+      </CardHeader>
+      <CardContent>
+        <CardDescription>
+          ওয়েবসাইটটি পরীক্ষার জন্য Sanity-তে কিছু ডেমো কনটেন্ট যোগ করুন।
+        </CardDescription>
+        <Button className="mt-4" variant="default" onClick={handleImport} disabled={isLoading}>
+          {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
+          {isLoading ? 'লোড হচ্ছে...' : 'এখনই যোগ করুন'}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
 
 export default function AdminDashboard() {
   return (
@@ -64,6 +113,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
         ))}
+         <DemoContentImporter />
       </div>
     </div>
   )
