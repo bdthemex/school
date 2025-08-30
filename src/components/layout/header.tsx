@@ -88,7 +88,7 @@ export default function Header() {
           </div>
           
           <div className="w-full shadow-md bg-[#0a2342] text-primary-foreground">
-            <div className="hidden md:block py-2">
+            <div className="hidden md:block p-2.5">
                 <nav className="flex items-center gap-1">
                 {navLinks.map((link) => (
                     link.children ? (
