@@ -16,10 +16,27 @@ export const demoData = [
   {
     _id: "homepage",
     _type: "homepage",
+    heroSlider: [
+      { 
+        _key: 'slide1', 
+        caption: 'প্রতিষ্ঠানের দৃষ্টিনন্দন প্রধান ফটক', 
+        alt: 'School main gate' 
+      },
+      { 
+        _key: 'slide2', 
+        caption: 'বার্ষিক ক্রীড়া প্রতিযোগিতা', 
+        alt: 'Annual sports day' 
+      },
+      { 
+        _key: 'slide3', 
+        caption: 'সাংস্কৃতিক অনুষ্ঠানে শিক্ষার্থীদের অংশগ্রহণ', 
+        alt: 'Students in a cultural event' 
+      },
+    ],
     historySection: {
       summary: "কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ সালে প্রতিষ্ঠিত হয়। এটি এই অঞ্চলের অন্যতম প্রাচীন এবং স্বনামধন্য একটি শিক্ষা প্রতিষ্ঠান। ১৯ মার্চ, ১৯৯১ সালে প্রতিষ্ঠানটি জাতীয়করণ করা হয়। বর্তমানে বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয় এবং প্রায় ৭১৭ জন শিক্ষার্থী অধ্যয়নরত আছে। অভিজ্ঞ শিক্ষকমণ্ডলীর মাধ্যমে পরিচালিত এই বিদ্যালয়ে বর্তমানে ১২ জন শিক্ষক কর্মরত রয়েছেন। বিদ্যালয়টিতে একটি তিন তলা ভবন, একটি দোতলা ভবন, তিনটি হাফ বিল্ডিং, একটি খেলার মাঠ এবং দুইটি শহীদ মিনার রয়েছে।",
       linkText: "বিস্তারিত পড়ুন",
-      linkHref: "/about",
+      linkHref: "/history",
     },
   },
   // Header Navigation
@@ -164,6 +181,15 @@ export const demoData = [
     phone: "01712345678",
     email: "principal@example.com",
   },
+   {
+    _id: "teacher_2",
+    _type: "teacher",
+    name: "মোঃ আব্দুল হামিদ",
+    designation: "সহকারী প্রধান শিক্ষক",
+    subject: "ইংরেজি",
+    phone: "01712345679",
+    email: "viceprincipal@example.com",
+  },
   // Staff
   {
     _id: "staff_1",
@@ -171,12 +197,24 @@ export const demoData = [
     name: "মোঃ রহিম উদ্দিন",
     designation: "অফিস সহকারী",
   },
+  {
+    _id: "staff_2",
+    _type: "staff",
+    name: "মোঃ করিম শেখ",
+    designation: "হিসাবরক্ষক",
+  },
   // Successful Student
   {
     _id: "student_1",
     _type: "successfulStudent",
     name: "আব্দুল্লাহ আল মামুন",
     achievement: "ঢাকা বিশ্ববিদ্যালয়ে ভর্তি (২০২৩)",
+  },
+   {
+    _id: "student_2",
+    _type: "successfulStudent",
+    name: "ফাতেমা আক্তার",
+    achievement: "বুয়েটে ভর্তি (২০২৩)",
   },
   // Video Item
   {
@@ -196,12 +234,28 @@ export const demoData = [
       { _key: "d2", day: "সোমবার", p1: "বিজ্ঞান", p2: "গণিত", p3: "ইংরেজি", p4: "বাংলা" },
     ],
   },
+    {
+    _id: "routine_class_9",
+    _type: "classRoutine",
+    className: "৯ম শ্রেণী",
+    order: 2,
+    schedule: [
+      { _key: "d1", day: "রবিবার", p1: "ইংরেজি", p2: "বাংলা", p3: "বিজ্ঞান", p4: "গণিত" },
+      { _key: "d2", day: "সোমবার", p1: "গণিত", p2: "বিজ্ঞান", p3: "বাংলা", p4: "ইংরেজি" },
+    ],
+  },
   // Academic Calendar Event
   {
     _id: "event_1",
     _type: "academicCalendarEvent",
     date: "০১ জানুয়ারি, ২০২৫",
     event: "নতুন বছরের ক্লাস শুরু",
+  },
+  {
+    _id: "event_2",
+    _type: "academicCalendarEvent",
+    date: "২১ ফেব্রুয়ারি, ২০২৫",
+    event: "শহীদ দিবস ও আন্তর্জাতিক মাতৃভাষা দিবস",
   },
   // Holiday
   {
@@ -211,6 +265,13 @@ export const demoData = [
     from: "১০ এপ্রিল, ২০২৫",
     to: "১৫ এপ্রিল, ২০২৫",
   },
+  {
+    _id: "holiday_2",
+    _type: "holiday",
+    occasion: "ঈদুল আযহা",
+    from: "১৭ জুন, ২০২৫",
+    to: "২০ জুন, ২০২৫",
+  },
   // Notice
   {
     _id: "notice_1",
@@ -219,10 +280,22 @@ export const demoData = [
     date: "2024-11-01T10:00:00Z",
     details: "২০২৫ শিক্ষাবর্ষে ৬ষ্ঠ থেকে ৯ম শ্রেণিতে ভর্তির জন্য আবেদন গ্রহণ শুরু হয়েছে। বিস্তারিত জানতে বিদ্যালয়ের অফিসে যোগাযোগ করুন।",
   },
+   {
+    _id: "notice_2",
+    _type: "notice",
+    title: "বার্ষিক পরীক্ষার রুটিন",
+    date: "2024-11-15T10:00:00Z",
+    details: "বার্ষিক পরীক্ষার রুটিন প্রকাশ করা হয়েছে। সকল শিক্ষার্থীকে নোটিশ বোর্ড থেকে রুটিন সংগ্রহ করার জন্য অনুরোধ করা হলো।",
+  },
   // Gallery Image
   {
     _id: "gallery_1",
     _type: "galleryImage",
     alt: "বার্ষিক ক্রীড়া প্রতিযোগিতা",
+  },
+   {
+    _id: "gallery_2",
+    _type: "galleryImage",
+    alt: "বিজ্ঞান মেলা",
   },
 ];
