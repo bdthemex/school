@@ -1,3 +1,4 @@
+
 // src/lib/demo-data.ts
 
 export const demoData = [
@@ -20,17 +21,20 @@ export const demoData = [
       { 
         _key: 'slide1', 
         caption: 'প্রতিষ্ঠানের দৃষ্টিনন্দন প্রধান ফটক', 
-        alt: 'School main gate' 
+        alt: 'School main gate',
+        image: { _type: 'image', asset: { _ref: 'image-Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x1333-jpg', _type: 'reference' } }
       },
       { 
         _key: 'slide2', 
         caption: 'বার্ষিক ক্রীড়া প্রতিযোগিতা', 
-        alt: 'Annual sports day' 
+        alt: 'Annual sports day',
+        image: { _type: 'image', asset: { _ref: 'image-ACEf_LAbI8E8aB-962x541-jpg', _type: 'reference' } }
       },
       { 
         _key: 'slide3', 
         caption: 'সাংস্কৃতিক অনুষ্ঠানে শিক্ষার্থীদের অংশগ্রহণ', 
-        alt: 'Students in a cultural event' 
+        alt: 'Students in a cultural event',
+        image: { _type: 'image', asset: { _ref: 'image-qz3fL9P4f-800x450-jpg', _type: 'reference' } }
       },
     ],
     historySection: {

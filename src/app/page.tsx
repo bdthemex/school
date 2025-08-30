@@ -129,18 +129,20 @@ export default function Home() {
                 className="w-full"
                 >
                 <CarouselContent>
-                    {homepageContent?.heroSlider ? homepageContent.heroSlider.map(slide => (
+                    {homepageContent?.heroSlider && homepageContent.heroSlider.length > 0 ? homepageContent.heroSlider.map(slide => (
                          <CarouselItem key={slide._key}>
                             <Image
-                                src={urlFor(slide.image).width(1280).height(400).url()}
-                                alt={slide.alt}
+                                src={slide.image ? urlFor(slide.image).width(1280).height(400).url() : "https://picsum.photos/1280/400?random=11"}
+                                alt={slide.alt || 'Slider image'}
                                 width={1280}
                                 height={400}
                                 className="w-full h-auto max-h-[400px] object-cover"
                             />
-                            <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
-                                <p className='font-bold text-lg'>{slide.caption}</p>
-                            </div>
+                            {slide.caption && (
+                                <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
+                                    <p className='font-bold text-lg'>{slide.caption}</p>
+                                </div>
+                            )}
                         </CarouselItem>
                     )) : (
                         <CarouselItem>
