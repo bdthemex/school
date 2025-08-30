@@ -22,15 +22,15 @@ export async function importDemoData() {
     let createdCount = 0;
 
     for (const doc of demoData) {
-        // Sanity IDs must not have dots
-        const docId = doc._id.replace(/\./g, '-');
-        
         // Skip image assets as they need to be uploaded, not created as documents
         if (doc._type === 'sanity.imageAsset') continue;
 
-        const docWithSanitizedId = { ...doc, _id: docId };
+        // Sanity IDs must not have dots and cannot start with 'drafts.'
+        const sanitizedId = doc._id.replace(/^drafts\./, '').replace(/\./g, '-');
         
-        const exists = await documentExists(docId);
+        const docWithSanitizedId = { ...doc, _id: sanitizedId };
+        
+        const exists = await documentExists(sanitizedId);
         if (!exists) {
             transaction.createOrReplace(docWithSanitizedId);
             createdCount++;
