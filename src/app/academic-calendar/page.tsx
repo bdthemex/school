@@ -9,8 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { sanityClient } from '@/lib/sanity'
 
-const calendarEvents = [
+interface CalendarEvent {
+  _id: string;
+  date: string;
+  event: string;
+}
+
+const fallbackEvents: Omit<CalendarEvent, '_id'>[] = [
   { date: '১ জানুয়ারি, ২০২৫', event: 'নববর্ষের ছুটি' },
   { date: '২১ ফেব্রুয়ারি, ২০২৫', event: 'শহীদ দিবস ও আন্তর্জাতিক মাতৃভাষা দিবস' },
   { date: '১৭ মার্চ, ২০২৫', event: 'জাতির পিতা বঙ্গবন্ধু শেখ মুজিবুর রহমানের জন্মদিন' },
@@ -22,7 +29,20 @@ const calendarEvents = [
   { date: '২৫ ডিসেম্বর, ২০২৫', event: 'বড়দিন' },
 ]
 
-export default function AcademicCalendarPage() {
+async function getCalendarEvents(): Promise<CalendarEvent[]> {
+  const query = `*[_type == "academicCalendarEvent" && !(_id in path("drafts.**"))] | order(date asc)`;
+  try {
+    const events = await sanityClient.fetch(query);
+    return events.length > 0 ? events : fallbackEvents;
+  } catch (error) {
+    console.error("Error fetching calendar events from Sanity:", error);
+    return fallbackEvents;
+  }
+}
+
+export default async function AcademicCalendarPage() {
+  const calendarEvents = await getCalendarEvents();
+
   return (
     <main className="flex-1">
       <div>
@@ -48,7 +68,7 @@ export default function AcademicCalendarPage() {
                   </TableHeader>
                   <TableBody>
                     {calendarEvents.map((item, index) => (
-                      <TableRow key={index}>
+                      <TableRow key={item._id || index}>
                         <TableCell className="font-medium">{item.date}</TableCell>
                         <TableCell>{item.event}</TableCell>
                       </TableRow>

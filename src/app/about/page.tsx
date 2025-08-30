@@ -2,8 +2,58 @@
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Building, Target, BookOpen } from 'lucide-react'
+import { sanityClient, urlFor } from '@/lib/sanity'
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
-export default function AboutPage() {
+interface AboutContent {
+  _id: string;
+  schoolName: string;
+  description: string;
+  mainImage: SanityImageSource;
+  missionTitle: string;
+  missionPoints: string[];
+  academicTitle: string;
+  academicDescription: string;
+}
+
+const fallbackContent: Omit<AboutContent, '_id'> = {
+  schoolName: 'কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়',
+  description: '১৮৩২ সালে প্রতিষ্ঠিত, কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয় একটি ঐতিহাসিক এবং স্বনামধন্য শিক্ষা প্রতিষ্ঠান। নেত্রকোণা জেলার কেন্দুয়া উপজেলায় অবস্থিত এই বিদ্যালয়টি দীর্ঘদিন ধরে এই অঞ্চলে শিক্ষার আলো ছড়িয়ে আসছে। ১৯৯১ সালে এটি জাতীয়করণ করা হয়, যা এর মান এবং গুরুত্বকে আরও বাড়িয়ে তোলে।',
+  mainImage: "https://kjsghs.edu.bd/wp-content/uploads/2022/10/school-front-gate-1.jpg",
+  missionTitle: 'আমাদের লক্ষ্য ও উদ্দেশ্য',
+  missionPoints: [
+      'শিক্ষার্থীদের মধ্যে জ্ঞান, শৃঙ্খলা এবং নৈতিকতার বিকাশ ঘটানো।',
+      'আধুনিক ও যুগোপযোগী শিক্ষা প্রদান করে ডিজিটাল বাংলাদেশ গঠনে ভূমিকা রাখা।',
+      'শিক্ষার্থীদের সুপ্ত প্রতিভা বিকাশে সহশিক্ষা কার্যক্রম পরিচালনা করা।',
+      'একটি নিরাপদ ও শিক্ষাবান্ধব পরিবেশ নিশ্চিত করা।',
+  ],
+  academicTitle: 'একাডেমিক কার্যক্রম',
+  academicDescription: 'বর্তমানে বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয়। অভিজ্ঞ শিক্ষকমণ্ডলী দ্বারা পরিচালিত এই প্রতিষ্ঠানে জাতীয় শিক্ষাক্রম অনুসরণ করে পাঠদান করা হয়। নিয়মিত পরীক্ষা, ক্লাসের মূল্যায়ন এবং অভিভাবকদের সাথে মতবিনিময়ের মাধ্যমে শিক্ষার্থীদের সার্বিক মানোন্নয়নে আমরা সর্বদা সচেষ্ট।',
+};
+
+
+async function getAboutContent(): Promise<AboutContent> {
+  const query = `*[_type == "aboutPage" && !(_id in path("drafts.**"))][0]`;
+  try {
+    const content = await sanityClient.fetch(query);
+    return content || fallbackContent;
+  } catch (error) {
+    console.error("Error fetching about page content from Sanity:", error);
+    return fallbackContent;
+  }
+}
+
+
+export default async function AboutPage() {
+  const content = await getAboutContent();
+
+  const imageUrl = content.mainImage
+    ? typeof content.mainImage === 'string'
+      ? content.mainImage
+      : urlFor(content.mainImage).width(600).height(400).url()
+    : "https://kjsghs.edu.bd/wp-content/uploads/2022/10/school-front-gate-1.jpg";
+
+
   return (
     <main className="flex-1">
         <div>
@@ -16,7 +66,7 @@ export default function AboutPage() {
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="md:w-1/3">
                     <Image
-                        src="https://kjsghs.edu.bd/wp-content/uploads/2022/10/school-front-gate-1.jpg"
+                        src={imageUrl}
                         alt="School Building"
                         width={600}
                         height={400}
@@ -25,9 +75,9 @@ export default function AboutPage() {
                     />
                     </div>
                     <div className="md:w-2/3">
-                    <h2 className="text-2xl font-bold text-primary mb-4">কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়</h2>
+                    <h2 className="text-2xl font-bold text-primary mb-4">{content.schoolName}</h2>
                     <p className="text-foreground leading-relaxed text-base">
-                        ১৮৩২ সালে প্রতিষ্ঠিত, কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয় একটি ঐতিহাসিক এবং স্বনামধন্য শিক্ষা প্রতিষ্ঠান। নেত্রকোণা জেলার কেন্দুয়া উপজেলায় অবস্থিত এই বিদ্যালয়টি দীর্ঘদিন ধরে এই অঞ্চলে শিক্ষার আলো ছড়িয়ে আসছে। ১৯৯১ সালে এটি জাতীয়করণ করা হয়, যা এর মান এবং গুরুত্বকে আরও বাড়িয়ে তোলে।
+                        {content.description}
                     </p>
                     </div>
                 </div>
@@ -36,22 +86,21 @@ export default function AboutPage() {
                     <div className="space-y-4">
                         <h3 className="text-xl font-bold text-primary flex items-center gap-2">
                             <Target className="w-6 h-6 text-accent" />
-                            আমাদের লক্ষ্য ও উদ্দেশ্য
+                            {content.missionTitle}
                         </h3>
                         <ul className="list-disc list-inside text-foreground space-y-2 leading-relaxed text-base">
-                            <li>শিক্ষার্থীদের মধ্যে জ্ঞান, শৃঙ্খলা এবং নৈতিকতার বিকাশ ঘটানো।</li>
-                            <li>আধুনিক ও যুগোপযোগী শিক্ষা প্রদান করে ডিজিটাল বাংলাদেশ গঠনে ভূমিকা রাখা।</li>
-                            <li>শিক্ষার্থীদের সুপ্ত প্রতিভা বিকাশে সহশিক্ষা কার্যক্রম পরিচালনা করা।</li>
-                            <li>একটি নিরাপদ ও শিক্ষাবান্ধব পরিবেশ নিশ্চিত করা।</li>
+                           {content.missionPoints.map((point, index) => (
+                             <li key={index}>{point}</li>
+                           ))}
                         </ul>
                     </div>
                     <div className="space-y-4">
                         <h3 className="text-xl font-bold text-primary flex items-center gap-2">
                             <BookOpen className="w-6 h-6 text-accent" />
-                            একাডেমিক কার্যক্রম
+                            {content.academicTitle}
                         </h3>
                         <p className="text-foreground leading-relaxed text-base">
-                        বর্তমানে বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয়। অভিজ্ঞ শিক্ষকমণ্ডলী দ্বারা পরিচালিত এই প্রতিষ্ঠানে জাতীয় শিক্ষাক্রম অনুসরণ করে পাঠদান করা হয়। নিয়মিত পরীক্ষা, ক্লাসের মূল্যায়ন এবং অভিভাবকদের সাথে মতবিনিময়ের মাধ্যমে শিক্ষার্থীদের সার্বিক মানোন্নয়নে আমরা সর্বদা সচেষ্ট।
+                            {content.academicDescription}
                         </p>
                     </div>
                 </div>

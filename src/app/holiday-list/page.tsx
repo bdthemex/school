@@ -9,15 +9,35 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { sanityClient } from '@/lib/sanity'
 
-const holidays = [
+interface Holiday {
+  _id: string;
+  occasion: string;
+  from: string;
+  to: string;
+}
+
+const fallbackHolidays: Omit<Holiday, '_id'>[] = [
   { occasion: 'শীতকালীন অবকাশ', from: 'ডিসেম্বর ২২, ২০২৪', to: 'জানুয়ারি ০২, ২০২৫' },
   { occasion: 'ঈদুল ফিতর', from: 'এপ্রিল ১০, ২০২৫', to: 'এপ্রিল ১৪, ২০২৫' },
   { occasion: 'গ্রীষ্মকালীন অবকাশ ও ঈদুল আযহা', from: 'জুন ১৫, ২০২৫', to: 'জুন ৩০, ২০২৫' },
   { occasion: 'শারদীয় দুর্গা পূজা', from: 'অক্টোবর ০১, ২০২৫', to: 'অক্টোবর ০৫, ২০২৫' },
 ]
 
-export default function HolidayListPage() {
+async function getHolidays(): Promise<Holiday[]> {
+  const query = `*[_type == "holiday" && !(_id in path("drafts.**"))] | order(from asc)`;
+  try {
+    const holidays = await sanityClient.fetch(query);
+    return holidays.length > 0 ? holidays : fallbackHolidays;
+  } catch (error) {
+    console.error("Error fetching holidays from Sanity:", error);
+    return fallbackHolidays;
+  }
+}
+
+export default async function HolidayListPage() {
+  const holidays = await getHolidays();
   return (
     <main className="flex-1">
       <div>
@@ -44,7 +64,7 @@ export default function HolidayListPage() {
                   </TableHeader>
                   <TableBody>
                     {holidays.map((holiday, index) => (
-                      <TableRow key={index}>
+                      <TableRow key={holiday._id || index}>
                         <TableCell className="font-medium">{holiday.occasion}</TableCell>
                         <TableCell>{holiday.from}</TableCell>
                         <TableCell>{holiday.to}</TableCell>

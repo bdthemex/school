@@ -2,16 +2,40 @@
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { UserSquare } from 'lucide-react'
+import { sanityClient, urlFor } from '@/lib/sanity'
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
-const staffMembers = [
-  { name: 'কর্মচারী ক', designation: 'অফিস সহকারী', image: 'https://picsum.photos/200/200?random=1', dataAiHint: 'person portrait' },
-  { name: 'কর্মচারী খ', designation: 'হিসাবরক্ষক', image: 'https://picsum.photos/200/200?random=2', dataAiHint: 'person portrait' },
-  { name: 'কর্মচারী গ', designation: 'গ্রন্থাগারিক', image: 'https://picsum.photos/200/200?random=3', dataAiHint: 'person portrait' },
-  { name: 'কর্মচারী ঘ', designation: 'অফিস সহায়ক', image: 'https://picsum.photos/200/200?random=4', dataAiHint: 'person portrait' },
-  { name: 'কর্মচারী ঙ', designation: 'নিরাপত্তা প্রহরী', image: 'https://picsum.photos/200/200?random=5', dataAiHint: 'person portrait' },
+interface StaffMember {
+  _id: string;
+  name: string;
+  designation: string;
+  image: SanityImageSource;
+}
+
+const fallbackStaff: Omit<StaffMember, '_id' | 'image'>[] = [
+  { name: 'কর্মচারী ক', designation: 'অফিস সহকারী' },
+  { name: 'কর্মচারী খ', designation: 'হিসাবরক্ষক' },
+  { name: 'কর্মচারী গ', designation: 'গ্রন্থাগারিক' },
+  { name: 'কর্মচারী ঘ', designation: 'অফিস সহায়ক' },
+  { name: 'কর্মচারী ঙ', designation: 'নিরাপত্তা প্রহরী' },
 ]
 
-export default function StaffPage() {
+async function getStaffMembers(): Promise<StaffMember[]> {
+  const query = `*[_type == "staff" && !(_id in path("drafts.**"))] | order(name asc)`;
+  try {
+    const staff = await sanityClient.fetch(query);
+    if (staff && staff.length > 0) {
+        return staff;
+    }
+    return fallbackStaff.map((s, i) => ({ ...s, _id: `fallback-${i}`, image: `https://picsum.photos/200/200?random=${i+1}` }));
+  } catch (error) {
+    console.error("Error fetching staff members from Sanity:", error);
+    return fallbackStaff.map((s, i) => ({ ...s, _id: `fallback-${i}`, image: `https://picsum.photos/200/200?random=${i+1}` }));
+  }
+}
+
+export default async function StaffPage() {
+  const staffMembers = await getStaffMembers();
   return (
     <main className="flex-1">
         <div>
@@ -25,22 +49,28 @@ export default function StaffPage() {
                     </CardHeader>
                     <CardContent className="p-8">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                            {staffMembers.map((staff, index) => (
-                            <Card key={index} className="text-center shadow-md hover:shadow-xl transition-shadow">
-                                <CardContent className="p-6">
-                                <Image
-                                    src={staff.image}
-                                    alt={staff.name}
-                                    width={120}
-                                    height={120}
-                                    className="rounded-full mx-auto mb-4 border-4 border-accent"
-                                    data-ai-hint={staff.dataAiHint}
-                                />
-                                <h3 className="text-lg font-bold text-primary">{staff.name}</h3>
-                                <p className="text-sm text-muted-foreground">{staff.designation}</p>
-                                </CardContent>
-                            </Card>
-                            ))}
+                            {staffMembers.map((staff, index) => {
+                                const imageUrl = staff.image 
+                                  ? typeof staff.image === 'string'
+                                    ? staff.image
+                                    : urlFor(staff.image).width(200).height(200).url()
+                                  : `https://picsum.photos/200/200?random=${index + 1}`;
+                                return (
+                                <Card key={staff._id || index} className="text-center shadow-md hover:shadow-xl transition-shadow">
+                                    <CardContent className="p-6">
+                                    <Image
+                                        src={imageUrl}
+                                        alt={staff.name}
+                                        width={120}
+                                        height={120}
+                                        className="rounded-full mx-auto mb-4 border-4 border-accent"
+                                    />
+                                    <h3 className="text-lg font-bold text-primary">{staff.name}</h3>
+                                    <p className="text-sm text-muted-foreground">{staff.designation}</p>
+                                    </CardContent>
+                                </Card>
+                                )
+                            })}
                         </div>
                     </CardContent>
                 </Card>

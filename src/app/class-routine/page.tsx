@@ -10,19 +10,56 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { sanityClient } from '@/lib/sanity'
 
-const routine = {
-    '৬ষ্ঠ শ্রেণি': [
-        { day: 'রবিবার', p1: 'বাংলা', p2: 'ইংরেজি', p3: 'গণিত', p4: 'বিজ্ঞান' },
-        { day: 'সোমবার', p1: 'বিজ্ঞান', p2: 'গণিত', p3: 'ইংরেজি', p4: 'বাংলা' },
-    ],
-    '৭ম শ্রেণি': [
-        { day: 'রবিবার', p1: 'গণিত', p2: 'বাংলা', p3: 'বিজ্ঞান', p4: 'ইংরেজি' },
-        { day: 'সোমবার', p1: 'ইংরেজি', p2: 'বিজ্ঞান', p3: 'বাংলা', p4: 'গণিত' },
-    ]
+interface DaySchedule {
+  day: string;
+  p1: string;
+  p2: string;
+  p3: string;
+  p4: string;
+}
+interface ClassRoutine {
+  _id: string;
+  className: string;
+  schedule: DaySchedule[];
+  order: number;
 }
 
-export default function ClassRoutinePage() {
+const fallbackRoutine = [
+    { 
+        className: '৬ষ্ঠ শ্রেণি', 
+        schedule: [
+            { day: 'রবিবার', p1: 'বাংলা', p2: 'ইংরেজি', p3: 'গণিত', p4: 'বিজ্ঞান' },
+            { day: 'সোমবার', p1: 'বিজ্ঞান', p2: 'গণিত', p3: 'ইংরেজি', p4: 'বাংলা' },
+        ],
+        order: 1
+    },
+    { 
+        className: '৭ম শ্রেণি', 
+        schedule: [
+            { day: 'রবিবার', p1: 'গণিত', p2: 'বাংলা', p3: 'বিজ্ঞান', p4: 'ইংরেজি' },
+            { day: 'সোমবার', p1: 'ইংরেজি', p2: 'বিজ্ঞান', p3: 'বাংলা', p4: 'গণিত' },
+        ],
+        order: 2
+    }
+]
+
+async function getClassRoutines(): Promise<ClassRoutine[]> {
+    const query = `*[_type == "classRoutine" && !(_id in path("drafts.**"))] | order(order asc)`;
+    try {
+        const routines = await sanityClient.fetch(query);
+        return routines.length > 0 ? routines : fallbackRoutine;
+    } catch (error) {
+        console.error("Error fetching class routines from Sanity:", error);
+        return fallbackRoutine;
+    }
+}
+
+
+export default async function ClassRoutinePage() {
+    const routines = await getClassRoutines();
+
   return (
     <main className="flex-1">
         <div>
@@ -45,9 +82,9 @@ export default function ClassRoutinePage() {
                         </Button>
                     </div>
 
-                    {Object.entries(routine).map(([className, schedule]) => (
-                        <div key={className}>
-                            <h2 className="text-2xl font-bold text-primary mb-4">{className}</h2>
+                    {routines.map((routine) => (
+                        <div key={routine._id || routine.className}>
+                            <h2 className="text-2xl font-bold text-primary mb-4">{routine.className}</h2>
                             <div className="border rounded-lg overflow-hidden">
                             <Table>
                                 <TableHeader>
@@ -60,7 +97,7 @@ export default function ClassRoutinePage() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {schedule.map(dayInfo => (
+                                    {routine.schedule.map(dayInfo => (
                                         <TableRow key={dayInfo.day}>
                                             <TableCell className="font-medium">{dayInfo.day}</TableCell>
                                             <TableCell>{dayInfo.p1}</TableCell>
