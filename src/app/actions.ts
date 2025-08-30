@@ -5,43 +5,46 @@ import { sanityWriteClient } from '@/lib/sanity.server'
 import { demoData } from '@/lib/demo-data'
 import { revalidatePath } from 'next/cache'
 
-// Helper to prevent duplicate imports
-async function documentExists(id: string) {
+// Helper to prevent duplicate imports by checking for a unique marker
+async function getMarkerDocument() {
   try {
-    const doc = await sanityWriteClient.fetch(`*[_id == $id][0]`, { id });
-    return !!doc;
+    const marker = await sanityWriteClient.fetch(`*[_type == "importMarker" && _id == "demoContentImported"][0]`);
+    return marker;
   } catch (error) {
-    console.error(`Error checking document existence for ID ${id}:`, error);
-    return false;
+    console.error(`Error checking marker document:`, error);
+    return null;
   }
 }
 
 export async function importDemoData() {
   try {
+    const marker = await getMarkerDocument();
+    if (marker) {
+      return { success: true, message: 'সমস্ত ডেমো কনটেন্ট আগে থেকেই যোগ করা আছে।' };
+    }
+
     const transaction = sanityWriteClient.transaction();
     let createdCount = 0;
 
     for (const doc of demoData) {
         // Skip image assets as they need to be uploaded, not created as documents
         if (doc._type === 'sanity.imageAsset') continue;
-
-        // Sanity IDs must not have dots and cannot start with 'drafts.'
-        const sanitizedId = doc._id.replace(/^drafts\./, '').replace(/\./g, '-');
         
-        const docWithSanitizedId = { ...doc, _id: sanitizedId };
-        
-        const exists = await documentExists(sanitizedId);
-        if (!exists) {
-            transaction.createOrReplace(docWithSanitizedId);
-            createdCount++;
-        }
+        // Let Sanity generate the _id automatically by not providing one
+        const { _id, ...docWithoutId } = doc;
+        transaction.create(docWithoutId);
+        createdCount++;
     }
     
+    // Add a marker document to prevent re-importing
+    transaction.create({ _id: 'demoContentImported', _type: 'importMarker' });
+
+
     if (createdCount === 0) {
-        return { success: true, message: 'সমস্ত ডেমো কনটেন্ট আগে থেকেই যোগ করা আছে।' };
+        return { success: true, message: 'যোগ করার জন্য কোনো নতুন ডেমো কনটেন্ট পাওয়া যায়নি।' };
     }
 
-    await transaction.commit({ returnDocuments: false });
+    await transaction.commit({ returnDocuments: false, autoGenerateArrayKeys: true });
 
     // Revalidate all paths to show new content
     revalidatePath('/', 'layout')
@@ -52,8 +55,10 @@ export async function importDemoData() {
     let errorMessage = 'ডেমো কনটেন্ট যোগ করতে সমস্যা হয়েছে।';
     if (error instanceof Error) {
         // Provide a more specific error message if available
-        if ('details' in error && typeof (error as any).details === 'object' && (error as any).details !== null) {
-            errorMessage = (error as any).details.description || errorMessage;
+        if (error.message.includes('permission')) {
+             errorMessage = 'Insufficient permissions. Please check your API token in .env.local and ensure it has "Editor" rights.';
+        } else if ('details' in error && typeof (error as any).details === 'object' && (error as any).details !== null) {
+            errorMessage = (error as any).details.description || error.message;
         } else {
             errorMessage = error.message;
         }
