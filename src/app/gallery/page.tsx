@@ -2,43 +2,34 @@
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Camera } from 'lucide-react'
-import { sanityClient, urlFor } from '@/lib/sanity'
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 interface GalleryImage {
-  _id: string;
+  id: string;
   alt: string;
-  image: SanityImageSource;
+  imageUrl: string;
+  createdAt: Timestamp;
 }
 
-const fallbackImages: Omit<GalleryImage, '_id' | 'image'>[] = [
-  { alt: 'Annual Sports Day' },
-  { alt: 'Science Fair' },
-  { alt: 'Cultural Program' },
-  { alt: 'Victory Day Celebration' },
-  { alt: 'Tree Plantation Program' },
-  { alt: 'School Campus' },
-]
-
 async function getGalleryImages(): Promise<GalleryImage[]> {
-  const query = `*[_type == "galleryImage" && !(_id in path("drafts.**"))] | order(_createdAt desc)`;
   try {
-    const images = await sanityClient.fetch(query);
-    if (images && images.length > 0) {
-      return images;
-    }
-    // Create fallback with placeholder URLs if Sanity is empty
-    return fallbackImages.map((img, index) => ({
-      ...img,
-      _id: `fallback-${index}`,
-      image: `https://picsum.photos/600/400?random=${index + 1}`
-    }));
+    const imagesCollectionRef = collection(db, 'gallery');
+    const q = query(imagesCollectionRef, orderBy('createdAt', 'desc'));
+    const data = await getDocs(q);
+    
+    return data.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    } as GalleryImage));
   } catch (error) {
-    console.error("Error fetching gallery images from Sanity:", error);
-    return fallbackImages.map((img, index) => ({
-      ...img,
-      _id: `fallback-${index}`,
-      image: `https://picsum.photos/600/400?random=${index + 1}`
+    console.error("Error fetching gallery images:", error);
+    // Return fallback data if firestore fails
+    return Array.from({ length: 6 }).map((_, i) => ({
+        id: `fallback-${i}`,
+        alt: `Fallback Image ${i + 1}`,
+        imageUrl: `https://picsum.photos/600/400?random=${i + 1}`,
+        createdAt: Timestamp.now()
     }));
   }
 }
@@ -59,25 +50,17 @@ export default async function GalleryPage() {
                     </CardHeader>
                     <CardContent className="p-8">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                            {galleryImages.map((image, index) => {
-                                const imageUrl = image.image 
-                                  ? typeof image.image === 'string' 
-                                    ? image.image 
-                                    : urlFor(image.image).width(600).height(400).url()
-                                  : `https://picsum.photos/600/400?random=${index + 1}`;
-
-                                return (
-                                <div key={image._id || index} className="overflow-hidden rounded-lg shadow-md group">
+                            {galleryImages.map((image) => (
+                                <div key={image.id} className="overflow-hidden rounded-lg shadow-md group">
                                     <Image
-                                        src={imageUrl}
+                                        src={image.imageUrl}
                                         alt={image.alt}
                                         width={600}
                                         height={400}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
                                 </div>
-                                )
-                            })}
+                            ))}
                         </div>
                     </CardContent>
                 </Card>
