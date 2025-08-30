@@ -48,5 +48,11 @@ export default {
       type: 'url',
       description: 'The URL for the school\'s Facebook page to be embedded in the footer.',
     },
+     {
+      name: 'googleMapsUrl',
+      title: 'Google Maps Embed URL',
+      type: 'url',
+      description: 'The embed URL for the school\'s location from Google Maps.',
+    },
   ],
 }

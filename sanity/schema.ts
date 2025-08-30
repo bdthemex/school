@@ -14,6 +14,7 @@ import videoItem from './schemas/videoItem'
 import siteSettings from './schemas/siteSettings'
 import homepage from './schemas/homepage'
 import navigation from './schemas/navigation'
+import studentResult from './schemas/studentResult'
 
 export const schemaTypes = [
   // Site-wide settings
@@ -35,4 +36,5 @@ export const schemaTypes = [
   holiday,
   notice,
   galleryImage,
+  studentResult,
 ]

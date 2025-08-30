@@ -12,6 +12,7 @@ export const demoData = [
     eiinNumber: "113026",
     schoolCode: "8300",
     facebookPageUrl: "https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fkjhsgovt.school&tabs=timeline&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId",
+    googleMapsUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3625.617985440232!2d90.84252431500001!3d24.671089284143213!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3756c368e82a9391%3A0x678c1561f743c72!2sKendua%20Joyhari%20Spry%20Govt.%20High%20School!5e0!3m2!1sen!2sbd!4v1678886543210!5m2!1sen!2sbd",
   },
   // Homepage
   {
@@ -345,5 +346,39 @@ export const demoData = [
    {
     _type: "galleryImage",
     alt: "বিজ্ঞান মেলা",
+  },
+  // Student Results
+  {
+    _type: "studentResult",
+    studentName: "মোঃ আব্দুল্লাহ",
+    fatherName: "মোঃ আব্দুর রহমান",
+    year: "2024",
+    examType: "বার্ষিক পরীক্ষা",
+    className: "১০ম",
+    roll: "101",
+    totalMarks: 850,
+    grade: "A+",
+    results: [
+        { _key: 'r1', subject: 'বাংলা', marks: 85 },
+        { _key: 'r2', subject: 'ইংরেজি', marks: 88 },
+        { _key: 'r3', subject: 'গণিত', marks: 92 },
+        { _key: 'r4', subject: 'বিজ্ঞান', marks: 80 },
+    ]
+  },
+  {
+    _type: "studentResult",
+    studentName: "ফাতেমা আক্তার",
+    fatherName: "মোঃ জামাল উদ্দিন",
+    year: "2024",
+    examType: "বার্ষিক পরীক্ষা",
+    className: "১০ম",
+    roll: "102",
+    totalMarks: 790,
+    grade: "A",
+    results: [
+        { _key: 'r1', subject: 'বাংলা', marks: 78 },
+        { _key: 'r2', subject: 'ইংরেজি', marks: 82 },
+        { _key: 'r3', subject: 'গণিত', marks: 85 },
+    ]
   },
 ];

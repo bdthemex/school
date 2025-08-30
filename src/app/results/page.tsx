@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Label } from '@/components/ui/label'
+import { searchResult } from '@/app/actions'
 
 const searchSchema = z.object({
   year: z.string().min(1, 'পরীক্ষার বছর দিন'),
@@ -37,62 +38,11 @@ interface StudentResult {
   results: SubjectResult[];
 }
 
-const demoResults: StudentResult[] = [
-    {
-        studentName: "মোঃ আব্দুল্লাহ",
-        fatherName: "মোঃ আব্দুর রহমান",
-        className: "১০ম",
-        roll: "১০১",
-        totalMarks: 850,
-        grade: "A+",
-        results: [
-            { subject: 'বাংলা', marks: 85 },
-            { subject: 'ইংরেজি', marks: 88 },
-            { subject: 'গণিত', marks: 92 },
-            { subject: 'বিজ্ঞান', marks: 80 },
-            { subject: 'সমাজ বিজ্ঞান', marks: 85 },
-            { subject: 'ধর্ম', marks: 90 },
-        ]
-    },
-    {
-        studentName: "ফাতেমা আক্তার",
-        fatherName: "মোঃ জামাল উদ্দিন",
-        className: "১০ম",
-        roll: "১০২",
-        totalMarks: 790,
-        grade: "A",
-        results: [
-            { subject: 'বাংলা', marks: 78 },
-            { subject: 'ইংরেজি', marks: 82 },
-            { subject: 'গণিত', marks: 85 },
-            { subject: 'বিজ্ঞান', marks: 75 },
-            { subject: 'সমাজ বিজ্ঞান', marks: 80 },
-            { subject: 'ধর্ম', marks: 88 },
-        ]
-    },
-     {
-        studentName: "সাইফুল ইসলাম",
-        fatherName: "মোঃ কামাল হোসেন",
-        className: "১০ম",
-        roll: "১০৩",
-        totalMarks: 910,
-        grade: "A+",
-        results: [
-            { subject: 'বাংলা', marks: 90 },
-            { subject: 'ইংরেজি', marks: 92 },
-            { subject: 'গণিত', marks: 95 },
-            { subject: 'বিজ্ঞান', marks: 88 },
-            { subject: 'সমাজ বিজ্ঞান', marks: 91 },
-            { subject: 'ধর্ম', marks: 94 },
-        ]
-    }
-]
-
-
 export default function ResultsPage() {
     const [result, setResult] = useState<StudentResult | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [searched, setSearched] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const { control, handleSubmit, formState: { errors } } = useForm<SearchFormValues>({
         resolver: zodResolver(searchSchema),
@@ -104,25 +54,27 @@ export default function ResultsPage() {
         }
     });
 
-    const onSubmit = (data: SearchFormValues) => {
+    const onSubmit = async (data: SearchFormValues) => {
         setIsLoading(true);
         setSearched(false);
         setResult(null);
+        setError(null);
+        
+        const response = await searchResult({
+            year: data.year,
+            examType: data.examType,
+            class: data.class,
+            roll: data.roll,
+        });
 
-        // Demo logic
-        setTimeout(() => {
-            const foundResult = demoResults.find(
-              (r) => r.className === data.class && r.roll === data.roll
-            );
-            
-            if (data.year === '2024' && data.examType === 'বার্ষিক পরীক্ষা' && foundResult) {
-                setResult(foundResult);
-            } else {
-                setResult(null);
-            }
-            setIsLoading(false);
-            setSearched(true);
-        }, 1000);
+        if (response.success) {
+            setResult(response.data);
+        } else {
+            setError(response.message || 'An unknown error occurred.');
+        }
+
+        setIsLoading(false);
+        setSearched(true);
     }
 
   return (
@@ -219,7 +171,7 @@ export default function ResultsPage() {
                                         </div>
                                     </div>
                                     <Button type="submit" className="w-full" disabled={isLoading}>
-                                        {isLoading ? 'অনুসন্ধาน করা হচ্ছে...' : 'ফলাফল দেখুন'}
+                                        {isLoading ? 'অনুসন্ধান করা হচ্ছে...' : 'ফলাফল দেখুন'}
                                     </Button>
                                 </form>
                             </CardContent>
@@ -267,8 +219,8 @@ export default function ResultsPage() {
                                                 </TableRow>
                                             </TableHeader>
                                             <TableBody>
-                                                {result.results.map(res => (
-                                                    <TableRow key={res.subject}>
+                                                {result.results.map((res, index) => (
+                                                    <TableRow key={index}>
                                                         <TableCell>{res.subject}</TableCell>
                                                         <TableCell className="text-right font-mono">{res.marks}</TableCell>
                                                     </TableRow>
@@ -283,9 +235,13 @@ export default function ResultsPage() {
                                 </CardContent>
                             </Card>
                         )}
-
+                        
                         {searched && !isLoading && !result && (
                              <p className="text-center text-destructive mt-8">দুঃখিত, আপনার দেওয়া তথ্যের সাথে মিলে এমন কোনো ফলাফল পাওয়া যায়নি।</p>
+                        )}
+                        
+                        {error && (
+                            <p className="text-center text-destructive mt-8">{error}</p>
                         )}
 
                     </CardContent>

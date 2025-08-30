@@ -68,10 +68,11 @@ export default defineConfig({
             S.divider(),
             ...S.documentTypeListItems().filter(
               (listItem) =>
-                !['siteSettings', 'homepage', 'navigation'].includes(
+                !['siteSettings', 'homepage', 'navigation', 'studentResult'].includes(
                   listItem.getId() || ''
                 )
             ),
+             S.documentTypeListItem('studentResult').title('Student Results'),
           ]),
     }),
     visionTool(),

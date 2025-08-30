@@ -1,7 +1,7 @@
 // src/app/actions.ts
 'use server'
 
-import { sanityWriteClient } from '@/lib/sanity.server'
+import { sanityClient, sanityWriteClient } from '@/lib/sanity.server'
 import { demoData } from '@/lib/demo-data'
 import { revalidatePath } from 'next/cache'
 
@@ -10,15 +10,26 @@ export async function importDemoData() {
     const transaction = sanityWriteClient.transaction()
     let createdCount = 0
 
+    // Clean up all previous demo data
+    const types = new Set(demoData.map(doc => doc._type));
+    for (const type of types) {
+       if (type !== 'sanity.imageAsset') {
+           // Don't delete settings and navigation documents, but rather update them
+            const query = `*[_type == "${type}" && !(_id in ["siteSettings", "homepage", "headerNavigation", "footerLinksCol1", "footerLinksCol2"])]`
+            const oldDocs = await sanityClient.fetch(query);
+            for(const doc of oldDocs) {
+                transaction.delete(doc._id);
+            }
+       }
+    }
+
+
     for (const doc of demoData) {
-      // Skip image assets as they need to be uploaded, not created as documents
       if (doc._type === 'sanity.imageAsset') continue
 
       if (doc._id) {
-        // Use createOrReplace for documents with a specific ID (e.g., settings, homepage)
         transaction.createOrReplace(doc)
       } else {
-        // Use create for documents without a specific ID, letting Sanity generate one
         transaction.create(doc)
       }
       createdCount++
@@ -30,7 +41,6 @@ export async function importDemoData() {
 
     await transaction.commit({ returnDocuments: false, autoGenerateArrayKeys: true })
 
-    // Revalidate all paths to show new content
     revalidatePath('/', 'layout')
 
     return { success: true, message: `${createdCount}টি ডেমো কনটেন্ট সফলভাবে যোগ করা হয়েছে।` }
@@ -38,7 +48,6 @@ export async function importDemoData() {
     console.error('Error importing demo data to Sanity:', error)
     let errorMessage = 'ডেমো কনটেন্ট যোগ করতে সমস্যা হয়েছে।'
     if (error instanceof Error) {
-      // Provide a more specific error message if available
       if (error.message.includes('permission')) {
         errorMessage = 'Insufficient permissions. Please check your API token in .env.local and ensure it has "Editor" rights.'
       } else if ('details' in error && typeof (error as any).details === 'object' && (error as any).details !== null) {
@@ -49,4 +58,22 @@ export async function importDemoData() {
     }
     return { success: false, message: `ত্রুটি: ${errorMessage}` }
   }
+}
+
+interface SearchParams {
+  year: string;
+  examType: string;
+  class: string;
+  roll: string;
+}
+
+export async function searchResult(params: SearchParams) {
+    try {
+        const query = `*[_type == "studentResult" && year == $year && examType == $examType && className == $class && roll == $roll][0]`
+        const result = await sanityClient.fetch(query, params);
+        return { success: true, data: result || null };
+    } catch(error) {
+        console.error("Error fetching result from Sanity:", error);
+        return { success: false, message: "ফলাফল খুঁজতে গিয়ে একটি সমস্যা হয়েছে।" };
+    }
 }

@@ -9,5 +9,13 @@ export const sanityWriteClient = createClient({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-08-30',
   useCdn: false, // Must be false for write operations
-  token: process.env.NEXT_PUBLIC_SANITY_API_WRITE_TOKEN, // Required for write operations
+  token: process.env.SANITY_API_WRITE_TOKEN, // Required for write operations
 });
+
+export const sanityClient = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '8s8ujgvp',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2024-08-30',
+  useCdn: false,
+  token: process.env.SANITY_API_WRITE_TOKEN,
+})
