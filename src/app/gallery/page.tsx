@@ -4,6 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Camera } from 'lucide-react'
 import { sanityClient, urlFor } from '@/lib/sanity'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'ফটো গ্যালারি',
+  description: 'আমাদের বিদ্যালয়ের বিভিন্ন অনুষ্ঠানের ছবির সংগ্রহ।',
+};
 
 interface GalleryImage {
   _id: string;

@@ -3,6 +3,7 @@ import { sanityClient } from '@/lib/sanity'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar } from 'lucide-react'
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next';
 
 interface Notice {
   _id: string;
@@ -21,6 +22,21 @@ async function getNotice(id: string): Promise<Notice | null> {
     return null
   }
 }
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+    const notice = await getNotice(params.id);
+  
+    if (!notice) {
+      return {
+        title: 'নোটিশ পাওয়া যায়নি',
+      };
+    }
+  
+    return {
+      title: notice.title,
+      description: notice.details ? notice.details.substring(0, 150) : 'বিস্তারিত জানতে পড়ুন।',
+    };
+  }
 
 export default async function NoticeDetailsPage({ params }: { params: { id: string } }) {
   const notice = await getNotice(params.id)

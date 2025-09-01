@@ -4,6 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, GraduationCap, Phone, Mail } from 'lucide-react'
 import { sanityClient, urlFor } from '@/lib/sanity'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'শিক্ষক পরিচিতি',
+  description: 'আমাদের বিদ্যালয়ের অভিজ্ঞ শিক্ষকমণ্ডলীর তালিকা।',
+};
 
 interface Teacher {
   _id: string;

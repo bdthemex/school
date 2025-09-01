@@ -11,6 +11,12 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { sanityClient } from '@/lib/sanity'
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'ক্লাস রুটিন',
+  description: 'সকল শ্রেণীর ক্লাস রুটিন দেখুন।',
+};
 
 interface DaySchedule {
   _id: string;

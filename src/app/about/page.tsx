@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Building, Target, BookOpen } from 'lucide-react'
 import { sanityClient, urlFor } from '@/lib/sanity'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import type { Metadata } from 'next';
 
 interface AboutContent {
   _id: string;
@@ -27,6 +28,16 @@ async function getAboutContent(): Promise<AboutContent | null> {
   }
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getAboutContent();
+  const title = "আমাদের সম্পর্কে";
+  const description = content?.description ? content.description.substring(0, 150) : 'আমাদের বিদ্যালয় সম্পর্কে জানুন।';
+  
+  return {
+    title,
+    description,
+  };
+}
 
 export default async function AboutPage() {
   const content = await getAboutContent();

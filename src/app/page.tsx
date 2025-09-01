@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { sanityClient, urlFor } from '@/lib/sanity'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 import * as LucideIcons from 'lucide-react';
@@ -135,39 +135,43 @@ export default function Home() {
     <main>
       <div className="pt-0 px-4 pb-4">
         <section className="relative w-full">
-            <Carousel
-                plugins={[heroCarouselPlugin.current]}
-                className="w-full"
-                >
-                <CarouselContent>
-                    {homepageContent?.heroSlider && homepageContent.heroSlider.length > 0 ? homepageContent.heroSlider.map(slide => (
-                         <CarouselItem key={slide._key}>
-                            <Image
-                                src={slide.image ? urlFor(slide.image).width(1280).height(400).url() : "https://picsum.photos/1280/400?random=11"}
-                                alt={slide.alt || 'Slider image'}
-                                width={1280}
-                                height={400}
-                                className="w-full h-auto max-h-[400px] object-cover"
-                            />
-                            {slide.caption && (
-                                <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
-                                    <p className='font-bold text-lg'>{slide.caption}</p>
-                                </div>
-                            )}
-                        </CarouselItem>
-                    )) : (
-                        <CarouselItem>
-                            <Image
-                                src="https://picsum.photos/1280/400?random=11"
-                                alt="Placeholder"
-                                width={1280}
-                                height={400}
-                                className="w-full h-auto max-h-[400px] object-cover"
-                            />
-                        </CarouselItem>
-                    )}
-                </CarouselContent>
-            </Carousel>
+            <Suspense fallback={<div className="w-full h-[400px] bg-muted animate-pulse" />}>
+                <Carousel
+                    plugins={[heroCarouselPlugin.current]}
+                    className="w-full"
+                    >
+                    <CarouselContent>
+                        {homepageContent?.heroSlider && homepageContent.heroSlider.length > 0 ? homepageContent.heroSlider.map(slide => (
+                            <CarouselItem key={slide._key}>
+                                <Image
+                                    src={slide.image ? urlFor(slide.image).width(1280).height(400).url() : "https://picsum.photos/1280/400?random=11"}
+                                    alt={slide.alt || 'Slider image'}
+                                    width={1280}
+                                    height={400}
+                                    className="w-full h-auto max-h-[400px] object-cover"
+                                    priority
+                                />
+                                {slide.caption && (
+                                    <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
+                                        <p className='font-bold text-lg'>{slide.caption}</p>
+                                    </div>
+                                )}
+                            </CarouselItem>
+                        )) : (
+                            <CarouselItem>
+                                <Image
+                                    src="https://picsum.photos/1280/400?random=11"
+                                    alt="Placeholder"
+                                    width={1280}
+                                    height={400}
+                                    className="w-full h-auto max-h-[400px] object-cover"
+                                    priority
+                                />
+                            </CarouselItem>
+                        )}
+                    </CarouselContent>
+                </Carousel>
+            </Suspense>
         </section>
 
         {showMarquee && (

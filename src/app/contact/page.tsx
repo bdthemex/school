@@ -2,6 +2,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Phone, Mail, MapPin } from 'lucide-react'
 import { sanityClient } from '@/lib/sanity'
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'যোগাযোগ',
+  description: 'আমাদের সাথে যোগাযোগ করুন। ঠিকানা, ফোন নম্বর এবং ইমেইল।',
+};
 
 interface SiteSettings {
   footerAddress: string;

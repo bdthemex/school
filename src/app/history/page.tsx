@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollText } from 'lucide-react'
 import { sanityClient, urlFor } from '@/lib/sanity'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import type { Metadata } from 'next';
 
 interface Milestone {
     _key: string;
@@ -33,6 +34,16 @@ async function getHistoryContent(): Promise<HistoryContent | null> {
   }
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+    const content = await getHistoryContent();
+    const title = content?.title || "প্রতিষ্ঠানের ইতিহাস";
+    const description = content?.description1 ? content.description1.substring(0, 150) : 'আমাদের বিদ্যালয়ের গৌরবময় ইতিহাস সম্পর্কে জানুন।';
+    
+    return {
+      title,
+      description,
+    };
+  }
 
 export default async function HistoryPage() {
   const content = await getHistoryContent();

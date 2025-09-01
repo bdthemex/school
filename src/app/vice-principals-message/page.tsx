@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { MessageSquare } from 'lucide-react'
 import { sanityClient, urlFor } from '@/lib/sanity'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import type { Metadata } from 'next';
 
 interface VicePrincipalMessage {
   _id: string;
@@ -25,6 +26,17 @@ async function getVicePrincipalMessage(): Promise<VicePrincipalMessage | null> {
     return null;
   }
 }
+
+export async function generateMetadata(): Promise<Metadata> {
+    const message = await getVicePrincipalMessage();
+    const title = "সহকারী প্রধান শিক্ষকের বাণী";
+    const description = message?.quote || 'সহকারী প্রধান শিক্ষকের বাণী পড়ুন।';
+    
+    return {
+      title,
+      description,
+    };
+  }
 
 export default async function VicePrincipalsMessagePage() {
     const message = await getVicePrincipalMessage();

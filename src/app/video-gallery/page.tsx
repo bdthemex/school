@@ -2,6 +2,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Video } from 'lucide-react'
 import { sanityClient } from '@/lib/sanity'
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'ভিডিও গ্যালারি',
+  description: 'আমাদের বিদ্যালয়ের বিভিন্ন অনুষ্ঠানের ভিডিও সংগ্রহ।',
+};
 
 interface VideoItem {
   _id: string;

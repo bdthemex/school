@@ -10,6 +10,13 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { sanityClient } from '@/lib/sanity'
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'ছুটির তালিকা',
+  description: 'বিদ্যালয়ের বাৎসরিক ছুটির তালিকা দেখুন।',
+};
+
 
 interface Holiday {
   _id: string;

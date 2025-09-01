@@ -4,6 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Award } from 'lucide-react'
 import { sanityClient, urlFor } from '@/lib/sanity'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'কৃতি শিক্ষার্থীবৃন্দ',
+  description: 'আমাদের বিদ্যালয়ের কৃতি শিক্ষার্থীদের দেখুন যারা তাদের মেধা দিয়ে বিদ্যালয়ের মুখ উজ্জ্বল করেছে।',
+};
+
 
 interface SuccessfulStudent {
   _id: string;

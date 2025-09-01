@@ -3,6 +3,12 @@ import { sanityClient } from '@/lib/sanity';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Megaphone, Calendar, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'নোটিশ বোর্ড',
+  description: 'বিদ্যালয়ের সর্বশেষ নোটিশ ও ঘোষণা দেখুন।',
+};
 
 interface Notice {
   _id: string;
