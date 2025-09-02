@@ -10,6 +10,7 @@ export const sanityWriteClient = createClient({
   apiVersion: '2024-08-30',
   useCdn: false, // Must be false for write operations
   token: process.env.SANITY_API_WRITE_TOKEN, // Required for write operations
+  perspective: 'published',
 });
 
 export const sanityClient = createClient({
@@ -18,4 +19,5 @@ export const sanityClient = createClient({
   apiVersion: '2024-08-30',
   useCdn: false,
   token: process.env.SANITY_API_WRITE_TOKEN,
+  perspective: 'published',
 })
