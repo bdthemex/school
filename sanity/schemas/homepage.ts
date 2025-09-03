@@ -66,31 +66,6 @@ export default {
                 { name: 'href', title: 'Link', type: 'string' },
             ]
         }]
-    },
-    {
-        name: 'infoBoxes',
-        title: 'Information Boxes',
-        type: 'array',
-        of: [{
-            type: 'object',
-            fields: [
-                { name: 'title', title: 'Title', type: 'string' },
-                { name: 'icon', title: 'Icon Name', type: 'string', description: 'e.g., "GraduationCap", "Users"' },
-                { name: 'image', title: 'Image', type: 'image' },
-                {
-                    name: 'links',
-                    title: 'Links',
-                    type: 'array',
-                    of: [{
-                        type: 'object',
-                        fields: [
-                            { name: 'label', title: 'Label', type: 'string' },
-                            { name: 'href', title: 'Link', type: 'string' },
-                        ]
-                    }]
-                }
-            ]
-        }]
     }
   ],
 }

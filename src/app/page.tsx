@@ -50,15 +50,6 @@ interface LinkItem {
     icon: IconName;
 }
 
-interface InfoBox {
-    _key: string;
-    title: string;
-    image: SanityImageSource;
-    icon: IconName;
-    links: { _key: string; label: string; href: string }[];
-}
-
-
 interface HomepageContent {
     heroSlider: {
         _key: string;
@@ -75,7 +66,6 @@ interface HomepageContent {
     importantLinks: LinkItem[];
     resourceLinks: LinkItem[];
     officialLinks: LinkItem[];
-    infoBoxes: InfoBox[];
 }
 
 async function getHomepageData(): Promise<{ notices: Notice[], content: HomepageContent | null, faculty: FacultyMessage[] }> {
@@ -85,8 +75,7 @@ async function getHomepageData(): Promise<{ notices: Notice[], content: Homepage
         "content": *[_type == "homepage" && _id == "homepage"][0]{
             ...,
             heroSlider[]{..., "image": image.asset->},
-            historySection{..., "image": image.asset->},
-            infoBoxes[]{..., "image": image.asset->}
+            historySection{..., "image": image.asset->}
         },
         "faculty": [
             *[_type == "principalMessage"][0] {..., "link": "/principals-message", "title": "প্রধান শিক্ষকের বাণী"},
@@ -135,6 +124,56 @@ export default function Home() {
     }, []);
 
     const marqueeText = "সরকারি ও বেসরকারি মাধ্যমিক বিদ্যালয়ে-২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি ও নিয়মাবলী সংক্রান্ত। আমাদের ওয়েবসাইটে আপনাকে স্বাগত…(সাইট ডেভেলপমেন্টের কাজ চলছে) *** "
+
+    const infoBoxes = [
+        { 
+            _key: 'ib1', 
+            title: 'শিক্ষার্থীদের কর্নার',
+            icon: 'GraduationCap' as IconName,
+            image: `https://picsum.photos/100/100?random=ib1`,
+            links: [
+              {_key: 'ibl1', label: 'শ্রেণিভিত্তিক শিক্ষার্থী', href: '#'}, 
+              {_key: 'ibl2', label: 'ক্লাস রুটিন', href: '/class-routine'}, 
+              {_key: 'ibl3', label: 'ছুটির তালিকা', href: '/holiday-list'}, 
+              {_key: 'ibl4', label: 'নোটিশ', href: '/notices'}
+            ]
+        },
+        { 
+            _key: 'ib2', 
+            title: 'শিক্ষকমন্ডলীদের কর্ণার',
+            icon: 'Users' as IconName,
+            image: `https://picsum.photos/100/100?random=ib2`,
+            links: [
+              {_key: 'ibl5', label: 'শিক্ষকমন্ডলী', href: '/teachers'}, 
+              {_key: 'ibl6', label: 'স্টাফ', href: '/staff'}, 
+              {_key: 'ibl7', label: 'শিক্ষক/কর্মচারী সংখ্যা', href: '#'}, 
+              {_key: 'ibl8', label: 'SMS ALERT', href: '#'}
+            ]
+        },
+        { 
+            _key: 'ib3', 
+            title: 'সকল ডাউনলোড',
+            icon: 'Download' as IconName,
+            image: `https://picsum.photos/100/100?random=ib3`,
+            links: [
+                {_key: 'ibl9', label: 'ডাউনলোড', href: '#'},
+                {_key: 'ibl10', label: 'পরীক্ষার রুটিন', href: '#'},
+                {_key: 'ibl11', label: 'ভর্তি', href: '#'},
+            ]
+        },
+        { 
+            _key: 'ib4', 
+            title: 'একাডেমিক তথ্য',
+            icon: 'BookMarked' as IconName,
+            image: `https://picsum.photos/100/100?random=ib4`,
+            links: [
+              {_key: 'ibl12', label: 'প্রতিষ্ঠানের ইতিহাস', href: '/history'}, 
+              {_key: 'ibl13', label: 'পরীক্ষার ফলাফল', href: '/results'}, 
+              {_key: 'ibl14', label: 'নোটিশ', href: '/notices'}, 
+              {_key: 'ibl15', label: 'একাডেমিক ক্যালেন্ডার', href: '/academic-calendar'}, 
+            ]
+        }
+    ];
 
   return (
     <main>
@@ -272,7 +311,7 @@ export default function Home() {
              </Carousel>
 
              <div className="grid md:grid-cols-2 gap-6">
-                {homepageContent?.infoBoxes?.map(box => (
+                {infoBoxes.map(box => (
                     <Card key={box._key} className="shadow-lg">
                         <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
                             <CardTitle className="text-lg flex items-center gap-2">
@@ -282,7 +321,7 @@ export default function Home() {
                         </CardHeader>
                         <CardContent className="flex items-center gap-4 pt-6">
                             <Image 
-                                src={box.image ? urlFor(box.image).width(100).height(100).url() : `https://picsum.photos/100/100?random=${box._key}`} 
+                                src={box.image}
                                 alt={box.title} 
                                 width={100} 
                                 height={100} 
@@ -379,5 +418,3 @@ export default function Home() {
     </main>
   )
 }
-
-    

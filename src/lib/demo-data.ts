@@ -59,51 +59,6 @@ export const demoData = [
         { _key: 'ol4', title: 'মাধ্যমিক ও উচ্চ শিক্ষা অধিদপ্তর', href: '#' },
         { _key: 'ol5', title: 'ব্যানবেইস', href: '#' },
     ],
-    infoBoxes: [
-        { 
-            _key: 'ib1', 
-            title: 'শিক্ষার্থীদের কর্নার',
-            icon: 'GraduationCap',
-            links: [
-              {_key: 'ibl1', label: 'শ্রেণিভিত্তিক শিক্ষার্থী', href: '#'}, 
-              {_key: 'ibl2', label: 'ক্লাস রুটিন', href: '/class-routine'}, 
-              {_key: 'ibl3', label: 'ছুটির তালিকা', href: '/holiday-list'}, 
-              {_key: 'ibl4', label: 'নোটিশ', href: '/notices'}
-            ]
-        },
-        { 
-            _key: 'ib2', 
-            title: 'শিক্ষকমন্ডলীদের কর্ণার',
-            icon: 'Users',
-            links: [
-              {_key: 'ibl5', label: 'শিক্ষকমন্ডলী', href: '/teachers'}, 
-              {_key: 'ibl6', label: 'স্টাফ', href: '/staff'}, 
-              {_key: 'ibl7', label: 'শিক্ষক/কর্মচারী সংখ্যা', href: '#'}, 
-              {_key: 'ibl8', label: 'SMS ALERT', href: '#'}
-            ]
-        },
-        { 
-            _key: 'ib3', 
-            title: 'সকল ডাউনলোড',
-            icon: 'Download',
-            links: [
-                {_key: 'ibl9', label: 'ডাউনলোড', href: '#'},
-                {_key: 'ibl10', label: 'পরীক্ষার রুটিন', href: '#'},
-                {_key: 'ibl11', label: 'ভর্তি', href: '#'},
-            ]
-        },
-        { 
-            _key: 'ib4', 
-            title: 'একাডেমিক তথ্য',
-            icon: 'BookMarked',
-            links: [
-              {_key: 'ibl12', label: 'প্রতিষ্ঠানের ইতিহাস', href: '/history'}, 
-              {_key: 'ibl13', label: 'পরীক্ষার ফলাফল', href: '/results'}, 
-              {_key: 'ibl14', label: 'নোটিশ', href: '/notices'}, 
-              {_key: 'ibl15', label: 'একাডেমিক ক্যালেন্ডার', href: '/academic-calendar'}, 
-            ]
-        }
-    ]
   },
   // Header Navigation
   {
