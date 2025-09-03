@@ -82,7 +82,12 @@ async function getHomepageData(): Promise<{ notices: Notice[], content: Homepage
   try {
     const query = `{
         "notices": *[_type == "notice" && !(_id in path("drafts.**"))] | order(date desc) [0...5] {_id, title},
-        "content": *[_type == "homepage" && _id == "homepage"][0],
+        "content": *[_type == "homepage" && _id == "homepage"][0]{
+            ...,
+            heroSlider[]{..., "image": image.asset->},
+            historySection{..., "image": image.asset->},
+            infoBoxes[]{..., "image": image.asset->}
+        },
         "faculty": [
             *[_type == "principalMessage"][0] {..., "link": "/principals-message", "title": "প্রধান শিক্ষকের বাণী"},
             *[_type == "vicePrincipalMessage"][0] {..., "link": "/vice-principals-message", "title": "সহকারী প্রধান শিক্ষকের বাণী"}
