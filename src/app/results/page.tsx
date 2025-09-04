@@ -12,7 +12,6 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Label } from '@/components/ui/label'
-import { searchResult } from '@/app/actions'
 
 const searchSchema = z.object({
   year: z.string().min(1, 'পরীক্ষার বছর দিন'),
@@ -24,19 +23,77 @@ const searchSchema = z.object({
 type SearchFormValues = z.infer<typeof searchSchema>
 
 interface SubjectResult {
+  _key: string;
   subject: string;
   marks: number;
 }
 
 interface StudentResult {
+  _id: string;
   studentName: string;
   fatherName: string;
+  year: string;
+  examType: string;
   className: string;
   roll: string;
   totalMarks: number;
   grade: string;
   results: SubjectResult[];
 }
+
+// Demo data - in a real app, this would come from a database
+const demoResults: StudentResult[] = [
+  {
+    _id: "res1",
+    studentName: "মোঃ আব্দুল্লাহ",
+    fatherName: "মোঃ আব্দুর রহমান",
+    year: "2024",
+    examType: "বার্ষিক পরীক্ষা",
+    className: "১০ম",
+    roll: "101",
+    totalMarks: 850,
+    grade: "A+",
+    results: [
+        { _key: 'r1', subject: 'বাংলা', marks: 85 },
+        { _key: 'r2', subject: 'ইংরেজি', marks: 88 },
+        { _key: 'r3', subject: 'গণিত', marks: 92 },
+        { _key: 'r4', subject: 'বিজ্ঞান', marks: 80 },
+    ]
+  },
+  {
+    _id: "res2",
+    studentName: "ফাতেমা আক্তার",
+    fatherName: "মোঃ জামাল উদ্দিন",
+    year: "2024",
+    examType: "বার্ষিক পরীক্ষা",
+    className: "১০ম",
+    roll: "102",
+    totalMarks: 790,
+    grade: "A",
+    results: [
+        { _key: 'r1', subject: 'বাংলা', marks: 78 },
+        { _key: 'r2', subject: 'ইংরেজি', marks: 82 },
+        { _key: 'r3', subject: 'গণিত', marks: 85 },
+    ]
+  },
+];
+
+async function searchResult(params: SearchFormValues): Promise<{ success: boolean, data: StudentResult | null, message?: string }> {
+    await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
+    try {
+        const result = demoResults.find(r => 
+            r.year === params.year &&
+            r.examType === params.examType &&
+            r.className === params.class &&
+            r.roll === params.roll
+        );
+        return { success: true, data: result || null };
+    } catch(error) {
+        console.error("Error searching result:", error);
+        return { success: false, data: null, message: "ফলাফল খুঁজতে গিয়ে একটি সমস্যা হয়েছে।" };
+    }
+}
+
 
 export default function ResultsPage() {
     const [result, setResult] = useState<StudentResult | null>(null)
@@ -60,12 +117,7 @@ export default function ResultsPage() {
         setResult(null);
         setError(null);
         
-        const response = await searchResult({
-            year: data.year,
-            examType: data.examType,
-            class: data.class,
-            roll: data.roll,
-        });
+        const response = await searchResult(data);
 
         if (response.success) {
             setResult(response.data);
@@ -219,8 +271,8 @@ export default function ResultsPage() {
                                                 </TableRow>
                                             </TableHeader>
                                             <TableBody>
-                                                {result.results.map((res, index) => (
-                                                    <TableRow key={index}>
+                                                {result.results.map((res) => (
+                                                    <TableRow key={res._key}>
                                                         <TableCell>{res.subject}</TableCell>
                                                         <TableCell className="text-right font-mono">{res.marks}</TableCell>
                                                     </TableRow>

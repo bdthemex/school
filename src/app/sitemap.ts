@@ -1,17 +1,14 @@
 import { MetadataRoute } from 'next'
-import { sanityClient } from '@/lib/sanity';
-
-type Notice = {
-  _id: string;
-  _updatedAt: string;
-}
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Fetch dynamic routes
-  const noticesQuery = `*[_type == "notice" && !(_id in path("drafts.**"))]{_id, _updatedAt}`;
-  const notices: Notice[] = await sanityClient.fetch(noticesQuery);
+export default function sitemap(): MetadataRoute.Sitemap {
+  // Hardcoded list of notices for the sitemap
+  const notices = [
+    { _id: 'n1', _updatedAt: new Date().toISOString() },
+    { _id: 'n2', _updatedAt: new Date().toISOString() },
+    { _id: 'n3', _updatedAt: new Date().toISOString() },
+  ];
 
   const noticeUrls = notices.map(notice => ({
     url: `${BASE_URL}/notices/${notice._id}`,

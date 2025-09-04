@@ -2,8 +2,6 @@
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { UserSquare } from 'lucide-react'
-import { sanityClient, urlFor } from '@/lib/sanity'
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -15,22 +13,40 @@ interface StaffMember {
   _id: string;
   name: string;
   designation: string;
-  image: SanityImageSource;
+  image: string;
 }
 
-async function getStaffMembers(): Promise<StaffMember[]> {
-  const query = `*[_type == "staff" && !(_id in path("drafts.**"))] | order(name asc)`;
-  try {
-    const staff = await sanityClient.fetch(query);
-    return staff || [];
-  } catch (error) {
-    console.error("Error fetching staff members from Sanity:", error);
-    return [];
-  }
+function getStaffMembers(): StaffMember[] {
+  return [
+    {
+      _id: "s1",
+      name: "মোঃ রহিম উদ্দিন",
+      designation: "অফিস সহকারী",
+      image: "https://picsum.photos/200/200?random=staff1"
+    },
+    {
+      _id: "s2",
+      name: "মোঃ করিম শেখ",
+      designation: "হিসাবরক্ষক",
+      image: "https://picsum.photos/200/200?random=staff2"
+    },
+    {
+      _id: "s3",
+      name: "জনাব আব্দুল্লাহ",
+      designation: "লাইব্রেরিয়ান",
+      image: "https://picsum.photos/200/200?random=staff3"
+    },
+    {
+      _id: "s4",
+      name: "জনাব আসাদ",
+      designation: "ল্যাব সহকারী",
+      image: "https://picsum.photos/200/200?random=staff4"
+    },
+  ];
 }
 
-export default async function StaffPage() {
-  const staffMembers = await getStaffMembers();
+export default function StaffPage() {
+  const staffMembers = getStaffMembers();
   return (
     <main className="flex-1">
         <div>
@@ -45,15 +61,11 @@ export default async function StaffPage() {
                     <CardContent className="p-8">
                         {staffMembers.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                                {staffMembers.map((staff, index) => {
-                                    const imageUrl = staff.image 
-                                    ? urlFor(staff.image).width(200).height(200).url()
-                                    : `https://picsum.photos/200/200?random=${index + 1}`;
-                                    return (
+                                {staffMembers.map((staff) => (
                                     <Card key={staff._id} className="text-center shadow-md hover:shadow-xl transition-shadow">
                                         <CardContent className="p-6">
                                         <Image
-                                            src={imageUrl}
+                                            src={staff.image}
                                             alt={staff.name}
                                             width={120}
                                             height={120}
@@ -63,11 +75,10 @@ export default async function StaffPage() {
                                         <p className="text-sm text-muted-foreground">{staff.designation}</p>
                                         </CardContent>
                                     </Card>
-                                    )
-                                })}
+                                ))}
                             </div>
                         ) : (
-                            <p className="text-center text-muted-foreground">কোনো কর্মচারীর তথ্য পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
+                            <p className="text-center text-muted-foreground">কোনো কর্মচারীর তথ্য পাওয়া যায়নি।</p>
                         )}
                     </CardContent>
                 </Card>

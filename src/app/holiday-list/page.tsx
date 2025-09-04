@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { sanityClient } from '@/lib/sanity'
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -25,19 +24,37 @@ interface Holiday {
   to: string;
 }
 
-async function getHolidays(): Promise<Holiday[]> {
-  const query = `*[_type == "holiday" && !(_id in path("drafts.**"))] | order(from asc)`;
-  try {
-    const holidays = await sanityClient.fetch(query);
-    return holidays || [];
-  } catch (error) {
-    console.error("Error fetching holidays from Sanity:", error);
-    return [];
-  }
+function getHolidays(): Holiday[] {
+  return [
+    {
+      _id: "h1",
+      occasion: "ঈদুল ফিতর",
+      from: "১০ এপ্রিল, ২০২৫",
+      to: "১৫ এপ্রিল, ২০২৫",
+    },
+    {
+      _id: "h2",
+      occasion: "ঈদুল আযহা",
+      from: "১৭ জুন, ২০২৫",
+      to: "২০ জুন, ২০২৫",
+    },
+    {
+      _id: "h3",
+      occasion: "গ্রীষ্মকালীন অবকাশ",
+      from: "০১ জুলাই, ২০২৫",
+      to: "১০ জুলাই, ২০২৫",
+    },
+    {
+      _id: "h4",
+      occasion: "শীতকালীন অবকাশ",
+      from: "২২ ডিসেম্বর, ২০২৫",
+      to: "৩১ ডিসেম্বর, ২০২৫",
+    },
+  ];
 }
 
-export default async function HolidayListPage() {
-  const holidays = await getHolidays();
+export default function HolidayListPage() {
+  const holidays = getHolidays();
   return (
     <main className="flex-1">
       <div>
@@ -77,7 +94,7 @@ export default async function HolidayListPage() {
                 </div>
                 </>
               ) : (
-                <p className="text-center text-muted-foreground">কোনো ছুটির তালিকা পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
+                <p className="text-center text-muted-foreground">কোনো ছুটির তালিকা পাওয়া যায়নি।</p>
               )}
             </CardContent>
           </Card>

@@ -2,8 +2,6 @@
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollText } from 'lucide-react'
-import { sanityClient, urlFor } from '@/lib/sanity'
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 import type { Metadata } from 'next';
 
 interface Milestone {
@@ -15,7 +13,7 @@ interface Milestone {
 interface HistoryContent {
   _id: string;
   title: string;
-  historicalImage: SanityImageSource;
+  historicalImage: string;
   journeyTitle: string;
   description1: string;
   description2: string;
@@ -23,51 +21,30 @@ interface HistoryContent {
   milestones: Milestone[];
 }
 
-async function getHistoryContent(): Promise<HistoryContent | null> {
-  const query = `*[_type == "historyPage" && !(_id in path("drafts.**"))][0]`;
-  try {
-    const content = await sanityClient.fetch(query);
-    return content;
-  } catch (error) {
-    console.error("Error fetching history page content from Sanity:", error);
-    return null;
-  }
+function getHistoryContent(): HistoryContent {
+  return {
+    _id: "historyPage",
+    title: "প্রতিষ্ঠানের গৌরবময় ইতিহাস",
+    historicalImage: "https://picsum.photos/600/800",
+    journeyTitle: "আমাদের পথচলা",
+    description1: "কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ সালে প্রতিষ্ঠিত হয়। এটি এই অঞ্চলের অন্যতম প্রাচীন এবং স্বনামধন্য একটি শিক্ষা প্রতিষ্ঠান। শিক্ষার আলো ছড়িয়ে দেওয়ার লক্ষ্যে এর যাত্রা শুরু হয়েছিল।",
+    description2: "১৯ মার্চ, ১৯৯১ সালে প্রতিষ্ঠানটি জাতীয়করণ করা হয়। বর্তমানে বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয় এবং প্রায় ৭১৭ জন শিক্ষার্থী অধ্যয়নরত আছে। অভিজ্ঞ শিক্ষকমণ্ডলীর মাধ্যমে পরিচালিত এই বিদ্যালয়ে বর্তমানে ১২ জন শিক্ষক কর্মরত রয়েছেন।",
+    milestonesTitle: "ঐতিহাসিক মাইলফলক",
+    milestones: [
+      { _key: "m1", year: 1832, event: "বিদ্যালয় প্রতিষ্ঠিত হয়।" },
+      { _key: "m2", year: 1991, event: "প্রতিষ্ঠানটি জাতীয়করণ করা হয়।" },
+      { _key: "m3", year: 2020, event: "অনলাইন ক্লাস কার্যক্রম শুরু হয়।" },
+    ],
+  };
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-    const content = await getHistoryContent();
-    const title = content?.title || "প্রতিষ্ঠানের ইতিহাস";
-    const description = content?.description1 ? content.description1.substring(0, 150) : 'আমাদের বিদ্যালয়ের গৌরবময় ইতিহাস সম্পর্কে জানুন।';
-    
-    return {
-      title,
-      description,
-    };
-  }
+export const metadata: Metadata = {
+    title: "প্রতিষ্ঠানের ইতিহাস",
+    description: 'আমাদের বিদ্যালয়ের গৌরবময় ইতিহাস সম্পর্কে জানুন।',
+};
 
-export default async function HistoryPage() {
-  const content = await getHistoryContent();
-
-  if (!content) {
-    return (
-       <main className="flex-1">
-        <div className="container mx-auto px-4 py-12">
-            <Card className="shadow-lg">
-                <CardHeader className="text-center bg-primary text-primary-foreground">
-                    <CardTitle className="text-3xl">প্রতিষ্ঠানের গৌরবময় ইতিহাস</CardTitle>
-                </CardHeader>
-                <CardContent className="p-8">
-                    <p className="text-center text-muted-foreground">এই পেইজের জন্য কোনো তথ্য পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
-                </CardContent>
-            </Card>
-        </div>
-      </main>
-    )
-  }
-
-  const imageUrl = content.historicalImage
-    ? urlFor(content.historicalImage).width(600).height(800).url()
-    : "https://picsum.photos/600/800";
+export default function HistoryPage() {
+  const content = getHistoryContent();
 
   return (
     <main className="flex-1">
@@ -81,7 +58,7 @@ export default async function HistoryPage() {
                 <div className="flex flex-col lg:flex-row gap-8 items-center">
                     <div className="lg:w-2/5">
                         <Image
-                            src={imageUrl}
+                            src={content.historicalImage}
                             alt="Historic photo of the school"
                             width={600}
                             height={800}

@@ -20,8 +20,6 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
-import { sanityClient, urlFor } from '@/lib/sanity';
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
 interface NavItem {
     _key: string;
@@ -30,13 +28,9 @@ interface NavItem {
     children?: NavItem[];
 }
 
-interface Navigation {
-    navItems: NavItem[];
-}
-
 interface SiteSettings {
-    logo: SanityImageSource;
-    headerBanner: SanityImageSource;
+    logo: string;
+    headerBanner: string;
 }
 
 // A map to get icons for navigation items
@@ -64,18 +58,62 @@ const iconMap: { [key: string]: React.ElementType } = {
 };
 
 
-async function getHeaderData(): Promise<{ nav: Navigation | null, settings: SiteSettings | null }> {
-    const query = `{
-        "nav": *[_type == "navigation" && _id == "headerNavigation"][0],
-        "settings": *[_type == "siteSettings" && _id == "siteSettings"][0]
-    }`;
-    try {
-        const data = await sanityClient.fetch(query);
-        return data;
-    } catch (error) {
-        console.error("Error fetching header data:", error);
-        return { nav: null, settings: null };
-    }
+function getHeaderData(): { navItems: NavItem[], settings: SiteSettings } {
+    const navItems: NavItem[] = [
+      { _key: "n1", label: "প্রচ্ছদ", href: "/" },
+      { 
+        _key: "n2", 
+        label: "আমাদের সম্পর্কে",
+        children: [
+          { _key: "s1", label: "আমাদের সম্পর্কে", href: "/about" },
+          { _key: "s2", label: "প্রতিষ্ঠানের ইতিহাস", href: "/history" },
+          { _key: "s3", label: "প্রধান শিক্ষকের বাণী", href: "/principals-message" },
+          { _key: "s4", label: "সহকারী প্রধান শিক্ষকের বাণী", href: "/vice-principals-message" },
+        ]
+      },
+      { 
+        _key: "n3", 
+        label: "শিক্ষার্থী",
+        children: [
+            { _key: "s5", label: 'ক্লাস রুটিন', href: '/class-routine' },
+            { _key: "s6", label: 'কৃতি শিক্ষার্থী', href: '/successful-students' },
+        ]
+      },
+      { 
+        _key: "n4", 
+        label: "শিক্ষকমন্ডলী",
+        children: [
+          { _key: "s7", label: "শিক্ষক পরিচিতি", href: "/teachers" },
+          { _key: "s8", label: "কর্মচারী পরিচিতি", href: "/staff" },
+        ]
+      },
+      { _key: "n5", label: "নোটিশ", href: "/notices" },
+      { _key: "n6", label: "পরীক্ষার ফলাফল", href: "/results" },
+      { 
+        _key: "n7", 
+        label: "গ্যালারি",
+        children: [
+          { _key: "s9", label: "ফটো গ্যালারি", href: "/gallery" },
+          { _key: "s10", label: "ভিডিও গ্যালারি", href: "/video-gallery" },
+        ]
+      },
+      { 
+        _key: "n8", 
+        label: "অন্যান্য",
+        children: [
+            { _key: "s11", label: "একাডেমিক ক্যালেন্ডার", href: "/academic-calendar" },
+            { _key: "s12", label: "ছুটির তালিকা", href: "/holiday-list" },
+        ]
+      },
+      { _key: "n9", label: "যোগাযোগ", href: "/contact" },
+    ];
+    
+    const settings: SiteSettings = {
+        logo: "https://picsum.photos/40/40?random=logo",
+        headerBanner: "https://picsum.photos/1280/250?random=banner",
+    };
+    
+    return { navItems, settings };
 }
 
 export default function Header() {
@@ -85,10 +123,9 @@ export default function Header() {
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
-    getHeaderData().then(data => {
-        if(data.nav) setNavLinks(data.nav.navItems);
-        if(data.settings) setSiteSettings(data.settings);
-    });
+    const { navItems, settings } = getHeaderData();
+    setNavLinks(navItems);
+    setSiteSettings(settings);
 
     const handleScroll = () => {
       if (window.scrollY > 200) {
@@ -119,7 +156,7 @@ export default function Header() {
         <div className="hidden md:block relative w-full h-[200px]">
             {siteSettings?.headerBanner ? (
                 <Image 
-                    src={urlFor(siteSettings.headerBanner).url()}
+                    src={siteSettings.headerBanner}
                     alt="Header Banner"
                     fill
                     style={{objectFit: 'cover'}}
@@ -186,7 +223,7 @@ export default function Header() {
             <div className="md:hidden flex justify-between items-center h-16 bg-[#0a2342] text-white px-4">
                   <Link href="/" className="flex items-center gap-2">
                     {siteSettings?.logo ? (
-                        <Image src={urlFor(siteSettings.logo).width(40).height(40).url()} alt="logo" width={40} height={40} />
+                        <Image src={siteSettings.logo} alt="logo" width={40} height={40} />
                     ) : (
                         <Home className="w-8 h-8" />
                     )}

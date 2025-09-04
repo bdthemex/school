@@ -1,7 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Video } from 'lucide-react'
-import { sanityClient } from '@/lib/sanity'
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -15,15 +14,19 @@ interface VideoItem {
   youtubeUrl: string;
 }
 
-async function getVideos(): Promise<VideoItem[]> {
-  const query = `*[_type == "videoItem" && !(_id in path("drafts.**"))] | order(_createdAt desc)`;
-  try {
-    const videos = await sanityClient.fetch(query);
-    return videos || [];
-  } catch (error) {
-    console.error("Error fetching videos from Sanity:", error);
-    return [];
-  }
+function getVideos(): VideoItem[] {
+  return [
+    {
+      _id: "v1",
+      title: "বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৩",
+      youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    },
+    {
+      _id: "v2",
+      title: "সাংস্কৃতিক অনুষ্ঠান ২০২২",
+      youtubeUrl: "https://www.youtube.com/watch?v=3JZ_D3ELwOQ",
+    },
+  ];
 }
 
 // Function to convert regular YouTube URL to embed URL
@@ -46,8 +49,8 @@ const getEmbedUrl = (url: string) => {
 }
 
 
-export default async function VideoGalleryPage() {
-  const videos = await getVideos();
+export default function VideoGalleryPage() {
+  const videos = getVideos();
 
   return (
     <main className="flex-1">
@@ -80,7 +83,7 @@ export default async function VideoGalleryPage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-center text-muted-foreground">কোনো ভিডিও পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
+                <p className="text-center text-muted-foreground">কোনো ভিডিও পাওয়া যায়নি।</p>
               )}
             </CardContent>
           </Card>

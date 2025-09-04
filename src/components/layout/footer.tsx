@@ -1,17 +1,11 @@
 
 import Link from 'next/link';
 import { Mail, MapPin, Phone, Star, Code, Plus } from 'lucide-react';
-import { sanityClient, urlFor } from '@/lib/sanity';
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
 interface NavItem {
   _key: string;
   label: string;
   href?: string;
-}
-
-interface Navigation {
-  navItems: NavItem[];
 }
 
 interface SiteSettings {
@@ -23,27 +17,39 @@ interface SiteSettings {
   facebookPageUrl: string;
 }
 
-async function getFooterData() {
-  const query = `{
-    "footerLinksCol1": *[_type == "navigation" && _id == "footerLinksCol1"][0],
-    "footerLinksCol2": *[_type == "navigation" && _id == "footerLinksCol2"][0],
-    "siteSettings": *[_type == "siteSettings" && _id == "siteSettings"][0]
-  }`;
-  try {
-    const data = await sanityClient.fetch(query);
-    return data;
-  } catch (error) {
-    console.error("Error fetching footer data from Sanity:", error);
-    return {
-      footerLinksCol1: null,
-      footerLinksCol2: null,
-      siteSettings: null,
-    };
-  }
+function getFooterData(): { footerLinksCol1: NavItem[], footerLinksCol2: NavItem[], siteSettings: SiteSettings } {
+  const footerLinksCol1: NavItem[] = [
+    { _key: "f1", label: "প্রতিষ্ঠানের ইতিহাস", href: "/history" },
+    { _key: "f2", label: "একাডেমিক ক্যালেন্ডার", href: "/academic-calendar" },
+    { _key: "f3", label: "যোগাযোগ", href: "/contact" },
+    { _key: "f4", label: "ছুটির দিন", href: "/holiday-list" },
+    { _key: "f5", label: "কৃতি শিক্ষার্থী", href: "/successful-students" },
+    { _key: "f6", label: "নোটিশ", href: "/notices" },
+  ];
+  
+  const footerLinksCol2: NavItem[] = [
+    { _key: "f7", label: "পরীক্ষার ফলাফল", href: "/results" },
+    { _key: "f8", label: "ফটো গ্যালারি", href: "/gallery" },
+    { _key: "f9", label: "ভিডিও গ্যালারি", href: "/video-gallery" },
+    { _key: "f10", label: "ক্লাস রুটিন", href: "/class-routine" },
+    { _key: "f11", label: "শিক্ষক পরিচিতি", href: "/teachers" },
+    { _key: "f12", label: "কর্মচারী পরিচিতি", href: "/staff" },
+  ];
+
+  const siteSettings: SiteSettings = {
+    footerAddress: "কেন্দুয়া বাজার, কেন্দুয়া, নেত্রকোণা, বাংলাদেশ।",
+    footerPhone: "০১৭১৭-৪০৭৫৮৫",
+    footerEmail: "joyharisprygovtschool@gmail.com",
+    eiinNumber: "113026",
+    schoolCode: "8300",
+    facebookPageUrl: "https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fkjhsgovt.school&tabs=timeline&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId",
+  };
+  
+  return { footerLinksCol1, footerLinksCol2, siteSettings };
 }
 
-export default async function Footer() {
-  const { footerLinksCol1, footerLinksCol2, siteSettings } = await getFooterData();
+export default function Footer() {
+  const { footerLinksCol1, footerLinksCol2, siteSettings } = getFooterData();
 
   return (
     <footer id="contact" className="bg-gray-800 text-white">
@@ -52,7 +58,7 @@ export default async function Footer() {
           <div>
             <h3 className="text-lg font-bold text-gray-300 mb-4 border-b border-green-700 pb-2">অন্যান্য লিংক</h3>
             <ul className="space-y-2">
-                {footerLinksCol1?.navItems?.map((link: NavItem) => (
+                {footerLinksCol1?.map((link: NavItem) => (
                     <li key={link._key}>
                         <Link href={link.href || '#'} className="hover:text-green-400 transition-colors flex items-center gap-2">
                             <Plus className='w-4 h-4' /> {link.label}
@@ -64,7 +70,7 @@ export default async function Footer() {
           
           <div className='md:mt-11'>
             <ul className="space-y-2">
-                {footerLinksCol2?.navItems?.map((link: NavItem) => (
+                {footerLinksCol2?.map((link: NavItem) => (
                     <li key={link._key}>
                         <Link href={link.href || '#'} className="hover:text-green-400 transition-colors flex items-center gap-2">
                              <Plus className='w-4 h-4' /> {link.label}

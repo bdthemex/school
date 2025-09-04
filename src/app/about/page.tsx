@@ -2,67 +2,44 @@
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Building, Target, BookOpen } from 'lucide-react'
-import { sanityClient, urlFor } from '@/lib/sanity'
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 import type { Metadata } from 'next';
 
 interface AboutContent {
   _id: string;
   schoolName: string;
   description: string;
-  mainImage: SanityImageSource;
+  mainImage: string;
   missionTitle: string;
   missionPoints: string[];
   academicTitle: string;
   academicDescription: string;
 }
 
-async function getAboutContent(): Promise<AboutContent | null> {
-  const query = `*[_type == "aboutPage" && !(_id in path("drafts.**"))][0]`;
-  try {
-    const content = await sanityClient.fetch(query);
-    return content;
-  } catch (error) {
-    console.error("Error fetching about page content from Sanity:", error);
-    return null;
-  }
-}
-
-export async function generateMetadata(): Promise<Metadata> {
-  const content = await getAboutContent();
-  const title = "আমাদের সম্পর্কে";
-  const description = content?.description ? content.description.substring(0, 150) : 'আমাদের বিদ্যালয় সম্পর্কে জানুন।';
-  
+function getAboutContent(): AboutContent {
   return {
-    title,
-    description,
+    _id: "aboutPage",
+    schoolName: "কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়",
+    description: "কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ সালে প্রতিষ্ঠিত হয়। এটি এই অঞ্চলের অন্যতম প্রাচীন এবং স্বনামধন্য একটি শিক্ষা প্রতিষ্ঠান। ১৯ মার্চ, ১৯৯১ সালে প্রতিষ্ঠানটি জাতীয়করণ করা হয়।",
+    mainImage: "https://picsum.photos/600/400",
+    missionTitle: "আমাদের লক্ষ্য",
+    missionPoints: [
+      "মানসম্মত শিক্ষা প্রদান।",
+      "শিক্ষার্থীদের নৈতিক বিকাশ।",
+      "আধুনিক প্রযুক্তির ব্যবহার।",
+      "শিক্ষার্থীদের সৃজনশীলতার বিকাশ ঘটানো।",
+    ],
+    academicTitle: "একাডেমিক কার্যক্রম",
+    academicDescription: "আমরা শিক্ষার্থীদের জন্য বিভিন্ন সহ-শিক্ষা কার্যক্রমের আয়োজন করি, যা তাদের শারীরিক ও মানসিক বিকাশে সহায়তা করে। খেলাধুলা, সাংস্কৃতিক অনুষ্ঠান এবং বিভিন্ন প্রতিযোগিতার মাধ্যমে তাদের প্রতিভা বিকাশের সুযোগ করে দেওয়া হয়।",
   };
 }
 
-export default async function AboutPage() {
-  const content = await getAboutContent();
+export const metadata: Metadata = {
+  title: "আমাদের সম্পর্কে",
+  description: 'আমাদের বিদ্যালয় সম্পর্কে জানুন।',
+};
 
-  if (!content) {
-    return (
-       <main className="flex-1">
-        <div className="container mx-auto px-4 py-12">
-            <Card className="shadow-lg">
-                <CardHeader className="text-center bg-primary text-primary-foreground rounded-t-lg">
-                    <CardTitle className="text-3xl">আমাদের সম্পর্কে</CardTitle>
-                </CardHeader>
-                <CardContent className="p-8">
-                    <p className="text-center text-muted-foreground">এই পেইজের জন্য কোনো তথ্য পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
-                </CardContent>
-            </Card>
-        </div>
-      </main>
-    )
-  }
-
-  const imageUrl = content.mainImage
-    ? urlFor(content.mainImage).width(600).height(400).url()
-    : "https://picsum.photos/600/400";
-
+export default function AboutPage() {
+  const content = getAboutContent();
 
   return (
     <main className="flex-1">
@@ -76,7 +53,7 @@ export default async function AboutPage() {
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="md:w-1/3">
                     <Image
-                        src={imageUrl}
+                        src={content.mainImage}
                         alt="School Building"
                         width={600}
                         height={400}

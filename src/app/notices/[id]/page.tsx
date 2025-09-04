@@ -1,5 +1,4 @@
 
-import { sanityClient } from '@/lib/sanity'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar } from 'lucide-react'
 import { notFound } from 'next/navigation'
@@ -12,19 +11,33 @@ interface Notice {
   details?: string;
 }
 
-async function getNotice(id: string): Promise<Notice | null> {
-  try {
-    const query = `*[_type == "notice" && _id == $id && !(_id in path("drafts.**"))][0]`;
-    const notice = await sanityClient.fetch(query, { id });
-    return notice;
-  } catch (error) {
-    console.error("Error fetching notice:", error)
-    return null
+const notices: Notice[] = [
+   {
+    _id: "n1",
+    title: "২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি",
+    date: "2024-11-01T10:00:00Z",
+    details: "২০২৫ শিক্ষাবর্ষে ৬ষ্ঠ থেকে ৯ম শ্রেণিতে ভর্তির জন্য আবেদন গ্রহণ শুরু হয়েছে। বিস্তারিত জানতে বিদ্যালয়ের অফিসে যোগাযোগ করুন।",
+  },
+   {
+    _id: "n2",
+    title: "বার্ষিক পরীক্ষার রুটিন",
+    date: "2024-11-15T10:00:00Z",
+    details: "বার্ষিক পরীক্ষার রুটিন প্রকাশ করা হয়েছে। সকল শিক্ষার্থীকে নোটিশ বোর্ড থেকে রুটিন সংগ্রহ করার জন্য অনুরোধ করা হলো।",
+  },
+  {
+    _id: "n3",
+    title: "অভিভাবক সমাবেশ",
+    date: "2024-12-01T10:00:00Z",
+    details: "আগামী ১০ই ডিসেম্বর, ২০২৪ তারিখে বিদ্যালয়ে একটি অভিভাবক সমাবেশ অনুষ্ঠিত হবে। সকল अभिभावকদের উপস্থিত থাকার জন্য অনুরোধ করা হলো।",
   }
+];
+
+function getNotice(id: string): Notice | null {
+  return notices.find(n => n._id === id) || null;
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-    const notice = await getNotice(params.id);
+export function generateMetadata({ params }: { params: { id: string } }): Metadata {
+    const notice = getNotice(params.id);
   
     if (!notice) {
       return {
@@ -38,8 +51,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     };
   }
 
-export default async function NoticeDetailsPage({ params }: { params: { id: string } }) {
-  const notice = await getNotice(params.id)
+export default function NoticeDetailsPage({ params }: { params: { id: string } }) {
+  const notice = getNotice(params.id)
 
   if (!notice) {
     notFound();

@@ -2,8 +2,6 @@
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Award } from 'lucide-react'
-import { sanityClient, urlFor } from '@/lib/sanity'
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -16,23 +14,41 @@ interface SuccessfulStudent {
   _id: string;
   name: string;
   achievement: string;
-  image: SanityImageSource;
+  image: string;
 }
 
-async function getSuccessfulStudents(): Promise<SuccessfulStudent[]> {
-  const query = `*[_type == "successfulStudent" && !(_id in path("drafts.**"))] | order(name asc)`;
-  try {
-    const students = await sanityClient.fetch(query);
-    return students || [];
-  } catch (error) {
-    console.error("Error fetching successful students from Sanity:", error);
-    return [];
-  }
+function getSuccessfulStudents(): SuccessfulStudent[] {
+  return [
+    {
+      _id: "ss1",
+      name: "আব্দুল্লাহ আল মামুন",
+      achievement: "ঢাকা বিশ্ববিদ্যালয়ে ভর্তি (২০২৩)",
+      image: "https://picsum.photos/200/200?random=student1"
+    },
+    {
+      _id: "ss2",
+      name: "ফাতেমা আক্তার",
+      achievement: "বুয়েটে ভর্তি (২০২৩)",
+      image: "https://picsum.photos/200/200?random=student2"
+    },
+    {
+      _id: "ss3",
+      name: "মোঃ সুমন আহমেদ",
+      achievement: "মেডিকেল কলেজে ভর্তি (২০২৩)",
+      image: "https://picsum.photos/200/200?random=student3"
+    },
+    {
+      _id: "ss4",
+      name: "তাসনিয়া তাবাসসুম",
+      achievement: "এসএসসিতে গোল্ডেন এ+",
+      image: "https://picsum.photos/200/200?random=student4"
+    },
+  ];
 }
 
 
-export default async function SuccessfulStudentsPage() {
-  const successfulStudents = await getSuccessfulStudents();
+export default function SuccessfulStudentsPage() {
+  const successfulStudents = getSuccessfulStudents();
   return (
     <main className="flex-1">
       <div>
@@ -51,15 +67,11 @@ export default async function SuccessfulStudentsPage() {
                     যারা তাদের মেধা ও শ্রম দিয়ে বিদ্যালয়ের মুখ উজ্জ্বল করেছে।
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                    {successfulStudents.map((student, index) => {
-                        const imageUrl = student.image 
-                          ? urlFor(student.image).width(200).height(200).url()
-                          : `https://picsum.photos/200/200?random=${index + 11}`;
-                      return (
+                    {successfulStudents.map((student) => (
                       <Card key={student._id} className="text-center shadow-md hover:shadow-xl transition-shadow">
                         <CardContent className="p-6">
                           <Image
-                            src={imageUrl}
+                            src={student.image}
                             alt={student.name}
                             width={120}
                             height={120}
@@ -69,11 +81,11 @@ export default async function SuccessfulStudentsPage() {
                           <p className="text-sm text-muted-foreground">{student.achievement}</p>
                         </CardContent>
                       </Card>
-                    )})}
+                    ))}
                   </div>
                 </>
               ) : (
-                <p className="text-center text-muted-foreground">কোনো কৃতি শিক্ষার্থীর তথ্য পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
+                <p className="text-center text-muted-foreground">কোনো কৃতি শিক্ষার্থীর তথ্য পাওয়া যায়নি।</p>
               )}
             </CardContent>
           </Card>

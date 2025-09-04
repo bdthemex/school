@@ -1,5 +1,4 @@
 
-import { sanityClient } from '@/lib/sanity';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Megaphone, Calendar, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -16,19 +15,28 @@ interface Notice {
   title: string;
 }
 
-async function getNotices(): Promise<Notice[]> {
-  try {
-    const query = `*[_type == "notice" && !(_id in path("drafts.**"))] | order(date desc)`;
-    const notices = await sanityClient.fetch(query);
-    return notices || [];
-  } catch (error) {
-    console.error("Error fetching notices:", error);
-    return [];
-  }
+function getNotices(): Notice[] {
+  return [
+    {
+      _id: "n1",
+      title: "২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি",
+      date: "2024-11-01T10:00:00Z",
+    },
+    {
+      _id: "n2",
+      title: "বার্ষিক পরীক্ষার রুটিন",
+      date: "2024-11-15T10:00:00Z",
+    },
+    {
+      _id: "n3",
+      title: "অভিভাবক সমাবেশ",
+      date: "2024-12-01T10:00:00Z",
+    }
+  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
-export default async function NoticesPage() {
-    const notices = await getNotices();
+export default function NoticesPage() {
+    const notices = getNotices();
 
   return (
     <main className="flex-1">

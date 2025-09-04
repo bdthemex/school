@@ -2,65 +2,37 @@
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { MessageSquare } from 'lucide-react'
-import { sanityClient, urlFor } from '@/lib/sanity'
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 import type { Metadata } from 'next';
 
 interface VicePrincipalMessage {
   _id: string;
   name: string;
   designation: string;
-  image: SanityImageSource;
+  image: string;
   quote: string;
   message1: string;
   message2: string;
 }
 
-async function getVicePrincipalMessage(): Promise<VicePrincipalMessage | null> {
-  const query = `*[_type == "vicePrincipalMessage" && !(_id in path("drafts.**"))][0]`;
-  try {
-    const message = await sanityClient.fetch(query);
-    return message;
-  } catch (error) {
-    console.error("Error fetching vice principal's message from Sanity:", error);
-    return null;
-  }
+function getVicePrincipalMessage(): VicePrincipalMessage {
+  return {
+    _id: "vicePrincipalMessage",
+    name: "মোঃ আব্দুল হামিদ",
+    designation: "সহকারী প্রধান শিক্ষক",
+    image: "https://picsum.photos/300/300?random=viceprincipal",
+    quote: "প্রযুক্তি ও শিক্ষার সমন্বয়ে আমরা এগিয়ে যাব।",
+    message1: "তথ্য প্রযুক্তির যুগে প্রবেশ করতে পেরে আমরা আনন্দিত। এর মাধ্যমে স্কুলের কার্যক্রম আরও গতিশীল হবে এবং স্বচ্ছতা নিশ্চিত হবে।",
+    message2: "আমাদের লক্ষ্য শিক্ষার্থীদের শুধু প্রাতিষ্ঠানিক শিক্ষায় নয়, বরং নৈতিক ও মানবিক মূল্যবোধেও শিক্ষিত করে তোলা।",
+  };
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-    const message = await getVicePrincipalMessage();
-    const title = "সহকারী প্রধান শিক্ষকের বাণী";
-    const description = message?.quote || 'সহকারী প্রধান শিক্ষকের বাণী পড়ুন।';
-    
-    return {
-      title,
-      description,
-    };
-  }
+export const metadata: Metadata = {
+    title: "সহকারী প্রধান শিক্ষকের বাণী",
+    description: 'সহকারী প্রধান শিক্ষকের বাণী পড়ুন।',
+};
 
-export default async function VicePrincipalsMessagePage() {
-    const message = await getVicePrincipalMessage();
-
-    if (!message) {
-      return (
-        <main className="flex-1">
-            <div className="container mx-auto px-4 py-12">
-                <Card className="shadow-lg">
-                    <CardHeader className="text-center bg-primary text-primary-foreground">
-                        <CardTitle className="text-3xl">সহকারী প্রধান শিক্ষকের বাণী</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-8">
-                        <p className="text-center text-muted-foreground">সহকারী প্রধান শিক্ষকের বাণী পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
-                    </CardContent>
-                </Card>
-            </div>
-        </main>
-      )
-  }
-
-    const imageUrl = message.image
-      ? urlFor(message.image).width(300).height(300).url()
-      : "https://picsum.photos/300/300";
+export default function VicePrincipalsMessagePage() {
+    const message = getVicePrincipalMessage();
 
   return (
     <main className="flex-1">
@@ -74,7 +46,7 @@ export default async function VicePrincipalsMessagePage() {
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="md:w-1/4 text-center">
                     <Image
-                        src={imageUrl}
+                        src={message.image}
                         alt="Vice Principal's Photo"
                         width={300}
                         height={300}
@@ -96,7 +68,8 @@ export default async function VicePrincipalsMessagePage() {
                         {message.message2}
                     </p>
                     <div className="text-right mt-6">
-                        <p className="font-bold text-primary">{message.designation}</p>
+                        <p className="font-bold text-primary">{message.name}</p>
+                        <p className="text-sm text-foreground">{message.designation}</p>
                         <p className="text-sm text-foreground">কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়</p>
                     </div>
                     </div>

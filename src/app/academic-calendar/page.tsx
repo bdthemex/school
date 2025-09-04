@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { sanityClient } from '@/lib/sanity'
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -23,19 +22,33 @@ interface CalendarEvent {
   event: string;
 }
 
-async function getCalendarEvents(): Promise<CalendarEvent[]> {
-  const query = `*[_type == "academicCalendarEvent" && !(_id in path("drafts.**"))] | order(date asc)`;
-  try {
-    const events = await sanityClient.fetch(query);
-    return events || [];
-  } catch (error) {
-    console.error("Error fetching calendar events from Sanity:", error);
-    return [];
-  }
+function getCalendarEvents(): CalendarEvent[] {
+  return [
+    {
+      _id: "event1",
+      date: "০১ জানুয়ারি, ২০২৫",
+      event: "নতুন বছরের ক্লাস শুরু",
+    },
+    {
+      _id: "event2",
+      date: "২১ ফেব্রুয়ারি, ২০২৫",
+      event: "শহীদ দিবস ও আন্তর্জাতিক মাতৃভাষা দিবস",
+    },
+    {
+      _id: "event3",
+      date: "২৬ মার্চ, ২০২৫",
+      event: "স্বাধীনতা দিবস",
+    },
+    {
+      _id: "event4",
+      date: "১৪ এপ্রিল, ২০২৫",
+      event: "পহেলা বৈশাখ",
+    }
+  ];
 }
 
-export default async function AcademicCalendarPage() {
-  const calendarEvents = await getCalendarEvents();
+export default function AcademicCalendarPage() {
+  const calendarEvents = getCalendarEvents();
 
   return (
     <main className="flex-1">
@@ -74,7 +87,7 @@ export default async function AcademicCalendarPage() {
                     </div>
                     </>
                 ) : (
-                    <p className="text-center text-muted-foreground">কোনো একাডেমিক ক্যালেন্ডার পাওয়া যায়নি। অনুগ্রহ করে Sanity Studio-তে তথ্য যোগ করুন।</p>
+                    <p className="text-center text-muted-foreground">কোনো একাডেমিক ক্যালেন্ডার পাওয়া যায়নি।</p>
                 )}
             </CardContent>
           </Card>
