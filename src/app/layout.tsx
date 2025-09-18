@@ -4,6 +4,7 @@ import './globals.css';
 import { Hind_Siliguri } from 'next/font/google'
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
+import ScrollToTopButton from '@/components/ui/scroll-to-top-button';
 
 const hindSiliguri = Hind_Siliguri({
   subsets: ['bengali'],
@@ -31,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="bn" className={`${hindSiliguri.variable}`}>
+    <html lang="bn" className={`${hindSiliguri.variable} scroll-smooth`}>
       <body className="font-body antialiased bg-muted/40">
         <Toaster />
         <main className="max-w-7xl mx-auto bg-background shadow-lg">
@@ -41,6 +42,7 @@ export default function RootLayout({
           </div>
         </main>
         <Footer />
+        <ScrollToTopButton />
       </body>
     </html>
   );
