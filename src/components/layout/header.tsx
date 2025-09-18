@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Home, Info, Users, Newspaper, ImageIcon as GalleryIcon, Phone, GraduationCap, ChevronDown, ChevronRight, MessageSquare, Video, BookOpen, Star, UserSquare, History, CalendarCheck, Plane } from 'lucide-react';
+import { Menu, Home, Info, Users, Newspaper, ImageIcon as GalleryIcon, Phone, GraduationCap, ChevronDown, ChevronRight, MessageSquare, Video, BookOpen, Star, UserSquare, History, CalendarCheck, Plane, FilePlus2 } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -59,6 +59,7 @@ const iconMap: { [key: string]: React.ElementType } = {
   'একাডেমিক ক্যালেন্ডার': CalendarCheck,
   'ছুটির তালিকা': Plane,
   'যোগাযোগ': Phone,
+  'নমুনা পৃষ্ঠা': FilePlus2,
 };
 
 

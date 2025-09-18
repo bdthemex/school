@@ -37,12 +37,11 @@ interface StudentResult {
   totalMarks: number;
   grade: string;
   results: SubjectResult[];
-  [key: string]: any; // Allow other properties like subject names
+  [key: string]: any;
 }
 
-// Function to extract subject results from the row object
 function extractSubjects(resultData: { [key: string]: any }): SubjectResult[] {
-    const predefinedColumns = ['studentName', 'examType', 'className', 'roll', 'totalMarks', 'grade', 'year', 'fatherName'];
+    const predefinedColumns = ['studentName', 'examType', 'className', 'roll', 'totalMarks', 'grade', 'year'];
     const subjects: SubjectResult[] = [];
     
     for (const key in resultData) {
@@ -105,7 +104,6 @@ export default function ResultsPage() {
             }
 
             try {
-                // Add a timestamp to bypass cache
                 const url = new URL(settings.googleSheetResultUrl);
                 url.searchParams.set('t', Date.now().toString());
 

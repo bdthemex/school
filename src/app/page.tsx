@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
-import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import type { LucideProps } from 'lucide-react';
 
 // Import data from JSON files
@@ -34,22 +34,20 @@ import homepageContentData from '@/data/homepage.json';
 import noticesData from '@/data/notices.json';
 import messagesData from '@/data/messages.json';
 
-// Dynamically import icons to fix the chunk loading issue
-const icons = {
-  Megaphone: lazy(() => import('lucide-react').then(module => ({ default: module.Megaphone }))),
-  Trophy: lazy(() => import('lucide-react').then(module => ({ default: module.Trophy }))),
-  Award: lazy(() => import('lucide-react').then(module => ({ default: module.Award }))),
-  Plane: lazy(() => import('lucide-react').then(module => ({ default: module.Plane }))),
-  Phone: lazy(() => import('lucide-react').then(module => ({ default: module.Phone }))),
-  GraduationCap: lazy(() => import('lucide-react').then(module => ({ default: module.GraduationCap }))),
-  Users: lazy(() => import('lucide-react').then(module => ({ default: module.Users }))),
-  Download: lazy(() => import('lucide-react').then(module => ({ default: module.Download }))),
-  BookMarked: lazy(() => import('lucide-react').then(module => ({ default: module.BookMarked }))),
-  // Add other icons used in homepage.json here if needed
-} as const;
+const IconMap = {
+    Megaphone,
+    Trophy,
+    Award,
+    Plane,
+    Phone,
+    GraduationCap,
+    Users,
+    Download,
+    BookMarked,
+    BookOpen
+};
 
-type IconName = keyof typeof icons;
-
+type IconName = keyof typeof IconMap;
 
 interface Notice {
   _id: string;
@@ -115,14 +113,10 @@ function getHomepageData(): { notices: Notice[], content: HomepageContent, facul
 }
 
 const IconComponent = ({ name, ...props }: { name: IconName } & LucideProps) => {
-    const Icon = icons[name];
+    const Icon = IconMap[name];
     if (!Icon) return <BookOpen {...props} />; // Fallback icon
 
-    return (
-        <Suspense fallback={<BookOpen {...props} />}>
-            <Icon {...props} />
-        </Suspense>
-    );
+    return <Icon {...props} />;
 };
 
 
