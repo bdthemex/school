@@ -67,3 +67,22 @@
   0% { transform: translateX(0%); }
   100% { transform: translateX(-100%); }
 }
+
+@media print {
+  body {
+    background-color: white;
+  }
+  .no-print, header, footer, .no-print * {
+    display: none !important;
+  }
+  .print-card {
+    box-shadow: none !important;
+    border: none !important;
+  }
+  #results-page .container {
+    padding: 0;
+    max-width: 100%;
+  }
+}
+
+    
