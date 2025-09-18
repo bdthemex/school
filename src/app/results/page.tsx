@@ -41,31 +41,19 @@ interface StudentResult {
 }
 
 // Function to extract subject results from the row object
-function extractSubjectsAndCalculate(resultData: { [key: string]: any }): { results: SubjectResult[], totalMarks: number, grade: string } {
+function extractSubjects(resultData: { [key: string]: any }): SubjectResult[] {
     const predefinedColumns = ['studentName', 'examType', 'className', 'roll', 'totalMarks', 'grade', 'year', 'fatherName'];
     const subjects: SubjectResult[] = [];
-    let totalMarks = 0;
     
     for (const key in resultData) {
         if (!predefinedColumns.includes(key) && resultData[key]) {
             const marks = parseInt(resultData[key], 10);
             if (!isNaN(marks)) {
                 subjects.push({ subject: key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' '), marks: resultData[key] });
-                totalMarks += marks;
             }
         }
     }
-
-    // Determine grade based on total marks
-    let grade = 'F';
-    if (totalMarks >= 800) grade = 'A+';
-    else if (totalMarks >= 700) grade = 'A';
-    else if (totalMarks >= 600) grade = 'A-';
-    else if (totalMarks >= 500) grade = 'B';
-    else if (totalMarks >= 400) grade = 'C';
-    else if (totalMarks >= 330) grade = 'D';
-
-    return { results: subjects, totalMarks, grade };
+    return subjects;
 }
 
 
@@ -79,15 +67,15 @@ async function searchResult(params: SearchFormValues, allResults: any[]): Promis
         );
 
         if (resultData) {
-            const { results, totalMarks, grade } = extractSubjectsAndCalculate(resultData);
+            const subjects = extractSubjects(resultData);
             const finalResult: StudentResult = {
                 studentName: resultData.studentName || '',
                 examType: resultData.examType || '',
                 className: resultData.className || '',
                 roll: resultData.roll || '',
-                totalMarks: totalMarks,
-                grade: grade,
-                results: results,
+                totalMarks: parseInt(resultData.totalMarks, 10) || 0,
+                grade: resultData.grade || 'N/A',
+                results: subjects,
             };
             return { success: true, data: finalResult };
         }
@@ -357,5 +345,3 @@ export default function ResultsPage() {
     </main>
   )
 }
-
-    
