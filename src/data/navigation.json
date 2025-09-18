@@ -42,7 +42,8 @@
       "label": "অন্যান্য",
       "children": [
         { "_key": "s11", "label": "একাডেমিক ক্যালেন্ডার", "href": "/academic-calendar" },
-        { "_key": "s12", "label": "ছুটির তালিকা", "href": "/holiday-list" }
+        { "_key": "s12", "label": "ছুটির তালিকা", "href": "/holiday-list" },
+        { "_key": "s13", "label": "নমুনা পৃষ্ঠা", "href": "/sample-page" }
       ]
     },
     { "_key": "n9", "label": "যোগাযোগ", "href": "/contact" }
