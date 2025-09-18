@@ -26,20 +26,30 @@ import {
 } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
-import React, { useState, useEffect, useRef, Suspense } from 'react';
-import * as LucideIcons from 'lucide-react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
+import type { LucideProps } from 'lucide-react';
 
 // Import data from JSON files
 import homepageContentData from '@/data/homepage.json';
 import noticesData from '@/data/notices.json';
 import messagesData from '@/data/messages.json';
 
-type IconName = keyof typeof LucideIcons;
+// Dynamically import icons to fix the chunk loading issue
+const icons = {
+  Megaphone: lazy(() => import('lucide-react').then(module => ({ default: module.Megaphone }))),
+  Trophy: lazy(() => import('lucide-react').then(module => ({ default: module.Trophy }))),
+  Award: lazy(() => import('lucide-react').then(module => ({ default: module.Award }))),
+  Plane: lazy(() => import('lucide-react').then(module => ({ default: module.Plane }))),
+  Phone: lazy(() => import('lucide-react').then(module => ({ default: module.Phone }))),
+  GraduationCap: lazy(() => import('lucide-react').then(module => ({ default: module.GraduationCap }))),
+  Users: lazy(() => import('lucide-react').then(module => ({ default: module.Users }))),
+  Download: lazy(() => import('lucide-react').then(module => ({ default: module.Download }))),
+  BookMarked: lazy(() => import('lucide-react').then(module => ({ default: module.BookMarked }))),
+  // Add other icons used in homepage.json here if needed
+} as const;
 
-const iconComponents: { [key in IconName]: React.ElementType } = {
-  ...LucideIcons,
-  // Add any custom icons here if needed
-};
+type IconName = keyof typeof icons;
+
 
 interface Notice {
   _id: string;
@@ -104,11 +114,17 @@ function getHomepageData(): { notices: Notice[], content: HomepageContent, facul
   return { notices, content, faculty };
 }
 
-const IconComponent = ({ name, ...props }: { name: IconName } & React.ComponentProps<"svg">) => {
-    const Icon = iconComponents[name] as React.ElementType;
+const IconComponent = ({ name, ...props }: { name: IconName } & LucideProps) => {
+    const Icon = icons[name];
     if (!Icon) return <BookOpen {...props} />; // Fallback icon
-    return <Icon {...props} />;
+
+    return (
+        <Suspense fallback={<BookOpen {...props} />}>
+            <Icon {...props} />
+        </Suspense>
+    );
 };
+
 
 export default function Home() {
     const [notices, setNotices] = useState<Notice[]>([]);
