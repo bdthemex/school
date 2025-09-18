@@ -3,52 +3,14 @@ import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Award } from 'lucide-react'
 import type { Metadata } from 'next';
+import successfulStudents from '@/data/successful-students.json';
 
 export const metadata: Metadata = {
   title: 'কৃতি শিক্ষার্থীবৃন্দ',
   description: 'আমাদের বিদ্যালয়ের কৃতি শিক্ষার্থীদের দেখুন যারা তাদের মেধা দিয়ে বিদ্যালয়ের মুখ উজ্জ্বল করেছে।',
 };
 
-
-interface SuccessfulStudent {
-  _id: string;
-  name: string;
-  achievement: string;
-  image: string;
-}
-
-function getSuccessfulStudents(): SuccessfulStudent[] {
-  return [
-    {
-      _id: "ss1",
-      name: "আব্দুল্লাহ আল মামুন",
-      achievement: "ঢাকা বিশ্ববিদ্যালয়ে ভর্তি (২০২৩)",
-      image: "https://picsum.photos/200/200?random=student1"
-    },
-    {
-      _id: "ss2",
-      name: "ফাতেমা আক্তার",
-      achievement: "বুয়েটে ভর্তি (২০২৩)",
-      image: "https://picsum.photos/200/200?random=student2"
-    },
-    {
-      _id: "ss3",
-      name: "মোঃ সুমন আহমেদ",
-      achievement: "মেডিকেল কলেজে ভর্তি (২০২৩)",
-      image: "https://picsum.photos/200/200?random=student3"
-    },
-    {
-      _id: "ss4",
-      name: "তাসনিয়া তাবাসসুম",
-      achievement: "এসএসসিতে গোল্ডেন এ+",
-      image: "https://picsum.photos/200/200?random=student4"
-    },
-  ];
-}
-
-
 export default function SuccessfulStudentsPage() {
-  const successfulStudents = getSuccessfulStudents();
   return (
     <main className="flex-1">
       <div>

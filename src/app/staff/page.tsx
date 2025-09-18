@@ -3,50 +3,14 @@ import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { UserSquare } from 'lucide-react'
 import type { Metadata } from 'next';
+import staffMembers from '@/data/staff.json';
 
 export const metadata: Metadata = {
   title: 'কর্মচারী পরিচিতি',
   description: 'আমাদের বিদ্যালয়ের নিবেদিতপ্রাণ কর্মচারীদের তালিকা।',
 };
 
-interface StaffMember {
-  _id: string;
-  name: string;
-  designation: string;
-  image: string;
-}
-
-function getStaffMembers(): StaffMember[] {
-  return [
-    {
-      _id: "s1",
-      name: "মোঃ রহিম উদ্দিন",
-      designation: "অফিস সহকারী",
-      image: "https://picsum.photos/200/200?random=staff1"
-    },
-    {
-      _id: "s2",
-      name: "মোঃ করিম শেখ",
-      designation: "হিসাবরক্ষক",
-      image: "https://picsum.photos/200/200?random=staff2"
-    },
-    {
-      _id: "s3",
-      name: "জনাব আব্দুল্লাহ",
-      designation: "লাইব্রেরিয়ান",
-      image: "https://picsum.photos/200/200?random=staff3"
-    },
-    {
-      _id: "s4",
-      name: "জনাব আসাদ",
-      designation: "ল্যাব সহকারী",
-      image: "https://picsum.photos/200/200?random=staff4"
-    },
-  ];
-}
-
 export default function StaffPage() {
-  const staffMembers = getStaffMembers();
   return (
     <main className="flex-1">
         <div>

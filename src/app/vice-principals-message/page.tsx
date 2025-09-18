@@ -3,28 +3,9 @@ import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { MessageSquare } from 'lucide-react'
 import type { Metadata } from 'next';
+import messages from '@/data/messages.json';
 
-interface VicePrincipalMessage {
-  _id: string;
-  name: string;
-  designation: string;
-  image: string;
-  quote: string;
-  message1: string;
-  message2: string;
-}
-
-function getVicePrincipalMessage(): VicePrincipalMessage {
-  return {
-    _id: "vicePrincipalMessage",
-    name: "মোঃ আব্দুল হামিদ",
-    designation: "সহকারী প্রধান শিক্ষক",
-    image: "https://picsum.photos/300/300?random=viceprincipal",
-    quote: "প্রযুক্তি ও শিক্ষার সমন্বয়ে আমরা এগিয়ে যাব।",
-    message1: "তথ্য প্রযুক্তির যুগে প্রবেশ করতে পেরে আমরা আনন্দিত। এর মাধ্যমে স্কুলের কার্যক্রম আরও গতিশীল হবে এবং স্বচ্ছতা নিশ্চিত হবে।",
-    message2: "আমাদের লক্ষ্য শিক্ষার্থীদের শুধু প্রাতিষ্ঠানিক শিক্ষায় নয়, বরং নৈতিক ও মানবিক মূল্যবোধেও শিক্ষিত করে তোলা।",
-  };
-}
+const message = messages.vicePrincipal;
 
 export const metadata: Metadata = {
     title: "সহকারী প্রধান শিক্ষকের বাণী",
@@ -32,8 +13,6 @@ export const metadata: Metadata = {
 };
 
 export default function VicePrincipalsMessagePage() {
-    const message = getVicePrincipalMessage();
-
   return (
     <main className="flex-1">
         <div>

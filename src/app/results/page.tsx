@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Label } from '@/components/ui/label'
+import demoResults from '@/data/results.json';
 
 const searchSchema = z.object({
   year: z.string().min(1, 'পরীক্ষার বছর দিন'),
@@ -40,43 +41,6 @@ interface StudentResult {
   grade: string;
   results: SubjectResult[];
 }
-
-// Demo data - in a real app, this would come from a database
-const demoResults: StudentResult[] = [
-  {
-    _id: "res1",
-    studentName: "মোঃ আব্দুল্লাহ",
-    fatherName: "মোঃ আব্দুর রহমান",
-    year: "2024",
-    examType: "বার্ষিক পরীক্ষা",
-    className: "১০ম",
-    roll: "101",
-    totalMarks: 850,
-    grade: "A+",
-    results: [
-        { _key: 'r1', subject: 'বাংলা', marks: 85 },
-        { _key: 'r2', subject: 'ইংরেজি', marks: 88 },
-        { _key: 'r3', subject: 'গণিত', marks: 92 },
-        { _key: 'r4', subject: 'বিজ্ঞান', marks: 80 },
-    ]
-  },
-  {
-    _id: "res2",
-    studentName: "ফাতেমা আক্তার",
-    fatherName: "মোঃ জামাল উদ্দিন",
-    year: "2024",
-    examType: "বার্ষিক পরীক্ষা",
-    className: "১০ম",
-    roll: "102",
-    totalMarks: 790,
-    grade: "A",
-    results: [
-        { _key: 'r1', subject: 'বাংলা', marks: 78 },
-        { _key: 'r2', subject: 'ইংরেজি', marks: 82 },
-        { _key: 'r3', subject: 'গণিত', marks: 85 },
-    ]
-  },
-];
 
 async function searchResult(params: SearchFormValues): Promise<{ success: boolean, data: StudentResult | null, message?: string }> {
     await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay

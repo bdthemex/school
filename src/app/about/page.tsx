@@ -1,37 +1,9 @@
 
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Building, Target, BookOpen } from 'lucide-react'
+import { Target, BookOpen } from 'lucide-react'
 import type { Metadata } from 'next';
-
-interface AboutContent {
-  _id: string;
-  schoolName: string;
-  description: string;
-  mainImage: string;
-  missionTitle: string;
-  missionPoints: string[];
-  academicTitle: string;
-  academicDescription: string;
-}
-
-function getAboutContent(): AboutContent {
-  return {
-    _id: "aboutPage",
-    schoolName: "কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়",
-    description: "কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ সালে প্রতিষ্ঠিত হয়। এটি এই অঞ্চলের অন্যতম প্রাচীন এবং স্বনামধন্য একটি শিক্ষা প্রতিষ্ঠান। ১৯ মার্চ, ১৯৯১ সালে প্রতিষ্ঠানটি জাতীয়করণ করা হয়।",
-    mainImage: "https://picsum.photos/600/400",
-    missionTitle: "আমাদের লক্ষ্য",
-    missionPoints: [
-      "মানসম্মত শিক্ষা প্রদান।",
-      "শিক্ষার্থীদের নৈতিক বিকাশ।",
-      "আধুনিক প্রযুক্তির ব্যবহার।",
-      "শিক্ষার্থীদের সৃজনশীলতার বিকাশ ঘটানো।",
-    ],
-    academicTitle: "একাডেমিক কার্যক্রম",
-    academicDescription: "আমরা শিক্ষার্থীদের জন্য বিভিন্ন সহ-শিক্ষা কার্যক্রমের আয়োজন করি, যা তাদের শারীরিক ও মানসিক বিকাশে সহায়তা করে। খেলাধুলা, সাংস্কৃতিক অনুষ্ঠান এবং বিভিন্ন প্রতিযোগিতার মাধ্যমে তাদের প্রতিভা বিকাশের সুযোগ করে দেওয়া হয়।",
-  };
-}
+import content from '@/data/about.json';
 
 export const metadata: Metadata = {
   title: "আমাদের সম্পর্কে",
@@ -39,8 +11,6 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  const content = getAboutContent();
-
   return (
     <main className="flex-1">
         <div>

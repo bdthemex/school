@@ -11,57 +11,14 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { Metadata } from 'next';
+import routines from '@/data/routines.json';
 
 export const metadata: Metadata = {
   title: 'ক্লাস রুটিন',
   description: 'সকল শ্রেণীর ক্লাস রুটিন দেখুন।',
 };
 
-interface DaySchedule {
-  _key: string;
-  day: string;
-  p1: string;
-  p2: string;
-  p3: string;
-  p4: string;
-}
-interface ClassRoutine {
-  _id: string;
-  className: string;
-  schedule: DaySchedule[];
-}
-
-function getClassRoutines(): ClassRoutine[] {
-  return [
-    {
-      _id: "cr1",
-      className: "১০ম শ্রেণী",
-      schedule: [
-        { _key: "d1", day: "রবিবার", p1: "বাংলা", p2: "ইংরেজি", p3: "গণিত", p4: "বিজ্ঞান" },
-        { _key: "d2", day: "সোমবার", p1: "বিজ্ঞান", p2: "গণিত", p3: "ইংরেজি", p4: "বাংলা" },
-        { _key: "d3", day: "মঙ্গলবার", p1: "বাংলা", p2: "ইংরেজি", p3: "গণিত", p4: "বিজ্ঞান" },
-        { _key: "d4", day: "বুধবার", p1: "বিজ্ঞান", p2: "গণিত", p3: "ইংরেজি", p4: "বাংলা" },
-        { _key: "d5", day: "বৃহস্পতিবার", p1: "বাংলা", p2: "ইংরেজি", p3: "গণিত", p4: "বিজ্ঞান" },
-      ],
-    },
-    {
-      _id: "cr2",
-      className: "৯ম শ্রেণী",
-      schedule: [
-        { _key: "d1", day: "রবিবার", p1: "ইংরেজি", p2: "বাংলা", p3: "বিজ্ঞান", p4: "গণিত" },
-        { _key: "d2", day: "সোমবার", p1: "গণিত", p2: "বিজ্ঞান", p3: "বাংলা", p4: "ইংরেজি" },
-        { _key: "d3", day: "মঙ্গলবার", p1: "ইংরেজি", p2: "বাংলা", p3: "বিজ্ঞান", p4: "গণিত" },
-        { _key: "d4", day: "বুধবার", p1: "গণিত", p2: "বিজ্ঞান", p3: "বাংলা", p4: "ইংরেজি" },
-        { _key: "d5", day: "বৃহস্পতিবার", p1: "ইংরেজি", p2: "বাংলা", p3: "বিজ্ঞান", p4: "গণিত" },
-      ],
-    },
-  ];
-}
-
-
 export default function ClassRoutinePage() {
-    const routines = getClassRoutines();
-
   return (
     <main className="flex-1">
         <div>

@@ -3,36 +3,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Megaphone, Calendar, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import noticesData from '@/data/notices.json';
 
 export const metadata: Metadata = {
   title: 'নোটিশ বোর্ড',
   description: 'বিদ্যালয়ের সর্বশেষ নোটিশ ও ঘোষণা দেখুন।',
 };
 
-interface Notice {
-  _id: string;
-  date: string;
-  title: string;
-}
-
-function getNotices(): Notice[] {
-  return [
-    {
-      _id: "n1",
-      title: "২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি",
-      date: "2024-11-01T10:00:00Z",
-    },
-    {
-      _id: "n2",
-      title: "বার্ষিক পরীক্ষার রুটিন",
-      date: "2024-11-15T10:00:00Z",
-    },
-    {
-      _id: "n3",
-      title: "অভিভাবক সমাবেশ",
-      date: "2024-12-01T10:00:00Z",
-    }
-  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+function getNotices() {
+  return noticesData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export default function NoticesPage() {

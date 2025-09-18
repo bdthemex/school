@@ -1,6 +1,8 @@
 
 import Link from 'next/link';
 import { Mail, MapPin, Phone, Star, Code, Plus } from 'lucide-react';
+import navigationData from '@/data/navigation.json';
+import settingsData from '@/data/settings.json';
 
 interface NavItem {
   _key: string;
@@ -18,33 +20,9 @@ interface SiteSettings {
 }
 
 function getFooterData(): { footerLinksCol1: NavItem[], footerLinksCol2: NavItem[], siteSettings: SiteSettings } {
-  const footerLinksCol1: NavItem[] = [
-    { _key: "f1", label: "প্রতিষ্ঠানের ইতিহাস", href: "/history" },
-    { _key: "f2", label: "একাডেমিক ক্যালেন্ডার", href: "/academic-calendar" },
-    { _key: "f3", label: "যোগাযোগ", href: "/contact" },
-    { _key: "f4", label: "ছুটির দিন", href: "/holiday-list" },
-    { _key: "f5", label: "কৃতি শিক্ষার্থী", href: "/successful-students" },
-    { _key: "f6", label: "নোটিশ", href: "/notices" },
-  ];
-  
-  const footerLinksCol2: NavItem[] = [
-    { _key: "f7", label: "পরীক্ষার ফলাফল", href: "/results" },
-    { _key: "f8", label: "ফটো গ্যালারি", href: "/gallery" },
-    { _key: "f9", label: "ভিডিও গ্যালারি", href: "/video-gallery" },
-    { _key: "f10", label: "ক্লাস রুটিন", href: "/class-routine" },
-    { _key: "f11", label: "শিক্ষক পরিচিতি", href: "/teachers" },
-    { _key: "f12", label: "কর্মচারী পরিচিতি", href: "/staff" },
-  ];
-
-  const siteSettings: SiteSettings = {
-    footerAddress: "কেন্দুয়া বাজার, কেন্দুয়া, নেত্রকোণা, বাংলাদেশ।",
-    footerPhone: "০১৭১৭-৪০৭৫৮৫",
-    footerEmail: "joyharisprygovtschool@gmail.com",
-    eiinNumber: "113026",
-    schoolCode: "8300",
-    facebookPageUrl: "https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fkjhsgovt.school&tabs=timeline&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId",
-  };
-  
+  const footerLinksCol1: NavItem[] = navigationData.footerCol1;
+  const footerLinksCol2: NavItem[] = navigationData.footerCol2;
+  const siteSettings: SiteSettings = settingsData;
   return { footerLinksCol1, footerLinksCol2, siteSettings };
 }
 

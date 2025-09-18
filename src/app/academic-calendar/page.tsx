@@ -10,46 +10,14 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { Metadata } from 'next';
+import calendarEvents from '@/data/calendar.json';
 
 export const metadata: Metadata = {
   title: 'একাডেমিক ক্যালেন্ডার',
   description: 'আমাদের বিদ্যালয়ের একাডেমিক ক্যালেন্ডার ও কার্যক্রমের তালিকা।',
 };
 
-interface CalendarEvent {
-  _id: string;
-  date: string;
-  event: string;
-}
-
-function getCalendarEvents(): CalendarEvent[] {
-  return [
-    {
-      _id: "event1",
-      date: "০১ জানুয়ারি, ২০২৫",
-      event: "নতুন বছরের ক্লাস শুরু",
-    },
-    {
-      _id: "event2",
-      date: "২১ ফেব্রুয়ারি, ২০২৫",
-      event: "শহীদ দিবস ও আন্তর্জাতিক মাতৃভাষা দিবস",
-    },
-    {
-      _id: "event3",
-      date: "২৬ মার্চ, ২০২৫",
-      event: "স্বাধীনতা দিবস",
-    },
-    {
-      _id: "event4",
-      date: "১৪ এপ্রিল, ২০২৫",
-      event: "পহেলা বৈশাখ",
-    }
-  ];
-}
-
 export default function AcademicCalendarPage() {
-  const calendarEvents = getCalendarEvents();
-
   return (
     <main className="flex-1">
       <div>

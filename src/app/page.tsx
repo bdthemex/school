@@ -19,13 +19,27 @@ import {
   ChevronRight,
   BookMarked,
   ClipboardList,
+  Trophy,
+  Award,
+  Plane,
+  Phone,
 } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import * as LucideIcons from 'lucide-react';
 
+// Import data from JSON files
+import homepageContentData from '@/data/homepage.json';
+import noticesData from '@/data/notices.json';
+import messagesData from '@/data/messages.json';
+
 type IconName = keyof typeof LucideIcons;
+
+const iconComponents: { [key in IconName]: React.ElementType } = {
+  ...LucideIcons,
+  // Add any custom icons here if needed
+};
 
 interface Notice {
   _id: string;
@@ -45,7 +59,7 @@ interface LinkItem {
     _key: string;
     title: string;
     href: string;
-    icon: IconName;
+    icon?: IconName;
 }
 
 interface HomepageContent {
@@ -67,86 +81,31 @@ interface HomepageContent {
 }
 
 function getHomepageData(): { notices: Notice[], content: HomepageContent, faculty: FacultyMessage[] } {
-  const notices = [
-    { _id: "n1", title: "২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি" },
-    { _id: "n2", title: "বার্ষিক পরীক্ষার রুটিন" },
-    { _id: "n3", title: "অভিভাবক সমাবেশ" },
-    { _id: "n4", title: "ক্রীড়া প্রতিযোগিতার ফলাফল" },
-    { _id: "n5", title: "বিজ্ঞান মেলার আয়োজন" },
-  ];
-
-  const content: HomepageContent = {
-    heroSlider: [
-      { 
-        _key: 'slide1', 
-        image: 'https://picsum.photos/1280/400?random=11',
-        caption: 'প্রতিষ্ঠানের দৃষ্টিনন্দন প্রধান ফটক', 
-        alt: 'School main gate',
-      },
-      { 
-        _key: 'slide2', 
-        image: 'https://picsum.photos/1280/400?random=12',
-        caption: 'বার্ষিক ক্রীড়া প্রতিযোগিতা', 
-        alt: 'Annual sports day',
-      },
-      { 
-        _key: 'slide3', 
-        image: 'https://picsum.photos/1280/400?random=13',
-        caption: 'সাংস্কৃতিক অনুষ্ঠানে শিক্ষার্থীদের অংশগ্রহণ', 
-        alt: 'Students in a cultural event',
-      },
-    ],
-    historySection: {
-      image: 'https://picsum.photos/400/300?random=history',
-      summary: "কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়টি ১৮৩২ সালে প্রতিষ্ঠিত হয়। এটি এই অঞ্চলের অন্যতম প্রাচীন এবং স্বনামধন্য একটি শিক্ষা প্রতিষ্ঠান। ১৯ মার্চ, ১৯৯১ সালে প্রতিষ্ঠানটি জাতীয়করণ করা হয়। বর্তমানে বিদ্যালয়ে ৬ষ্ঠ থেকে ১০ম শ্রেণি পর্যন্ত পাঠদান করা হয় এবং প্রায় ৭১৭ জন শিক্ষার্থী অধ্যয়নরত আছে। অভিজ্ঞ শিক্ষকমণ্ডলীর মাধ্যমে পরিচালিত এই বিদ্যালয়ে বর্তমানে ১২ জন শিক্ষক কর্মরত রয়েছেন। বিদ্যালয়টিতে একটি তিন তলা ভবন, একটি দোতলা ভবন, তিনটি হাফ বিল্ডিং, একটি খেলার মাঠ এবং দুইটি শহীদ মিনার রয়েছে।",
-      linkText: "বিস্তারিত পড়ুন",
-      linkHref: "/history",
-    },
-    importantLinks: [
-        { _key: 'il1', title: 'নোটিশ', href: '/notices', icon: 'Megaphone' },
-        { _key: 'il2', title: 'পরীক্ষার ফলাফল', href: '/results', icon: 'Trophy' },
-        { _key: 'il3', title: 'কৃতি শিক্ষার্থী', href: '/successful-students', icon: 'Award' },
-        { _key: 'il4', title: 'ছুটির দিন', href: '/holiday-list', icon: 'Plane' },
-        { _key: 'il5', title: 'যোগাযোগ', href: '/contact', icon: 'Phone' },
-    ],
-    resourceLinks: [
-        { _key: 'rl1', title: 'প্রধানমন্ত্রীর শিক্ষা সহায়তা ট্রাস্ট', href: '#' },
-        { _key: 'rl2', title: 'উপবৃত্তি তথ্য', href: '#' },
-        { _key: 'rl3', title: 'বৃত্তি তথ্য', href: '#' },
-    ],
-    officialLinks: [
-        { _key: 'ol1', title: 'ভর্তির আবেদন', href: '#' },
-        { _key: 'ol2', title: 'পরীক্ষার ফলাফল', href: '#' },
-        { _key: 'ol3', title: 'ময়মনসিংহ বোর্ড', href: '#' },
-        { _key: 'ol4', title: 'মাধ্যমিক ও উচ্চ শিক্ষা অধিদপ্তর', href: '#' },
-        { _key: 'ol5', title: 'ব্যানবেইস', href: '#' },
-    ],
-  };
-
+  const notices = noticesData.slice(0, 5).map(n => ({ _id: n._id, title: n.title }));
+  const content: HomepageContent = homepageContentData;
   const faculty: FacultyMessage[] = [
     {
       _id: "principal",
-      name: "মোঃ আব্দুল বাতেন",
+      name: messagesData.principal.name,
       title: "প্রধান শিক্ষকের বাণী",
       link: "/principals-message",
-      quote: "শিক্ষা জাতির মেরুদণ্ড। মানসম্মত শিক্ষাই একটি দেশের সার্বিক উন্নয়নের চাবিকাঠি।",
-      image: "https://picsum.photos/80/80?random=1",
+      quote: messagesData.principal.quote,
+      image: messagesData.principal.image,
     },
     {
       _id: "vice-principal",
-      name: "মোঃ আব্দুল হামিদ",
+      name: messagesData.vicePrincipal.name,
       title: "সহকারী প্রধান শিক্ষকের বাণী",
       link: "/vice-principals-message",
-      quote: "প্রযুক্তি ও শিক্ষার সমন্বয়ে আমরা এগিয়ে যাব।",
-      image: "https://picsum.photos/80/80?random=2",
+      quote: messagesData.vicePrincipal.quote,
+      image: messagesData.vicePrincipal.image,
     }
   ];
-
   return { notices, content, faculty };
 }
 
 const IconComponent = ({ name, ...props }: { name: IconName } & React.ComponentProps<"svg">) => {
-    const Icon = LucideIcons[name] as React.ElementType;
+    const Icon = iconComponents[name] as React.ElementType;
     if (!Icon) return <BookOpen {...props} />; // Fallback icon
     return <Icon {...props} />;
 };
@@ -172,6 +131,7 @@ export default function Home() {
 
     const marqueeText = "সরকারি ও বেসরকারি মাধ্যমিক বিদ্যালয়ে-২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি ও নিয়মাবলী সংক্রান্ত। আমাদের ওয়েবসাইটে আপনাকে স্বাগত…(সাইট ডেভেলপমেন্টের কাজ চলছে) *** "
 
+    // This data is now hardcoded as requested, to avoid Sanity dependency.
     const infoBoxes = [
         { 
             _key: 'ib1', 
@@ -221,6 +181,7 @@ export default function Home() {
             ]
         }
     ];
+
 
   return (
     <main>
@@ -397,7 +358,7 @@ export default function Home() {
                             key={link._key}
                             className="flex items-center gap-2 p-2.5 text-base font-medium border rounded-md hover:bg-muted transition-colors text-foreground"
                         >
-                             <IconComponent name={link.icon} className="w-4 h-4 text-primary" />
+                             {link.icon && <IconComponent name={link.icon} className="w-4 h-4 text-primary" />}
                              {link.title}
                         </Link>
                     ))}

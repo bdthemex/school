@@ -1,0 +1,22 @@
+{
+  "photos": [
+    { "_id": "g1", "alt": "বার্ষিক ক্রীড়া প্রতিযোগিতা", "image": "https://picsum.photos/600/400?random=1" },
+    { "_id": "g2", "alt": "বিজ্ঞান মেলা", "image": "https://picsum.photos/600/400?random=2" },
+    { "_id": "g3", "alt": "সাংস্কৃতিক অনুষ্ঠান", "image": "https://picsum.photos/600/400?random=3" },
+    { "_id": "g4", "alt": "পুরস্কার বিতরণী", "image": "https://picsum.photos/600/400?random=4" },
+    { "_id": "g5", "alt": "শ্রেণিকক্ষের পাঠদান", "image": "https://picsum.photos/600/400?random=5" },
+    { "_id": "g6", "alt": "школьный двор", "image": "https://picsum.photos/600/400?random=6" }
+  ],
+  "videos": [
+    {
+      "_id": "v1",
+      "title": "বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৩",
+      "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    },
+    {
+      "_id": "v2",
+      "title": "সাংস্কৃতিক অনুষ্ঠান ২০২২",
+      "youtubeUrl": "https://www.youtube.com/watch?v=3JZ_D3ELwOQ"
+    }
+  ]
+}

@@ -3,28 +3,9 @@ import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { MessageSquare } from 'lucide-react'
 import type { Metadata } from 'next';
+import messages from '@/data/messages.json';
 
-interface PrincipalMessage {
-  _id: string;
-  name: string;
-  designation: string;
-  image: string;
-  quote: string;
-  message1: string;
-  message2: string;
-}
-
-function getPrincipalMessage(): PrincipalMessage {
-  return {
-    _id: "principalMessage",
-    name: "মোঃ আব্দুল বাতেন",
-    designation: "প্রধান শিক্ষক",
-    image: "https://picsum.photos/300/300?random=principal",
-    quote: "শিক্ষা জাতির মেরুদণ্ড। মানসম্মত শিক্ষাই একটি দেশের সার্বিক উন্নয়নের চাবিকাঠি।",
-    message1: "দীর্ঘদিন পরে কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়ের ওয়েব সাইট সম্প্রতি খোলা হয়েছে। এটা বিদ্যালয়ের জন্য উজ্জ্বল মাইল ফলক। এর মাধ্যমে বিদ্যালয়ের সকল তথ্য সকলের কাছে দ্রুত পৌঁছে দেওয়া সম্ভব হবে।",
-    message2: "আমরা শিক্ষার্থীদের যুগোপযোগী শিক্ষায় শিক্ষিত করে তুলতে প্রতিশ্রুতিবদ্ধ। আমি সকল শিক্ষক, শিক্ষার্থী ও অভিভাবকদের সহযোগিতা কামনা করছি।",
-  };
-}
+const message = messages.principal;
 
 export const metadata: Metadata = {
     title: "প্রধান শিক্ষকের বাণী",
@@ -32,8 +13,6 @@ export const metadata: Metadata = {
 };
 
 export default function PrincipalsMessagePage() {
-  const message = getPrincipalMessage();
-
   return (
     <main className="flex-1">
         <div>

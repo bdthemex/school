@@ -2,32 +2,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Video } from 'lucide-react'
 import type { Metadata } from 'next';
+import galleries from '@/data/galleries.json';
 
 export const metadata: Metadata = {
   title: 'ভিডিও গ্যালারি',
   description: 'আমাদের বিদ্যালয়ের বিভিন্ন অনুষ্ঠানের ভিডিও সংগ্রহ।',
 };
-
-interface VideoItem {
-  _id: string;
-  title: string;
-  youtubeUrl: string;
-}
-
-function getVideos(): VideoItem[] {
-  return [
-    {
-      _id: "v1",
-      title: "বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৩",
-      youtubeUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    },
-    {
-      _id: "v2",
-      title: "সাংস্কৃতিক অনুষ্ঠান ২০২২",
-      youtubeUrl: "https://www.youtube.com/watch?v=3JZ_D3ELwOQ",
-    },
-  ];
-}
 
 // Function to convert regular YouTube URL to embed URL
 const getEmbedUrl = (url: string) => {
@@ -50,7 +30,7 @@ const getEmbedUrl = (url: string) => {
 
 
 export default function VideoGalleryPage() {
-  const videos = getVideos();
+  const videos = galleries.videos;
 
   return (
     <main className="flex-1">

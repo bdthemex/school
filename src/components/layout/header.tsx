@@ -21,6 +21,10 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 
+// Import data from JSON files
+import navigationData from '@/data/navigation.json';
+import settingsData from '@/data/settings.json';
+
 interface NavItem {
     _key: string;
     label: string;
@@ -59,60 +63,11 @@ const iconMap: { [key: string]: React.ElementType } = {
 
 
 function getHeaderData(): { navItems: NavItem[], settings: SiteSettings } {
-    const navItems: NavItem[] = [
-      { _key: "n1", label: "প্রচ্ছদ", href: "/" },
-      { 
-        _key: "n2", 
-        label: "আমাদের সম্পর্কে",
-        children: [
-          { _key: "s1", label: "আমাদের সম্পর্কে", href: "/about" },
-          { _key: "s2", label: "প্রতিষ্ঠানের ইতিহাস", href: "/history" },
-          { _key: "s3", label: "প্রধান শিক্ষকের বাণী", href: "/principals-message" },
-          { _key: "s4", label: "সহকারী প্রধান শিক্ষকের বাণী", href: "/vice-principals-message" },
-        ]
-      },
-      { 
-        _key: "n3", 
-        label: "শিক্ষার্থী",
-        children: [
-            { _key: "s5", label: 'ক্লাস রুটিন', href: '/class-routine' },
-            { _key: "s6", label: 'কৃতি শিক্ষার্থী', href: '/successful-students' },
-        ]
-      },
-      { 
-        _key: "n4", 
-        label: "শিক্ষকমন্ডলী",
-        children: [
-          { _key: "s7", label: "শিক্ষক পরিচিতি", href: "/teachers" },
-          { _key: "s8", label: "কর্মচারী পরিচিতি", href: "/staff" },
-        ]
-      },
-      { _key: "n5", label: "নোটিশ", href: "/notices" },
-      { _key: "n6", label: "পরীক্ষার ফলাফল", href: "/results" },
-      { 
-        _key: "n7", 
-        label: "গ্যালারি",
-        children: [
-          { _key: "s9", label: "ফটো গ্যালারি", href: "/gallery" },
-          { _key: "s10", label: "ভিডিও গ্যালারি", href: "/video-gallery" },
-        ]
-      },
-      { 
-        _key: "n8", 
-        label: "অন্যান্য",
-        children: [
-            { _key: "s11", label: "একাডেমিক ক্যালেন্ডার", href: "/academic-calendar" },
-            { _key: "s12", label: "ছুটির তালিকা", href: "/holiday-list" },
-        ]
-      },
-      { _key: "n9", label: "যোগাযোগ", href: "/contact" },
-    ];
-    
+    const navItems: NavItem[] = navigationData.header;
     const settings: SiteSettings = {
-        logo: "https://picsum.photos/40/40?random=logo",
-        headerBanner: "https://picsum.photos/1280/250?random=banner",
+        logo: settingsData.logo,
+        headerBanner: settingsData.headerBanner,
     };
-    
     return { navItems, settings };
 }
 
@@ -163,13 +118,7 @@ export default function Header() {
                     priority
                 />
             ) : (
-                 <Image 
-                    src="https://picsum.photos/1280/250"
-                    alt="Header Banner"
-                    fill
-                    style={{objectFit: 'cover'}}
-                    priority
-                />
+                 <div className="w-full h-full bg-muted animate-pulse" />
             )}
         </div>
         

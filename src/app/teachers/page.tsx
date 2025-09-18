@@ -3,66 +3,14 @@ import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, GraduationCap, Phone, Mail } from 'lucide-react'
 import type { Metadata } from 'next';
+import teachers from '@/data/teachers.json';
 
 export const metadata: Metadata = {
   title: 'শিক্ষক পরিচিতি',
   description: 'আমাদের বিদ্যালয়ের অভিজ্ঞ শিক্ষকমণ্ডলীর তালিকা।',
 };
 
-interface Teacher {
-  _id: string;
-  name: string;
-  designation: string;
-  subject: string;
-  phone?: string;
-  email?: string;
-  image: string;
-}
-
-function getTeachers(): Teacher[] {
-  return [
-    {
-      _id: "t1",
-      name: "মোঃ আব্দুল বাতেন",
-      designation: "প্রধান শিক্ষক",
-      subject: "গণিত",
-      phone: "01712345678",
-      email: "principal@example.com",
-      image: "https://picsum.photos/200/200?random=teacher1",
-    },
-    {
-      _id: "t2",
-      name: "মোঃ আব্দুল হামিদ",
-      designation: "সহকারী প্রধান শিক্ষক",
-      subject: "ইংরেজি",
-      phone: "01712345679",
-      email: "viceprincipal@example.com",
-      image: "https://picsum.photos/200/200?random=teacher2",
-    },
-    {
-      _id: "t3",
-      name: "জনাব রফিকুল ইসলাম",
-      designation: "সহকারী শিক্ষক",
-      subject: "বাংলা",
-      phone: "01712345680",
-      email: "rafiq@example.com",
-      image: "https://picsum.photos/200/200?random=teacher3",
-    },
-    {
-      _id: "t4",
-      name: "মিসেস আমেনা বেগম",
-      designation: "সহকারী শিক্ষক",
-      subject: "বিজ্ঞান",
-      phone: "01712345681",
-      email: "amena@example.com",
-      image: "https://picsum.photos/200/200?random=teacher4",
-    },
-  ];
-}
-
 export default function TeachersPage() {
-  const teachers = getTeachers();
-
   return (
     <main className="flex-1">
         <div>

@@ -2,32 +2,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Phone, Mail, MapPin } from 'lucide-react'
 import type { Metadata } from 'next';
+import settings from '@/data/settings.json';
 
 export const metadata: Metadata = {
   title: 'যোগাযোগ',
   description: 'আমাদের সাথে যোগাযোগ করুন। ঠিকানা, ফোন নম্বর এবং ইমেইল।',
 };
 
-interface SiteSettings {
-  footerAddress: string;
-  footerPhone: string;
-  footerEmail: string;
-  googleMapsUrl: string;
-}
-
-function getSiteSettings(): SiteSettings {
-  return {
-    footerAddress: "কেন্দুয়া বাজার, কেন্দুয়া, নেত্রকোণা, বাংলাদেশ।",
-    footerPhone: "০১৭১৭-৪০৭৫৮৫",
-    footerEmail: "joyharisprygovtschool@gmail.com",
-    googleMapsUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3625.617985440232!2d90.84252431500001!3d24.671089284143213!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3756c368e82a9391%3A0x678c1561f743c72!2sKendua%20Joyhari%20Spry%20Govt.%20High%20School!5e0!3m2!1sen!2sbd!4v1678886543210!5m2!1sen!2sbd",
-  };
-}
-
-
 export default function ContactPage() {
-  const settings = getSiteSettings();
-
   return (
     <main className="flex-1">
         <div>

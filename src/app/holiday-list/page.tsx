@@ -10,51 +10,14 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { Metadata } from 'next';
+import holidays from '@/data/holidays.json';
 
 export const metadata: Metadata = {
   title: 'ছুটির তালিকা',
   description: 'বিদ্যালয়ের বাৎসরিক ছুটির তালিকা দেখুন।',
 };
 
-
-interface Holiday {
-  _id: string;
-  occasion: string;
-  from: string;
-  to: string;
-}
-
-function getHolidays(): Holiday[] {
-  return [
-    {
-      _id: "h1",
-      occasion: "ঈদুল ফিতর",
-      from: "১০ এপ্রিল, ২০২৫",
-      to: "১৫ এপ্রিল, ২০২৫",
-    },
-    {
-      _id: "h2",
-      occasion: "ঈদুল আযহা",
-      from: "১৭ জুন, ২০২৫",
-      to: "২০ জুন, ২০২৫",
-    },
-    {
-      _id: "h3",
-      occasion: "গ্রীষ্মকালীন অবকাশ",
-      from: "০১ জুলাই, ২০২৫",
-      to: "১০ জুলাই, ২০২৫",
-    },
-    {
-      _id: "h4",
-      occasion: "শীতকালীন অবকাশ",
-      from: "২২ ডিসেম্বর, ২০২৫",
-      to: "৩১ ডিসেম্বর, ২০২৫",
-    },
-  ];
-}
-
 export default function HolidayListPage() {
-  const holidays = getHolidays();
   return (
     <main className="flex-1">
       <div>
