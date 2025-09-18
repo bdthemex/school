@@ -34,44 +34,60 @@ interface StudentResult {
   examType: string;
   className: string;
   roll: string;
-  totalMarks: string;
+  totalMarks: number;
   grade: string;
   results: SubjectResult[];
   [key: string]: any; // Allow other properties like subject names
 }
 
 // Function to extract subject results from the row object
-function extractSubjects(resultData: { [key: string]: any }): SubjectResult[] {
-    const predefinedColumns = ['studentName', 'examType', 'className', 'roll', 'totalMarks', 'grade', 'year'];
+function extractSubjectsAndCalculate(resultData: { [key: string]: any }): { results: SubjectResult[], totalMarks: number, grade: string } {
+    const predefinedColumns = ['studentName', 'examType', 'className', 'roll', 'totalMarks', 'grade', 'year', 'fatherName'];
     const subjects: SubjectResult[] = [];
+    let totalMarks = 0;
     
     for (const key in resultData) {
         if (!predefinedColumns.includes(key) && resultData[key]) {
-            subjects.push({ subject: key.charAt(0).toUpperCase() + key.slice(1), marks: resultData[key] });
+            const marks = parseInt(resultData[key], 10);
+            if (!isNaN(marks)) {
+                subjects.push({ subject: key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' '), marks: resultData[key] });
+                totalMarks += marks;
+            }
         }
     }
-    return subjects;
+
+    // Determine grade based on total marks
+    let grade = 'F';
+    if (totalMarks >= 800) grade = 'A+';
+    else if (totalMarks >= 700) grade = 'A';
+    else if (totalMarks >= 600) grade = 'A-';
+    else if (totalMarks >= 500) grade = 'B';
+    else if (totalMarks >= 400) grade = 'C';
+    else if (totalMarks >= 330) grade = 'D';
+
+    return { results: subjects, totalMarks, grade };
 }
 
 
 async function searchResult(params: SearchFormValues, allResults: any[]): Promise<{ success: boolean, data: StudentResult | null, message?: string }> {
     try {
         const resultData = allResults.find(r => 
-            (params.year ? r.year === params.year : true) && // Year might not exist in sheet, so it's optional
+            (params.year ? r.year === params.year : true) &&
             r.examType === params.examType &&
             r.className === params.class &&
             r.roll === params.roll
         );
 
         if (resultData) {
+            const { results, totalMarks, grade } = extractSubjectsAndCalculate(resultData);
             const finalResult: StudentResult = {
                 studentName: resultData.studentName || '',
                 examType: resultData.examType || '',
                 className: resultData.className || '',
                 roll: resultData.roll || '',
-                totalMarks: resultData.totalMarks || '0',
-                grade: resultData.grade || 'N/A',
-                results: extractSubjects(resultData),
+                totalMarks: totalMarks,
+                grade: grade,
+                results: results,
             };
             return { success: true, data: finalResult };
         }
@@ -341,3 +357,5 @@ export default function ResultsPage() {
     </main>
   )
 }
+
+    
