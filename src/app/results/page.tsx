@@ -16,7 +16,6 @@ import { Label } from '@/components/ui/label'
 import settings from '@/data/settings.json';
 
 const searchSchema = z.object({
-  year: z.string().min(1, 'পরীক্ষার বছর দিন'),
   examType: z.string().min(1, 'পরীক্ষার নাম নির্বাচন করুন'),
   class: z.string().min(1, 'শ্রেণী নির্বাচন করুন'),
   roll: z.string().min(1, 'রোল নম্বর দিন'),
@@ -59,7 +58,6 @@ function extractSubjects(resultData: { [key: string]: any }): SubjectResult[] {
 async function searchResult(params: SearchFormValues, allResults: any[]): Promise<{ success: boolean, data: StudentResult | null, message?: string }> {
     try {
         const resultData = allResults.find(r => 
-            (params.year ? r.year === params.year : true) &&
             r.examType === params.examType &&
             r.className === params.class &&
             r.roll === params.roll
@@ -137,7 +135,6 @@ export default function ResultsPage() {
     const { control, handleSubmit, formState: { errors } } = useForm<SearchFormValues>({
         resolver: zodResolver(searchSchema),
         defaultValues: {
-            year: new Date().getFullYear().toString(),
             examType: '',
             class: '',
             roll: ''
@@ -189,26 +186,6 @@ export default function ResultsPage() {
                                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                                     <div className="grid sm:grid-cols-2 gap-4">
                                         <div>
-                                            <Label htmlFor="year">পরীক্ষার বছর</Label>
-                                            <Controller
-                                                name="year"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                        <SelectTrigger id="year">
-                                                            <SelectValue placeholder="বছর নির্বাচন করুন" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="2025">২০২৫</SelectItem>
-                                                            <SelectItem value="2024">২০২৪</SelectItem>
-                                                            <SelectItem value="2023">২০২৩</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                )}
-                                            />
-                                            {errors.year && <p className="text-red-500 text-xs mt-1">{errors.year.message}</p>}
-                                        </div>
-                                        <div>
                                             <Label htmlFor="examType">পরীক্ষার নাম</Label>
                                              <Controller
                                                 name="examType"
@@ -251,7 +228,7 @@ export default function ResultsPage() {
                                             />
                                             {errors.class && <p className="text-red-500 text-xs mt-1">{errors.class.message}</p>}
                                         </div>
-                                        <div>
+                                        <div className="sm:col-span-2">
                                             <Label htmlFor="roll">রোল নম্বর</Label>
                                             <Controller
                                                 name="roll"
@@ -343,3 +320,5 @@ export default function ResultsPage() {
     </main>
   )
 }
+
+    
