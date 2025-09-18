@@ -31,7 +31,6 @@ interface SubjectResult {
 
 interface StudentResult {
   studentName: string;
-  fatherName: string;
   year: string;
   examType: string;
   className: string;
@@ -274,8 +273,8 @@ export default function ResultsPage() {
                                                 <strong>শিক্ষার্থীর নাম:</strong> {result.studentName}
                                             </p>
                                             <p className="flex items-center gap-2">
-                                                <User className="w-4 h-4 text-muted-foreground"/>
-                                                <strong>পিতার নাম:</strong> {result.fatherName}
+                                                <ChevronsRight className="w-4 h-4 text-muted-foreground"/>
+                                                <strong>পরীক্ষার নাম:</strong> {result.examType} ({result.year})
                                             </p>
                                         </div>
                                         <div className="space-y-2">
