@@ -1,10 +1,11 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
+import Papa from 'papaparse'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Trophy, Search, FileText, User, ChevronsRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -12,7 +13,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Label } from '@/components/ui/label'
-import demoResults from '@/data/results.json';
+import settings from '@/data/settings.json';
 
 const searchSchema = z.object({
   year: z.string().min(1, 'পরীক্ষার বছর দিন'),
@@ -24,13 +25,11 @@ const searchSchema = z.object({
 type SearchFormValues = z.infer<typeof searchSchema>
 
 interface SubjectResult {
-  _key: string;
   subject: string;
   marks: number;
 }
 
 interface StudentResult {
-  _id: string;
   studentName: string;
   fatherName: string;
   year: string;
@@ -42,16 +41,35 @@ interface StudentResult {
   results: SubjectResult[];
 }
 
-async function searchResult(params: SearchFormValues): Promise<{ success: boolean, data: StudentResult | null, message?: string }> {
-    await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
+// Function to parse the results string (e.g., "বাংলা:85,ইংরেজি:88")
+function parseResults(resultsString: string): SubjectResult[] {
+    if (!resultsString) return [];
+    return resultsString.split(',').map(pair => {
+        const [subject, marks] = pair.split(':');
+        return { subject, marks: Number(marks) || 0 };
+    });
+}
+
+
+async function searchResult(params: SearchFormValues, allResults: any[]): Promise<{ success: boolean, data: StudentResult | null, message?: string }> {
     try {
-        const result = demoResults.find(r => 
+        const resultData = allResults.find(r => 
             r.year === params.year &&
             r.examType === params.examType &&
             r.className === params.class &&
             r.roll === params.roll
         );
-        return { success: true, data: result || null };
+
+        if (resultData) {
+            const finalResult: StudentResult = {
+                ...resultData,
+                totalMarks: Number(resultData.totalMarks) || 0,
+                results: parseResults(resultData.results || '')
+            }
+            return { success: true, data: finalResult };
+        }
+
+        return { success: true, data: null };
     } catch(error) {
         console.error("Error searching result:", error);
         return { success: false, data: null, message: "ফলাফল খুঁজতে গিয়ে একটি সমস্যা হয়েছে।" };
@@ -60,10 +78,48 @@ async function searchResult(params: SearchFormValues): Promise<{ success: boolea
 
 
 export default function ResultsPage() {
+    const [allResults, setAllResults] = useState<any[]>([]);
     const [result, setResult] = useState<StudentResult | null>(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [isFetchingSheet, setIsFetchingSheet] = useState(true);
     const [searched, setSearched] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchResults = async () => {
+            if (!settings.googleSheetResultUrl) {
+                setError("ফলাফলের জন্য গুগল শীট লিঙ্ক সেট করা নেই।");
+                setIsFetchingSheet(false);
+                return;
+            }
+
+            try {
+                const response = await fetch(settings.googleSheetResultUrl);
+                if (!response.ok) {
+                    throw new Error("Google Sheet থেকে ডেটা আনা সম্ভব হয়নি।");
+                }
+                const csvText = await response.text();
+                
+                Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        setAllResults(results.data);
+                        setIsFetchingSheet(false);
+                    },
+                    error: (err) => {
+                        throw err;
+                    }
+                });
+            } catch (e) {
+                console.error("Error fetching or parsing Google Sheet:", e);
+                setError("ফলাফল লোড করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
+                setIsFetchingSheet(false);
+            }
+        };
+
+        fetchResults();
+    }, []);
 
     const { control, handleSubmit, formState: { errors } } = useForm<SearchFormValues>({
         resolver: zodResolver(searchSchema),
@@ -81,7 +137,7 @@ export default function ResultsPage() {
         setResult(null);
         setError(null);
         
-        const response = await searchResult(data);
+        const response = await searchResult(data, allResults);
 
         if (response.success) {
             setResult(response.data);
@@ -114,6 +170,9 @@ export default function ResultsPage() {
                                 <CardDescription>অনুগ্রহ করে নিচের তথ্যগুলো পূরণ করে ফলাফল দেখুন।</CardDescription>
                             </CardHeader>
                             <CardContent>
+                                {isFetchingSheet ? (
+                                     <p className="text-center text-muted-foreground">ফলাফলের ডেটাবেস লোড হচ্ছে...</p>
+                                ) : (
                                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                                     <div className="grid sm:grid-cols-2 gap-4">
                                         <div>
@@ -127,6 +186,7 @@ export default function ResultsPage() {
                                                             <SelectValue placeholder="বছর নির্বাচন করুন" />
                                                         </SelectTrigger>
                                                         <SelectContent>
+                                                            <SelectItem value="2025">২০২৫</SelectItem>
                                                             <SelectItem value="2024">২০২৪</SelectItem>
                                                             <SelectItem value="2023">২০২৩</SelectItem>
                                                         </SelectContent>
@@ -148,6 +208,8 @@ export default function ResultsPage() {
                                                         <SelectContent>
                                                             <SelectItem value="বার্ষিক পরীক্ষা">বার্ষিক পরীক্ষা</SelectItem>
                                                             <SelectItem value="অর্ধ-বার্ষিক পরীক্ষা">অর্ধ-বার্ষিক পরীক্ষা</SelectItem>
+                                                            <SelectItem value="প্রাক-নির্বাচনী">প্রাক-নির্বাচনী</SelectItem>
+                                                            <SelectItem value="নির্বাচনী">নির্বাচনী</SelectItem>
                                                         </SelectContent>
                                                     </Select>
                                                 )}
@@ -186,10 +248,11 @@ export default function ResultsPage() {
                                             {errors.roll && <p className="text-red-500 text-xs mt-1">{errors.roll.message}</p>}
                                         </div>
                                     </div>
-                                    <Button type="submit" className="w-full" disabled={isLoading}>
+                                    <Button type="submit" className="w-full" disabled={isLoading || isFetchingSheet}>
                                         {isLoading ? 'অনুসন্ধান করা হচ্ছে...' : 'ফলাফল দেখুন'}
                                     </Button>
                                 </form>
+                                )}
                             </CardContent>
                         </Card>
                         
@@ -235,8 +298,8 @@ export default function ResultsPage() {
                                                 </TableRow>
                                             </TableHeader>
                                             <TableBody>
-                                                {result.results.map((res) => (
-                                                    <TableRow key={res._key}>
+                                                {result.results.map((res, index) => (
+                                                    <TableRow key={index}>
                                                         <TableCell>{res.subject}</TableCell>
                                                         <TableCell className="text-right font-mono">{res.marks}</TableCell>
                                                     </TableRow>
