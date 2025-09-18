@@ -26,34 +26,38 @@ type SearchFormValues = z.infer<typeof searchSchema>
 
 interface SubjectResult {
   subject: string;
-  marks: number;
+  marks: string;
 }
 
 interface StudentResult {
   studentName: string;
-  year: string;
   examType: string;
   className: string;
   roll: string;
-  totalMarks: number;
+  totalMarks: string;
   grade: string;
   results: SubjectResult[];
+  [key: string]: any; // Allow other properties like subject names
 }
 
-// Function to parse the results string (e.g., "বাংলা:85,ইংরেজি:88")
-function parseResults(resultsString: string): SubjectResult[] {
-    if (!resultsString) return [];
-    return resultsString.split(',').map(pair => {
-        const [subject, marks] = pair.split(':');
-        return { subject, marks: Number(marks) || 0 };
-    });
+// Function to extract subject results from the row object
+function extractSubjects(resultData: { [key: string]: any }): SubjectResult[] {
+    const predefinedColumns = ['studentName', 'examType', 'className', 'roll', 'totalMarks', 'grade', 'year'];
+    const subjects: SubjectResult[] = [];
+    
+    for (const key in resultData) {
+        if (!predefinedColumns.includes(key) && resultData[key]) {
+            subjects.push({ subject: key.charAt(0).toUpperCase() + key.slice(1), marks: resultData[key] });
+        }
+    }
+    return subjects;
 }
 
 
 async function searchResult(params: SearchFormValues, allResults: any[]): Promise<{ success: boolean, data: StudentResult | null, message?: string }> {
     try {
         const resultData = allResults.find(r => 
-            r.year === params.year &&
+            (params.year ? r.year === params.year : true) && // Year might not exist in sheet, so it's optional
             r.examType === params.examType &&
             r.className === params.class &&
             r.roll === params.roll
@@ -61,10 +65,14 @@ async function searchResult(params: SearchFormValues, allResults: any[]): Promis
 
         if (resultData) {
             const finalResult: StudentResult = {
-                ...resultData,
-                totalMarks: Number(resultData.totalMarks) || 0,
-                results: parseResults(resultData.results || '')
-            }
+                studentName: resultData.studentName || '',
+                examType: resultData.examType || '',
+                className: resultData.className || '',
+                roll: resultData.roll || '',
+                totalMarks: resultData.totalMarks || '0',
+                grade: resultData.grade || 'N/A',
+                results: extractSubjects(resultData),
+            };
             return { success: true, data: finalResult };
         }
 
@@ -93,7 +101,11 @@ export default function ResultsPage() {
             }
 
             try {
-                const response = await fetch(settings.googleSheetResultUrl);
+                // Add a timestamp to bypass cache
+                const url = new URL(settings.googleSheetResultUrl);
+                url.searchParams.set('t', Date.now().toString());
+
+                const response = await fetch(url.toString());
                 if (!response.ok) {
                     throw new Error("Google Sheet থেকে ডেটা আনা সম্ভব হয়নি।");
                 }
@@ -123,7 +135,7 @@ export default function ResultsPage() {
     const { control, handleSubmit, formState: { errors } } = useForm<SearchFormValues>({
         resolver: zodResolver(searchSchema),
         defaultValues: {
-            year: '2024',
+            year: new Date().getFullYear().toString(),
             examType: '',
             class: '',
             roll: ''
@@ -274,7 +286,7 @@ export default function ResultsPage() {
                                             </p>
                                             <p className="flex items-center gap-2">
                                                 <ChevronsRight className="w-4 h-4 text-muted-foreground"/>
-                                                <strong>পরীক্ষার নাম:</strong> {result.examType} ({result.year})
+                                                <strong>পরীক্ষার নাম:</strong> {result.examType}
                                             </p>
                                         </div>
                                         <div className="space-y-2">
