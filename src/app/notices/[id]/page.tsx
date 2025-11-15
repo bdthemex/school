@@ -13,7 +13,8 @@ interface Notice {
 
 async function getNotice(id: string): Promise<Notice | null> {
   const notices = await getSheetData('notices');
-  const notice = notices.find(n => n.id === id);
+  // Ensure we are comparing strings to strings to avoid type issues.
+  const notice = notices.find(n => String(n.id) === String(id));
   if (!notice) return null;
   return notice as Notice;
 }
