@@ -4,6 +4,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic'; // Force dynamic rendering
+
 export const metadata: Metadata = {
   title: 'নোটিশ বোর্ড',
   description: 'বিদ্যালয়ের সর্বশেষ নোটিশ ও ঘোষণা দেখুন।',

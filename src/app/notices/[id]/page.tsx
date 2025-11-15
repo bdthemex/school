@@ -4,20 +4,13 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic'; // Force dynamic rendering
+
 interface Notice {
   id: string;
   date: string;
   title: string;
   details?: string;
-}
-
-// This function tells Next.js which paths to pre-render at build time.
-export async function generateStaticParams() {
-  const notices = await getSheetData('notices');
- 
-  return notices.map((notice) => ({
-    id: String(notice.id),
-  }));
 }
 
 async function getNotice(id: string): Promise<Notice | null> {
