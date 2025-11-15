@@ -88,6 +88,7 @@ export default function ResultsPage() {
     const [allResults, setAllResults] = useState<any[]>([]);
     const [result, setResult] = useState<StudentResult | null>(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [searched, setSearched] = useState(false)
     const [isFetchingSheet, setIsFetchingSheet] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [sheetUrl, setSheetUrl] = useState('');
