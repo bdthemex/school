@@ -4,17 +4,10 @@ import sheetUrls from '@/data/sheets.json';
 
 type SheetName = keyof typeof sheetUrls;
 
-const cache = new Map<string, { data: any[], timestamp: number }>();
-const CACHE_DURATION = 300 * 1000; // 5 minutes in milliseconds
-
-async function fetchAndParseCSV(url: string, sheetName: SheetName): Promise<any[]> {
-    const cached = cache.get(sheetName);
-    if (cached && (Date.now() - cached.timestamp < CACHE_DURATION)) {
-        return cached.data;
-    }
-
+async function fetchAndParseCSV(url: string): Promise<any[]> {
     try {
-        const response = await fetch(url, { next: { revalidate: 300 } });
+        // Use `no-store` to ensure fresh data on every request.
+        const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) {
             throw new Error(`Failed to fetch CSV from ${url}. Status: ${response.status}`);
         }
@@ -25,7 +18,6 @@ async function fetchAndParseCSV(url: string, sheetName: SheetName): Promise<any[
                 header: true,
                 skipEmptyLines: true,
                 complete: (results) => {
-                    cache.set(sheetName, { data: results.data, timestamp: Date.now() });
                     resolve(results.data);
                 },
                 error: (error: any) => {
@@ -35,7 +27,7 @@ async function fetchAndParseCSV(url: string, sheetName: SheetName): Promise<any[
             });
         });
     } catch (error) {
-        console.error(`Error fetching or parsing sheet "${sheetName}":`, error);
+        console.error(`Error fetching or parsing sheet:`, error);
         return []; // Return empty array on error
     }
 }
@@ -55,6 +47,6 @@ export async function GET(request: Request) {
     return NextResponse.json([]);
   }
 
-  const data = await fetchAndParseCSV(url, name);
+  const data = await fetchAndParseCSV(url);
   return NextResponse.json(data);
 }
