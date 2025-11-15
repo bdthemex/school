@@ -1,17 +1,16 @@
-
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Camera } from 'lucide-react'
 import type { Metadata } from 'next';
-import galleries from '@/data/galleries.json';
+import { getSheetData } from '@/lib/data-loader';
 
 export const metadata: Metadata = {
   title: 'ফটো গ্যালারি',
   description: 'আমাদের বিদ্যালয়ের বিভিন্ন অনুষ্ঠানের ছবির সংগ্রহ।',
 };
 
-export default function GalleryPage() {
-    const galleryImages = galleries.photos;
+export default async function GalleryPage() {
+    const galleryImages = await getSheetData('gallery');
 
   return (
     <main className="flex-1">
@@ -27,8 +26,8 @@ export default function GalleryPage() {
                     <CardContent className="p-8">
                        {galleryImages.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                            {galleryImages.map((image) => (
-                                <div key={image._id} className="overflow-hidden rounded-lg shadow-md group">
+                            {galleryImages.map((image: any) => (
+                                <div key={image.id} className="overflow-hidden rounded-lg shadow-md group">
                                     <Image
                                         src={image.image}
                                         alt={image.alt}

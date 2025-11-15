@@ -1,23 +1,18 @@
 import { MetadataRoute } from 'next'
+import { getSheetData } from '@/lib/data-loader';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  // Hardcoded list of notices for the sitemap
-  const notices = [
-    { _id: 'n1', _updatedAt: new Date().toISOString() },
-    { _id: 'n2', _updatedAt: new Date().toISOString() },
-    { _id: 'n3', _updatedAt: new Date().toISOString() },
-  ];
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const notices = await getSheetData('notices');
 
   const noticeUrls = notices.map(notice => ({
-    url: `${BASE_URL}/notices/${notice._id}`,
-    lastModified: new Date(notice._updatedAt),
+    url: `${BASE_URL}/notices/${notice.id}`,
+    lastModified: new Date(notice.date),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }));
   
-  // Define static routes
   const staticRoutes = [
     '', 
     '/about', 

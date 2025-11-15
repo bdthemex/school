@@ -1,16 +1,17 @@
-
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, GraduationCap, Phone, Mail } from 'lucide-react'
 import type { Metadata } from 'next';
-import teachers from '@/data/teachers.json';
+import { getSheetData } from '@/lib/data-loader';
 
 export const metadata: Metadata = {
   title: 'শিক্ষক পরিচিতি',
   description: 'আমাদের বিদ্যালয়ের অভিজ্ঞ শিক্ষকমণ্ডলীর তালিকা।',
 };
 
-export default function TeachersPage() {
+export default async function TeachersPage() {
+  const teachers = await getSheetData('teachers');
+
   return (
     <main className="flex-1">
         <div>
@@ -25,8 +26,8 @@ export default function TeachersPage() {
                     <CardContent className="p-8">
                         {teachers.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                                {teachers.map((teacher) => (
-                                    <Card key={teacher._id} className="text-center shadow-md hover:shadow-xl transition-shadow">
+                                {teachers.map((teacher: any) => (
+                                    <Card key={teacher.id} className="text-center shadow-md hover:shadow-xl transition-shadow">
                                         <CardContent className="p-6">
                                         <Image
                                             src={teacher.image}

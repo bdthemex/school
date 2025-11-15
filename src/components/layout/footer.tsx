@@ -1,13 +1,12 @@
-
 import Link from 'next/link';
 import { Mail, MapPin, Phone, Star, Code, Plus } from 'lucide-react';
-import navigationData from '@/data/navigation.json';
-import settingsData from '@/data/settings.json';
+import { getSheetData, objectify } from '@/lib/data-loader';
 
 interface NavItem {
   _key: string;
   label: string;
   href?: string;
+  column?: string;
 }
 
 interface SiteSettings {
@@ -19,15 +18,21 @@ interface SiteSettings {
   facebookPageUrl: string;
 }
 
-function getFooterData(): { footerLinksCol1: NavItem[], footerLinksCol2: NavItem[], siteSettings: SiteSettings } {
-  const footerLinksCol1: NavItem[] = navigationData.footerCol1;
-  const footerLinksCol2: NavItem[] = navigationData.footerCol2;
-  const siteSettings: SiteSettings = settingsData;
+async function getFooterData(): Promise<{ footerLinksCol1: NavItem[], footerLinksCol2: NavItem[], siteSettings: SiteSettings }> {
+  const [linksData, settingsData] = await Promise.all([
+      getSheetData('footer_links'),
+      getSheetData('settings')
+  ]);
+
+  const footerLinksCol1: NavItem[] = linksData.filter(link => link.column === '1');
+  const footerLinksCol2: NavItem[] = linksData.filter(link => link.column === '2');
+  const siteSettings: SiteSettings = objectify(settingsData);
+  
   return { footerLinksCol1, footerLinksCol2, siteSettings };
 }
 
-export default function Footer() {
-  const { footerLinksCol1, footerLinksCol2, siteSettings } = getFooterData();
+export default async function Footer() {
+  const { footerLinksCol1, footerLinksCol2, siteSettings } = await getFooterData();
 
   return (
     <footer id="contact" className="bg-gray-800 text-white">
@@ -37,7 +42,7 @@ export default function Footer() {
             <h3 className="text-lg font-bold text-gray-300 mb-4 border-b border-green-700 pb-2">অন্যান্য লিংক</h3>
             <ul className="space-y-2">
                 {footerLinksCol1?.map((link: NavItem) => (
-                    <li key={link._key}>
+                    <li key={link.label}>
                         <Link href={link.href || '#'} className="hover:text-green-400 transition-colors flex items-center gap-2">
                             <Plus className='w-4 h-4' /> {link.label}
                         </Link>
@@ -49,7 +54,7 @@ export default function Footer() {
           <div className='md:mt-11'>
             <ul className="space-y-2">
                 {footerLinksCol2?.map((link: NavItem) => (
-                    <li key={link._key}>
+                    <li key={link.label}>
                         <Link href={link.href || '#'} className="hover:text-green-400 transition-colors flex items-center gap-2">
                              <Plus className='w-4 h-4' /> {link.label}
                         </Link>

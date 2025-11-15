@@ -1,16 +1,34 @@
-
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Target, BookOpen } from 'lucide-react'
 import type { Metadata } from 'next';
-import content from '@/data/about.json';
+import { getSheetData, objectify } from '@/lib/data-loader';
 
-export const metadata: Metadata = {
-  title: "আমাদের সম্পর্কে",
-  description: 'আমাদের বিদ্যালয় সম্পর্কে জানুন।',
-};
+interface AboutContent {
+  schoolName?: string;
+  description?: string;
+  mainImage?: string;
+  missionTitle?: string;
+  missionPoints?: string;
+  academicTitle?: string;
+  academicDescription?: string;
+}
 
-export default function AboutPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const aboutData = await getSheetData('about');
+  const content = objectify(aboutData);
+  
+  return {
+    title: content.pageTitle || "আমাদের সম্পর্কে",
+    description: content.description || 'আমাদের বিদ্যালয় সম্পর্কে জানুন।',
+  };
+}
+
+export default async function AboutPage() {
+  const aboutData = await getSheetData('about');
+  const content: AboutContent = objectify(aboutData);
+  const missionPoints = content.missionPoints?.split('|') || [];
+
   return (
     <main className="flex-1">
         <div>
@@ -23,7 +41,7 @@ export default function AboutPage() {
                 <div className="flex flex-col md:flex-row items-center gap-8">
                     <div className="md:w-1/3">
                     <Image
-                        src={content.mainImage}
+                        src={content.mainImage || 'https://picsum.photos/600/400'}
                         alt="School Building"
                         width={600}
                         height={400}
@@ -46,7 +64,7 @@ export default function AboutPage() {
                             {content.missionTitle}
                         </h3>
                         <ul className="list-disc list-inside text-foreground space-y-2 leading-relaxed text-base">
-                           {content.missionPoints.map((point, index) => (
+                           {missionPoints.map((point, index) => (
                              <li key={index}>{point}</li>
                            ))}
                         </ul>

@@ -1,0 +1,18 @@
+{
+  "settings": "URL_TO_YOUR_SETTINGS_CSV",
+  "header_nav": "URL_TO_YOUR_HEADER_NAV_CSV",
+  "footer_links": "URL_TO_YOUR_FOOTER_LINKS_CSV",
+  "homepage": "URL_TO_YOUR_HOMEPAGE_CSV",
+  "messages": "URL_TO_YOUR_MESSAGES_CSV",
+  "teachers": "URL_TO_YOUR_TEACHERS_CSV",
+  "staff": "URL_TO_YOUR_STAFF_CSV",
+  "successful_students": "URL_TO_YOUR_SUCCESSFUL_STUDENTS_CSV",
+  "notices": "URL_TO_YOUR_NOTICES_CSV",
+  "routines": "URL_TO_YOUR_ROUTINES_CSV",
+  "calendar": "URL_TO_YOUR_CALENDAR_CSV",
+  "holidays": "URL_TO_YOUR_HOLIDAYS_CSV",
+  "gallery": "URL_TO_YOUR_GALLERY_CSV",
+  "videos": "URL_TO_YOUR_VIDEOS_CSV",
+  "about": "URL_TO_YOUR_ABOUT_CSV",
+  "history": "URL_TO_YOUR_HISTORY_CSV"
+}

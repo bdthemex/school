@@ -1,4 +1,3 @@
-
 'use client'
 
 import Image from 'next/image';
@@ -18,21 +17,15 @@ import {
   GraduationCap,
   ChevronRight,
   BookMarked,
-  ClipboardList,
-  Trophy,
-  Award,
   Plane,
   Phone,
+  Award,
+  Trophy
 } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import type { LucideProps } from 'lucide-react';
-
-// Import data from JSON files
-import homepageContentData from '@/data/homepage.json';
-import noticesData from '@/data/notices.json';
-import messagesData from '@/data/messages.json';
 
 const IconMap = {
     Megaphone,
@@ -50,7 +43,7 @@ const IconMap = {
 type IconName = keyof typeof IconMap;
 
 interface Notice {
-  _id: string;
+  id: string;
   title: string;
 }
 
@@ -86,36 +79,69 @@ interface HomepageContent {
     importantLinks: LinkItem[];
     resourceLinks: LinkItem[];
     officialLinks: LinkItem[];
+    marqueeText: string;
 }
 
-function getHomepageData(): { notices: Notice[], content: HomepageContent, faculty: FacultyMessage[] } {
-  const notices = noticesData.slice(0, 5).map(n => ({ _id: n._id, title: n.title }));
-  const content: HomepageContent = homepageContentData;
-  const faculty: FacultyMessage[] = [
-    {
-      _id: "principal",
-      name: messagesData.principal.name,
-      title: "প্রধান শিক্ষকের বাণী",
-      link: "/principals-message",
-      quote: messagesData.principal.quote,
-      image: messagesData.principal.image,
-    },
-    {
-      _id: "vice-principal",
-      name: messagesData.vicePrincipal.name,
-      title: "সহকারী প্রধান শিক্ষকের বাণী",
-      link: "/vice-principals-message",
-      quote: messagesData.vicePrincipal.quote,
-      image: messagesData.vicePrincipal.image,
-    }
-  ];
-  return { notices, content, faculty };
+interface InfoBox {
+    _key: string;
+    title: string;
+    icon: IconName;
+    image: string;
+    links: { _key: string; label: string; href: string }[];
+}
+
+
+async function getPageData() {
+    const [homepageData, noticesData, messagesData, settingsData] = await Promise.all([
+        fetch('/api/sheets?name=homepage').then(res => res.json()),
+        fetch('/api/sheets?name=notices').then(res => res.json()),
+        fetch('/api/sheets?name=messages').then(res => res.json()),
+        fetch('/api/sheets?name=settings').then(res => res.json())
+    ]);
+
+    const content: HomepageContent = {
+        heroSlider: homepageData.filter((r: any) => r.type === 'heroSlider').map((r: any) => ({ _key: r.key, image: r.value, caption: r.value2, alt: r.value3 })),
+        historySection: {
+            image: homepageData.find((r: any) => r.key === 'image')?.value || '',
+            summary: homepageData.find((r: any) => r.key === 'summary')?.value || '',
+            linkText: homepageData.find((r: any) => r.key === 'linkText')?.value || '',
+            linkHref: homepageData.find((r: any) => r.key === 'linkHref')?.value || '',
+        },
+        importantLinks: homepageData.filter((r: any) => r.type === 'importantLink').map((r: any) => ({ _key: r.key, title: r.value, href: r.value2, icon: r.value3 as IconName })),
+        resourceLinks: homepageData.filter((r: any) => r.type === 'resourceLink').map((r: any) => ({ _key: r.key, title: r.value, href: r.value2 })),
+        officialLinks: homepageData.filter((r: any) => r.type === 'officialLink').map((r: any) => ({ _key: r.key, title: r.value, href: r.value2 })),
+        marqueeText: settingsData.find((r: any) => r.key === 'marqueeText')?.value || ''
+    };
+
+    const notices = noticesData.slice(0, 5).map((n: any) => ({ id: n.id, title: n.title }));
+    
+    const principalMsg = messagesData.find((m: any) => m.key === 'principal');
+    const vicePrincipalMsg = messagesData.find((m: any) => m.key === 'vicePrincipal');
+    
+    const faculty: FacultyMessage[] = [];
+    if(principalMsg) faculty.push({
+        _id: "principal",
+        name: principalMsg.name,
+        title: "প্রধান শিক্ষকের বাণী",
+        link: "/principals-message",
+        quote: principalMsg.quote,
+        image: principalMsg.image,
+    });
+     if(vicePrincipalMsg) faculty.push({
+        _id: "vice-principal",
+        name: vicePrincipalMsg.name,
+        title: "সহকারী প্রধান শিক্ষকের বাণী",
+        link: "/vice-principals-message",
+        quote: vicePrincipalMsg.quote,
+        image: vicePrincipalMsg.image,
+    });
+    
+    return { notices, content, faculty };
 }
 
 const IconComponent = ({ name, ...props }: { name: IconName } & LucideProps) => {
     const Icon = IconMap[name];
     if (!Icon) return <BookOpen {...props} />; // Fallback icon
-
     return <Icon {...props} />;
 };
 
@@ -124,25 +150,26 @@ export default function Home() {
     const [notices, setNotices] = useState<Notice[]>([]);
     const [homepageContent, setHomepageContent] = useState<HomepageContent | null>(null);
     const [facultyMessages, setFacultyMessages] = useState<FacultyMessage[]>([]);
-    const heroCarouselPlugin = useRef(
-        Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true })
-    );
-    const facultyCarouselPlugin = useRef(
-        Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true })
-    );
+    const [isLoading, setIsLoading] = useState(true);
+
+    const heroCarouselPlugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true }));
+    const facultyCarouselPlugin = useRef(Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true }));
     const [showMarquee, setShowMarquee] = useState(true);
 
     useEffect(() => {
-        const { notices, content, faculty } = getHomepageData();
-        setNotices(notices);
-        setHomepageContent(content);
-        setFacultyMessages(faculty);
+        getPageData().then(data => {
+            setNotices(data.notices);
+            setHomepageContent(data.content);
+            setFacultyMessages(data.faculty);
+            setIsLoading(false);
+        });
     }, []);
+    
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-screen">লোড হচ্ছে...</div>;
+    }
 
-    const marqueeText = "সরকারি ও বেসরকারি মাধ্যমিক বিদ্যালয়ে-২০২৫ শিক্ষাবর্ষে ভর্তি বিজ্ঞপ্তি ও নিয়মাবলী সংক্রান্ত। আমাদের ওয়েবসাইটে আপনাকে স্বাগত…(সাইট ডেভেলপমেন্টের কাজ চলছে) *** "
-
-    // This data is now hardcoded as requested, to avoid Sanity dependency.
-    const infoBoxes = [
+    const infoBoxes: InfoBox[] = [
         { 
             _key: 'ib1', 
             title: 'শিক্ষার্থীদের কর্নার',
@@ -192,7 +219,6 @@ export default function Home() {
         }
     ];
 
-
   return (
     <main>
       <div className="pt-0 px-4 pb-4">
@@ -236,7 +262,7 @@ export default function Home() {
             </Suspense>
         </section>
 
-        {showMarquee && (
+        {showMarquee && homepageContent?.marqueeText && (
         <div className="my-4">
             <div className="bg-muted flex h-12 items-center overflow-hidden shadow-sm">
                 <div className="relative bg-primary text-primary-foreground px-4 py-3 flex items-center">
@@ -246,8 +272,8 @@ export default function Home() {
                 <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
                     <div className="w-full flex items-center">
                     <div className="animate-marquee whitespace-nowrap flex text-foreground text-base">
-                        <span className="mx-4">{marqueeText}</span>
-                        <span className="mx-4">{marqueeText}</span>
+                        <span className="mx-4">{homepageContent.marqueeText}</span>
+                        <span className="mx-4">{homepageContent.marqueeText}</span>
                     </div>
                     </div>
                 </div>
@@ -384,7 +410,7 @@ export default function Home() {
                 <CardContent className="p-4 space-y-3 bg-muted/50">
                     {notices.length > 0 ? (
                       notices.map((notice) => (
-                        <Link href={`/notices/${notice._id}`} key={notice._id} className="block text-base text-foreground hover:text-primary gap-2">
+                        <Link href={`/notices/${notice.id}`} key={notice.id} className="block text-base text-foreground hover:text-primary gap-2">
                            <div className="flex items-start gap-2">
                              <Target className="w-4 h-4 mt-1 flex-shrink-0 text-primary" />
                              <p>{notice.title}</p>

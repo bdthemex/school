@@ -5,6 +5,7 @@ import { Hind_Siliguri } from 'next/font/google'
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import ScrollToTopButton from '@/components/ui/scroll-to-top-button';
+import { getSheetData, objectify } from '@/lib/data-loader';
 
 const hindSiliguri = Hind_Siliguri({
   subsets: ['bengali'],
@@ -13,17 +14,22 @@ const hindSiliguri = Hind_Siliguri({
   display: 'swap',
 })
 
-const siteMetadata = {
-  title: 'কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়',
-  description: 'ওয়েবসাইটটি কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়-এর তথ্য কেন্দ্র হিসাবে কাজ করে।'
-}
+export async function generateMetadata(): Promise<Metadata> {
+  const settingsData = await getSheetData('settings');
+  const settings = objectify(settingsData);
+  
+  const siteMetadata = {
+    title: settings.schoolName || 'কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়',
+    description: settings.siteDescription || 'ওয়েবসাইটটি কেন্দুয়া জয়হরি স্প্রাই সরকারি উচ্চ বিদ্যালয়-এর তথ্য কেন্দ্র হিসাবে কাজ করে।'
+  }
 
-export const metadata: Metadata = {
-  title: {
-    default: siteMetadata.title,
-    template: `%s | ${siteMetadata.title}`,
-  },
-  description: siteMetadata.description,
+  return {
+    title: {
+      default: siteMetadata.title,
+      template: `%s | ${siteMetadata.title}`,
+    },
+    description: siteMetadata.description,
+  }
 }
 
 export default function RootLayout({

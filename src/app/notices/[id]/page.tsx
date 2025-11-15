@@ -1,23 +1,25 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next';
-import notices from '@/data/notices.json';
+import { getSheetData } from '@/lib/data-loader';
 
 interface Notice {
-  _id: string;
+  id: string;
   date: string;
   title: string;
   details?: string;
 }
 
-function getNotice(id: string): Notice | null {
-  return notices.find(n => n._id === id) || null;
+async function getNotice(id: string): Promise<Notice | null> {
+  const notices = await getSheetData('notices');
+  const notice = notices.find(n => n.id === id);
+  if (!notice) return null;
+  return notice as Notice;
 }
 
-export function generateMetadata({ params }: { params: { id: string } }): Metadata {
-    const notice = getNotice(params.id);
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+    const notice = await getNotice(params.id);
   
     if (!notice) {
       return {
@@ -31,8 +33,8 @@ export function generateMetadata({ params }: { params: { id: string } }): Metada
     };
 }
 
-export default function NoticeDetailsPage({ params }: { params: { id: string } }) {
-  const notice = getNotice(params.id)
+export default async function NoticeDetailsPage({ params }: { params: { id: string } }) {
+  const notice = await getNotice(params.id);
 
   if (!notice) {
     notFound();

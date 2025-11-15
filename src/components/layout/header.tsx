@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -20,10 +19,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
-
-// Import data from JSON files
-import navigationData from '@/data/navigation.json';
-import settingsData from '@/data/settings.json';
+import { buildNestedNav } from '@/lib/data-loader-client';
 
 interface NavItem {
     _key: string;
@@ -33,11 +29,10 @@ interface NavItem {
 }
 
 interface SiteSettings {
-    logo: string;
-    headerBanner: string;
+    logo?: string;
+    headerBanner?: string;
 }
 
-// A map to get icons for navigation items
 const iconMap: { [key: string]: React.ElementType } = {
   'প্রচ্ছদ': Home,
   'আমাদের সম্পর্কে': Info,
@@ -62,13 +57,18 @@ const iconMap: { [key: string]: React.ElementType } = {
   'নমুনা পৃষ্ঠা': FilePlus2,
 };
 
-
-function getHeaderData(): { navItems: NavItem[], settings: SiteSettings } {
-    const navItems: NavItem[] = navigationData.header;
-    const settings: SiteSettings = {
-        logo: settingsData.logo,
-        headerBanner: settingsData.headerBanner,
-    };
+async function getHeaderData(): Promise<{ navItems: NavItem[], settings: SiteSettings }> {
+    const [navData, settingsData] = await Promise.all([
+      fetch('/api/sheets?name=header_nav').then(res => res.json()),
+      fetch('/api/sheets?name=settings').then(res => res.json())
+    ]);
+    
+    const navItems = buildNestedNav(navData);
+    const settings = settingsData.reduce((acc: any, item: any) => {
+        if (item.key) acc[item.key] = item.value;
+        return acc;
+    }, {});
+    
     return { navItems, settings };
 }
 
@@ -79,9 +79,10 @@ export default function Header() {
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
-    const { navItems, settings } = getHeaderData();
-    setNavLinks(navItems);
-    setSiteSettings(settings);
+    getHeaderData().then(({ navItems, settings }) => {
+        setNavLinks(navItems);
+        setSiteSettings(settings);
+    });
 
     const handleScroll = () => {
       if (window.scrollY > 200) {
@@ -123,7 +124,6 @@ export default function Header() {
             )}
         </div>
         
-        {/* Placeholder for fixed menu on desktop */}
         <div className={cn("hidden md:block", isSticky && "h-16")} />
 
         <div className={cn(

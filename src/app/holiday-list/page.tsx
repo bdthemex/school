@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Plane } from 'lucide-react'
 import {
@@ -10,14 +9,16 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { Metadata } from 'next';
-import holidays from '@/data/holidays.json';
+import { getSheetData } from '@/lib/data-loader';
 
 export const metadata: Metadata = {
   title: 'ছুটির তালিকা',
   description: 'বিদ্যালয়ের বাৎসরিক ছুটির তালিকা দেখুন।',
 };
 
-export default function HolidayListPage() {
+export default async function HolidayListPage() {
+  const holidays = await getSheetData('holidays');
+
   return (
     <main className="flex-1">
       <div>
@@ -45,8 +46,8 @@ export default function HolidayListPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {holidays.map((holiday) => (
-                        <TableRow key={holiday._id}>
+                        {holidays.map((holiday: any) => (
+                        <TableRow key={holiday.id}>
                             <TableCell className="font-medium">{holiday.occasion}</TableCell>
                             <TableCell>{holiday.from}</TableCell>
                             <TableCell>{holiday.to}</TableCell>

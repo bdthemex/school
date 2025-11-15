@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CalendarCheck } from 'lucide-react'
 import {
@@ -10,14 +9,16 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { Metadata } from 'next';
-import calendarEvents from '@/data/calendar.json';
+import { getSheetData } from '@/lib/data-loader';
 
 export const metadata: Metadata = {
   title: 'একাডেমিক ক্যালেন্ডার',
   description: 'আমাদের বিদ্যালয়ের একাডেমিক ক্যালেন্ডার ও কার্যক্রমের তালিকা।',
 };
 
-export default function AcademicCalendarPage() {
+export default async function AcademicCalendarPage() {
+  const calendarEvents = await getSheetData('calendar');
+
   return (
     <main className="flex-1">
       <div>
@@ -44,8 +45,8 @@ export default function AcademicCalendarPage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {calendarEvents.map((item) => (
-                            <TableRow key={item._id}>
+                            {calendarEvents.map((item: any) => (
+                            <TableRow key={item.id}>
                                 <TableCell className="font-medium">{item.date}</TableCell>
                                 <TableCell>{item.event}</TableCell>
                             </TableRow>

@@ -1,15 +1,17 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Phone, Mail, MapPin } from 'lucide-react'
 import type { Metadata } from 'next';
-import settings from '@/data/settings.json';
+import { getSheetData, objectify } from '@/lib/data-loader';
 
 export const metadata: Metadata = {
   title: 'যোগাযোগ',
   description: 'আমাদের সাথে যোগাযোগ করুন। ঠিকানা, ফোন নম্বর এবং ইমেইল।',
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settingsData = await getSheetData('settings');
+  const settings = objectify(settingsData);
+
   return (
     <main className="flex-1">
         <div>
@@ -47,16 +49,18 @@ export default function ContactPage() {
                                 </address>
                             </div>
                             <div className="md:col-span-1 h-80 md:h-full">
-                                <iframe 
-                                    src={settings?.googleMapsUrl} 
-                                    width="100%" 
-                                    height="100%" 
-                                    style={{ border: 0 }} 
-                                    allowFullScreen={true} 
-                                    loading="lazy" 
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                    className="md:rounded-r-lg"
-                                ></iframe>
+                                {settings?.googleMapsUrl && (
+                                    <iframe 
+                                        src={settings.googleMapsUrl} 
+                                        width="100%" 
+                                        height="100%" 
+                                        style={{ border: 0 }} 
+                                        allowFullScreen={true} 
+                                        loading="lazy" 
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        className="md:rounded-r-lg"
+                                    ></iframe>
+                                )}
                             </div>
                         </div>
                     </CardContent>

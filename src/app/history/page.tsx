@@ -1,16 +1,40 @@
-
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollText } from 'lucide-react'
 import type { Metadata } from 'next';
-import content from '@/data/history.json';
+import { getSheetData } from '@/lib/data-loader';
 
-export const metadata: Metadata = {
-    title: content.title,
-    description: 'আমাদের বিদ্যালয়ের গৌরবময় ইতিহাস সম্পর্কে জানুন।',
-};
+interface HistoryContent {
+    title: string;
+    historicalImage: string;
+    journeyTitle: string;
+    description1: string;
+    description2: string;
+    milestonesTitle: string;
+}
 
-export default function HistoryPage() {
+interface Milestone {
+    _key: string;
+    year: string;
+    event: string;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+    const historyData = await getSheetData('history');
+    const content = historyData.find(item => item.type === 'content');
+    
+    return {
+        title: content?.title || "প্রতিষ্ঠানের গৌরবময় ইতিহাস",
+        description: 'আমাদের বিদ্যালয়ের গৌরবময় ইতিহাস সম্পর্কে জানুন।',
+    };
+}
+
+export default async function HistoryPage() {
+  const historyData = await getSheetData('history');
+  const content: HistoryContent = historyData.find(item => item.type === 'content') || {};
+  const milestones: Milestone[] = historyData.filter(item => item.type === 'milestone');
+
+
   return (
     <main className="flex-1">
         <div>
@@ -47,7 +71,7 @@ export default function HistoryPage() {
                         <div className="mt-8">
                             <h3 className="text-xl font-semibold text-primary mb-4">{content.milestonesTitle}</h3>
                             <div className="relative border-l-2 border-accent space-y-8 pl-6">
-                                {content.milestones.map((item) => (
+                                {milestones.map((item) => (
                                     <div key={item._key} className="relative">
                                         <div className="absolute -left-[35px] top-1.5 w-4 h-4 bg-accent rounded-full border-4 border-muted/40"></div>
                                         <p className="font-bold text-primary">{item.year}</p>

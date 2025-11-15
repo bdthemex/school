@@ -1,8 +1,7 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Video } from 'lucide-react'
 import type { Metadata } from 'next';
-import galleries from '@/data/galleries.json';
+import { getSheetData } from '@/lib/data-loader';
 
 export const metadata: Metadata = {
   title: 'ভিডিও গ্যালারি',
@@ -29,8 +28,8 @@ const getEmbedUrl = (url: string) => {
 }
 
 
-export default function VideoGalleryPage() {
-  const videos = galleries.videos;
+export default async function VideoGalleryPage() {
+  const videos = await getSheetData('videos');
 
   return (
     <main className="flex-1">
@@ -46,8 +45,8 @@ export default function VideoGalleryPage() {
             <CardContent className="p-8">
               {videos.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {videos.map((video) => (
-                    <div key={video._id}>
+                  {videos.map((video: any) => (
+                    <div key={video.id}>
                       <div className="aspect-video overflow-hidden rounded-lg shadow-md">
                         <iframe
                           src={getEmbedUrl(video.youtubeUrl)}

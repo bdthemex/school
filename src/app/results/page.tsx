@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -13,7 +12,6 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Label } from '@/components/ui/label'
-import settings from '@/data/settings.json';
 import { useToast } from '@/hooks/use-toast'
 
 const searchSchema = z.object({
@@ -91,20 +89,31 @@ export default function ResultsPage() {
     const [result, setResult] = useState<StudentResult | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [isFetchingSheet, setIsFetchingSheet] = useState(true);
-    const [searched, setSearched] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [sheetUrl, setSheetUrl] = useState('');
     const { toast } = useToast();
 
     useEffect(() => {
-        const fetchResults = async () => {
-            if (!settings.googleSheetResultUrl) {
+        // Fetch the settings to get the sheet URL
+        fetch('/api/sheets?name=settings')
+          .then(res => res.json())
+          .then(settingsData => {
+            const url = settingsData.find((s: any) => s.key === 'googleSheetResultUrl')?.value;
+            if (url) {
+                setSheetUrl(url);
+            } else {
                 setError("ফলাফলের জন্য গুগল শীট লিঙ্ক সেট করা নেই।");
                 setIsFetchingSheet(false);
-                return;
             }
+          });
+    }, []);
 
+    useEffect(() => {
+        if (!sheetUrl) return;
+
+        const fetchResults = async () => {
             try {
-                const url = new URL(settings.googleSheetResultUrl);
+                const url = new URL(sheetUrl);
                 url.searchParams.set('t', Date.now().toString());
 
                 const response = await fetch(url.toString());
@@ -132,7 +141,7 @@ export default function ResultsPage() {
         };
 
         fetchResults();
-    }, []);
+    }, [sheetUrl]);
 
     const { control, handleSubmit, formState: { errors } } = useForm<SearchFormValues>({
         resolver: zodResolver(searchSchema),
@@ -181,7 +190,7 @@ export default function ResultsPage() {
                 });
             }
         } else {
-            toast({
+             toast({
                 title: "শেয়ার ফিচারটি উপলভ্য নয়",
                 description: "আপনার ব্রাউজারটি এই ফিচারটি সমর্থন করে না।",
                 variant: "destructive",

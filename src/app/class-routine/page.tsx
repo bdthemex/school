@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CalendarDays, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -11,14 +10,41 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { Metadata } from 'next';
-import routines from '@/data/routines.json';
+import { getSheetData } from '@/lib/data-loader';
 
 export const metadata: Metadata = {
   title: 'ক্লাস রুটিন',
   description: 'সকল শ্রেণীর ক্লাস রুটিন দেখুন।',
 };
 
-export default function ClassRoutinePage() {
+async function getRoutines() {
+    const data = await getSheetData('routines');
+    const routines: { [key: string]: any[] } = {};
+
+    data.forEach(row => {
+        if (!routines[row.className]) {
+            routines[row.className] = [];
+        }
+        routines[row.className].push({
+            _key: row.day,
+            day: row.day,
+            p1: row.p1,
+            p2: row.p2,
+            p3: row.p3,
+            p4: row.p4,
+        });
+    });
+
+    return Object.entries(routines).map(([className, schedule]) => ({
+        _id: className,
+        className,
+        schedule,
+    }));
+}
+
+export default async function ClassRoutinePage() {
+  const routines = await getRoutines();
+  
   return (
     <main className="flex-1">
         <div>

@@ -1,18 +1,26 @@
-
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { MessageSquare } from 'lucide-react'
 import type { Metadata } from 'next';
-import messages from '@/data/messages.json';
-
-const message = messages.principal;
+import { getSheetData } from '@/lib/data-loader';
 
 export const metadata: Metadata = {
     title: "প্রধান শিক্ষকের বাণী",
     description: 'প্রধান শিক্ষকের বাণী পড়ুন।',
 };
 
-export default function PrincipalsMessagePage() {
+async function getMessage() {
+    const data = await getSheetData('messages');
+    return data.find(m => m.key === 'principal');
+}
+
+export default async function PrincipalsMessagePage() {
+  const message = await getMessage();
+
+  if (!message) {
+      return <main className="flex-1 container mx-auto px-4 py-12">বাণী পাওয়া যায়নি।</main>;
+  }
+
   return (
     <main className="flex-1">
         <div>
