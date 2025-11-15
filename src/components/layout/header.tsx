@@ -131,7 +131,7 @@ export default function Header() {
           isSticky ? "fixed top-0 left-1/2 -translate-x-1/2 max-w-7xl z-50 md:shadow-lg md:bg-[#0a2342] md:px-4" : "bg-[#0a2342]"
           )}>
           <div className="hidden md:block">
-              <nav className="container mx-auto flex items-center gap-1 p-2.5">
+              <nav className="container mx-auto flex items-center flex-wrap justify-center gap-1 p-2.5">
               {navLinks.map((link) => (
                   link.children ? (
                       <DropdownMenu key={link.label}>
@@ -209,7 +209,7 @@ export default function Header() {
                                           href={child.href || '#'}
                                           className={cn(
                                             "text-base font-medium transition-colors hover:bg-opacity-80 flex items-center gap-3 p-2 rounded-md",
-                                            pathname === child.href ? 'bg-[#8B0000] text-white' : 'text-white'
+                                            pathname === child.href ? 'bg-[#8B0000] text-white' : 'bg-transparent text-white'
                                           )}
                                         >
                                           {renderMobileIcon(child.label)}
@@ -225,7 +225,7 @@ export default function Header() {
                                     href={link.href || '#'}
                                     className={cn(
                                       "text-lg font-medium transition-colors hover:bg-opacity-80 flex items-center gap-3 p-2 rounded-md",
-                                      pathname === link.href ? 'bg-[#8B0000] text-white' : 'text-white'
+                                      pathname === link.href ? 'bg-[#8B0000] text-white' : 'bg-transparent text-white'
                                     )}
                                   >
                                     {renderMobileIcon(link.label)}
