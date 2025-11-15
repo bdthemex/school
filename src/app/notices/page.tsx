@@ -9,13 +9,8 @@ export const metadata: Metadata = {
   description: 'বিদ্যালয়ের সর্বশেষ নোটিশ ও ঘোষণা দেখুন।',
 };
 
-async function getNotices() {
-  const noticesData = await getSheetData('notices');
-  return noticesData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-}
-
 export default async function NoticesPage() {
-    const notices = await getNotices();
+    const notices = (await getSheetData('notices')).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
     <main className="flex-1">
