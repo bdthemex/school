@@ -6,7 +6,7 @@ import { getSheetData } from '@/lib/data-loader';
 
 interface HistoryContent {
     title: string;
-    historicalImage: string;
+    historicallmage: string;
     journeyTitle: string;
     description1: string;
     description2: string;
@@ -47,7 +47,7 @@ export default async function HistoryPage() {
                 <div className="flex flex-col lg:flex-row gap-8 items-center">
                     <div className="lg:w-2/5">
                         <Image
-                            src={content.historicalImage}
+                            src={content.historicallmage}
                             alt="Historic photo of the school"
                             width={600}
                             height={800}
