@@ -101,7 +101,7 @@ export default async function Footer() {
       <div className="bg-gray-900">
         <div className="container mx-auto px-4 py-3 text-center text-xs text-gray-400 md:flex justify-between items-center">
           <p>All rights reserved</p>
-          <p>Developed by <a href="https://www.google.com" target="_blank" rel="noopener noreferrer" className="hover:text-green-400">Mahmudul Hasan Arman</a></p>
+          <p>Developed by <a href="https://fb.com/bdthemex" target="_blank" rel="noopener noreferrer" className="hover:text-green-400">BDthemeX</a></p>
         </div>
       </div>
     </footer>
