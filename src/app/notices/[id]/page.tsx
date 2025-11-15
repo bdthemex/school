@@ -11,6 +11,15 @@ interface Notice {
   details?: string;
 }
 
+// This function tells Next.js which paths to pre-render at build time.
+export async function generateStaticParams() {
+  const notices = await getSheetData('notices');
+ 
+  return notices.map((notice) => ({
+    id: String(notice.id),
+  }));
+}
+
 async function getNotice(id: string): Promise<Notice | null> {
   const notices = await getSheetData('notices');
   // Ensure we are comparing strings to strings to avoid type issues.
