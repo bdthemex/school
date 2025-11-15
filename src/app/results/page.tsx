@@ -91,58 +91,27 @@ export default function ResultsPage() {
     const [searched, setSearched] = useState(false)
     const [isFetchingSheet, setIsFetchingSheet] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [sheetUrl, setSheetUrl] = useState('');
     const { toast } = useToast();
 
     useEffect(() => {
-        // Fetch the settings to get the sheet URL
-        fetch('/api/sheets?name=settings')
-          .then(res => res.json())
-          .then(settingsData => {
-            const url = settingsData.find((s: any) => s.key === 'googleSheetResultUrl')?.value;
-            if (url) {
-                setSheetUrl(url);
-            } else {
-                setError("ফলাফলের জন্য গুগল শীট লিঙ্ক সেট করা নেই।");
-                setIsFetchingSheet(false);
-            }
-          });
-    }, []);
-
-    useEffect(() => {
-        if (!sheetUrl) return;
-
         const fetchResults = async () => {
             try {
-                const url = new URL(sheetUrl);
-                url.searchParams.set('t', Date.now().toString());
-
-                const response = await fetch(url.toString());
+                const response = await fetch('/api/sheets?name=results_sheet');
                 if (!response.ok) {
-                    throw new Error("Google Sheet থেকে ডেটা আনা সম্ভব হয়নি।");
+                    throw new Error("ফলাফলের ডেটা আনা সম্ভব হয়নি।");
                 }
-                const csvText = await response.text();
-                
-                Papa.parse(csvText, {
-                    header: true,
-                    skipEmptyLines: true,
-                    complete: (results) => {
-                        setAllResults(results.data);
-                        setIsFetchingSheet(false);
-                    },
-                    error: (err) => {
-                        throw err;
-                    }
-                });
+                const data = await response.json();
+                setAllResults(data);
+                setIsFetchingSheet(false);
             } catch (e) {
-                console.error("Error fetching or parsing Google Sheet:", e);
+                console.error("Error fetching results sheet:", e);
                 setError("ফলাফল লোড করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
                 setIsFetchingSheet(false);
             }
         };
 
         fetchResults();
-    }, [sheetUrl]);
+    }, []);
 
     const { control, handleSubmit, formState: { errors } } = useForm<SearchFormValues>({
         resolver: zodResolver(searchSchema),
