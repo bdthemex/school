@@ -6,12 +6,12 @@ type SheetName = keyof typeof sheetUrls;
 const cache = new Map<string, any>();
 
 async function fetchAndParseCSV(url: string): Promise<any[]> {
-    if (cache.has(url)) {
-        return cache.get(url);
-    }
-
+    // Re-implement caching with a time-to-live (TTL) to avoid hitting sheet limits
+    // but also ensure data is refreshed. For now, disabling cache to fix the bug.
     try {
-        const response = await fetch(url, { next: { revalidate: 300 } }); // Revalidate every 5 minutes
+        // Using `cache: 'no-store'` is crucial for dynamic pages on Vercel/Next.js
+        // to ensure they re-fetch data on each request and don't serve stale build-time data.
+        const response = await fetch(url, { cache: 'no-store' }); 
         if (!response.ok) {
             throw new Error(`Failed to fetch CSV from ${url}. Status: ${response.status}`);
         }
@@ -22,7 +22,6 @@ async function fetchAndParseCSV(url: string): Promise<any[]> {
                 header: true,
                 skipEmptyLines: true,
                 complete: (results) => {
-                    cache.set(url, results.data);
                     resolve(results.data);
                 },
                 error: (error: any) => {
@@ -48,8 +47,9 @@ export async function getSheetData(name: SheetName): Promise<any[]> {
 
 // Specific data transformation helpers
 export function objectify(data: any[], keyField: string = 'key') {
+    if (!Array.isArray(data)) return {};
     return data.reduce((acc, item) => {
-        if (item[keyField]) {
+        if (item && item[keyField]) {
             acc[item[keyField]] = item.value;
         }
         return acc;
@@ -60,21 +60,25 @@ export function buildNestedNav(data: any[]): any[] {
     const navItems: any = {};
     const childItems: any[] = [];
 
+    if (!Array.isArray(data)) {
+        return [];
+    }
+
     data.forEach(item => {
-        if (!item.parent_key) {
+        if (item && !item.parent_key) {
             navItems[item.key] = {
                 _key: item.key,
                 label: item.label,
                 href: item.href || undefined,
                 children: []
             };
-        } else {
+        } else if (item) {
             childItems.push(item);
         }
     });
 
     childItems.forEach(item => {
-        if (navItems[item.parent_key]) {
+        if (item && navItems[item.parent_key]) {
             navItems[item.parent_key].children.push({
                 _key: item.key,
                 label: item.label,
