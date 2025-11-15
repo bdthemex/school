@@ -1,3 +1,4 @@
+
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollText } from 'lucide-react'
@@ -6,7 +7,7 @@ import { getSheetData } from '@/lib/data-loader';
 
 interface HistoryContent {
     title: string;
-    historicallmage: string;
+    historicalImage: string;
     journeyTitle: string;
     description1: string;
     description2: string;
@@ -47,7 +48,7 @@ export default async function HistoryPage() {
                 <div className="flex flex-col lg:flex-row gap-8 items-center">
                     <div className="lg:w-2/5">
                         <Image
-                            src={content.historicallmage}
+                            src={content.historicalImage}
                             alt="Historic photo of the school"
                             width={600}
                             height={800}
