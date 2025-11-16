@@ -6,6 +6,7 @@ import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import ScrollToTopButton from '@/components/ui/scroll-to-top-button';
 import { getSheetData, objectify } from '@/lib/data-loader';
+import React from 'react';
 
 const hindSiliguri = Hind_Siliguri({
   subsets: ['bengali'],
@@ -44,12 +45,16 @@ export default function RootLayout({
       <body className="font-body antialiased bg-muted/40">
         <Toaster />
         <main className="max-w-7xl mx-auto bg-background shadow-lg">
-          <Header />
+          <React.Suspense fallback={<div className="h-[88px] md:h-[288px] bg-muted animate-pulse" />}>
+            <Header />
+          </React.Suspense>
           <div>
             {children}
           </div>
         </main>
-        <Footer />
+        <React.Suspense fallback={<div className="h-[50px] bg-gray-900" />}>
+          <Footer />
+        </React.Suspense>
         <ScrollToTopButton />
       </body>
     </html>
