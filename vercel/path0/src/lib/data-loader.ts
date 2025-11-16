@@ -1,30 +1,45 @@
+import Papa from 'papaparse';
 import sheetUrls from '@/data/sheets.json';
 
 type SheetName = keyof typeof sheetUrls;
 
-export async function getSheetData(name: SheetName): Promise<any[]> {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002';
-    const apiUrl = new URL(`/api/sheets`, baseUrl);
-    apiUrl.searchParams.set('name', name);
-
+async function fetchAndParseCSV(url: string): Promise<any[]> {
     try {
-        // Fetch data from the internal API route, ensuring no caching.
-        const response = await fetch(apiUrl.toString(), { cache: 'no-store' });
-
+        // Use `no-store` to ensure fresh data on every request, bypassing any cache.
+        const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) {
-            console.error(`Failed to fetch sheet data for "${name}" from API. Status: ${response.status}`);
-            return [];
+            throw new Error(`Failed to fetch CSV from ${url}. Status: ${response.status}`);
         }
-
-        const data = await response.json();
-        return data;
-
+        const csvText = await response.text();
+        
+        return new Promise((resolve, reject) => {
+            Papa.parse(csvText, {
+                header: true,
+                skipEmptyLines: true,
+                complete: (results) => {
+                    resolve(results.data);
+                },
+                error: (error: any) => {
+                    console.error('Error parsing CSV:', error);
+                    reject(error);
+                }
+            });
+        });
     } catch (error) {
-        console.error(`Error fetching sheet data for "${name}":`, error);
+        console.error(`Error fetching or parsing sheet:`, error);
         return []; // Return empty array on error
     }
 }
 
+
+export async function getSheetData(name: SheetName): Promise<any[]> {
+    const url = sheetUrls[name];
+    if (!url || url.includes('URL_TO_YOUR')) {
+        console.warn(`Sheet URL for "${name}" is not configured in sheets.json.`);
+        return [];
+    }
+    return fetchAndParseCSV(url);
+}
 
 // Specific data transformation helpers
 export function objectify(data: any[], keyField: string = 'key') {

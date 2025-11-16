@@ -1,5 +1,3 @@
-
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -118,6 +116,11 @@ export default function ResultsPage() {
     useEffect(() => {
         const fetchResults = async () => {
             try {
+                // The API route has been removed, so we fetch directly.
+                // We'll call the getSheetData logic from the client, which requires
+                // moving the direct fetch logic into a client-compatible utility
+                // or just fetching it directly here. For now, let's assume there is
+                // an API still but we will fix the data loader instead.
                 const response = await fetch('/api/sheets?name=results_sheet');
                 if (!response.ok) {
                     throw new Error("ফলাফলের ডেটা আনা সম্ভব হয়নি।");
@@ -132,7 +135,38 @@ export default function ResultsPage() {
             }
         };
 
-        fetchResults();
+        // fetchResults(); // Temporarily disabling as the API route is removed.
+        // Let's use the new direct fetch mechanism. This component is client-side.
+        const fetchDirect = async () => {
+             try {
+                const sheetUrls = (await import('@/data/sheets.json')).default;
+                const url = sheetUrls['results_sheet'];
+                const response = await fetch(url);
+                if (!response.ok) {
+                     throw new Error("ফলাফলের ডেটা আনা সম্ভব হয়নি।");
+                }
+                const csvText = await response.text();
+                const Papa = (await import('papaparse')).default;
+                Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        setAllResults(results.data);
+                        setIsFetchingSheet(false);
+                    },
+                    error: (error: any) => {
+                        console.error('Error parsing CSV:', error);
+                        throw new Error("CSV parsing failed");
+                    }
+                });
+
+             } catch(e) {
+                console.error("Error fetching results sheet directly:", e);
+                setError("ফলাফল লোড করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
+                setIsFetchingSheet(false);
+             }
+        }
+        fetchDirect();
     }, []);
 
     const { control, handleSubmit, formState: { errors } } = useForm<SearchFormValues>({

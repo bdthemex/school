@@ -14,6 +14,8 @@ const hindSiliguri = Hind_Siliguri({
   display: 'swap',
 })
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata(): Promise<Metadata> {
   const settingsData = await getSheetData('settings');
   const settings = objectify(settingsData);
