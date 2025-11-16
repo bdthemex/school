@@ -45,16 +45,12 @@ export default function RootLayout({
       <body className="font-body antialiased bg-muted/40">
         <Toaster />
         <main className="max-w-7xl mx-auto bg-background shadow-lg">
-          <React.Suspense fallback={<div className="h-[88px] md:h-[288px] bg-muted animate-pulse" />}>
-            <Header />
-          </React.Suspense>
+          <Header />
           <div>
             {children}
           </div>
         </main>
-        <React.Suspense fallback={<div className="h-[50px] bg-gray-900" />}>
-          <Footer />
-        </React.Suspense>
+        <Footer />
         <ScrollToTopButton />
       </body>
     </html>
