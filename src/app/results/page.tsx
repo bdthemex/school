@@ -38,7 +38,8 @@ interface StudentResult {
   [key: string]: any;
 }
 
-async function getSheetData(sheetName: string) {
+// This function now runs on the client to fetch data from our new API route
+async function getSheetDataFromApi(sheetName: string) {
     const response = await fetch(`/api/sheets?name=${sheetName}`);
     if (!response.ok) {
         throw new Error('Failed to fetch sheet data');
@@ -124,7 +125,8 @@ export default function ResultsPage() {
     useEffect(() => {
         const fetchResults = async () => {
             try {
-                const data = await getSheetData('results_sheet');
+                // The client-side page now calls the server component's dataloader, which fetches direct.
+                const data = await getSheetDataFromApi('results_sheet');
                 if (!data) {
                     throw new Error("ফলাফলের ডেটা আনা সম্ভব হয়নি।");
                 }
