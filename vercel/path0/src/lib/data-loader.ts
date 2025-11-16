@@ -3,43 +3,28 @@ import sheetUrls from '@/data/sheets.json';
 
 type SheetName = keyof typeof sheetUrls;
 
-async function fetchAndParseCSV(url: string): Promise<any[]> {
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
+async function fetchSheetFromApi(name: SheetName): Promise<any[]> {
     try {
-        // Use `no-store` to ensure fresh data on every request, bypassing any cache.
+        const url = `${BASE_URL}/api/sheets?name=${name}`;
         const response = await fetch(url, { cache: 'no-store' });
-        if (!response.ok) {
-            throw new Error(`Failed to fetch CSV from ${url}. Status: ${response.status}`);
-        }
-        const csvText = await response.text();
         
-        return new Promise((resolve, reject) => {
-            Papa.parse(csvText, {
-                header: true,
-                skipEmptyLines: true,
-                complete: (results) => {
-                    resolve(results.data);
-                },
-                error: (error: any) => {
-                    console.error('Error parsing CSV:', error);
-                    reject(error);
-                }
-            });
-        });
+        if (!response.ok) {
+            console.error(`Failed to fetch sheet "${name}" from API. Status: ${response.status}`);
+            return [];
+        }
+        return await response.json();
     } catch (error) {
-        console.error(`Error fetching or parsing sheet:`, error);
-        return []; // Return empty array on error
-    }
-}
-
-
-export async function getSheetData(name: SheetName): Promise<any[]> {
-    const url = sheetUrls[name];
-    if (!url || url.includes('URL_TO_YOUR')) {
-        console.warn(`Sheet URL for "${name}" is not configured in sheets.json.`);
+        console.error(`Error fetching sheet "${name}" from API:`, error);
         return [];
     }
-    return fetchAndParseCSV(url);
 }
+
+export async function getSheetData(name: SheetName): Promise<any[]> {
+    return fetchSheetFromApi(name);
+}
+
 
 // Specific data transformation helpers
 export function objectify(data: any[], keyField: string = 'key') {
