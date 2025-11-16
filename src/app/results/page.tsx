@@ -13,7 +13,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
 import { Skeleton } from '@/components/ui/skeleton'
-import { getSheetData } from '@/lib/data-loader'
 
 const searchSchema = z.object({
   examType: z.string().min(1, 'পরীক্ষার নাম নির্বাচন করুন'),
@@ -37,6 +36,14 @@ interface StudentResult {
   grade: string;
   results: SubjectResult[];
   [key: string]: any;
+}
+
+async function getSheetData(sheetName: string) {
+    const response = await fetch(`/api/sheets?name=${sheetName}`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch sheet data');
+    }
+    return response.json();
 }
 
 function extractSubjects(resultData: { [key: string]: any }): SubjectResult[] {
