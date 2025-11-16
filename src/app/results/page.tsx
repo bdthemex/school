@@ -359,4 +359,5 @@ export default function ResultsPage() {
             </Card>
         </div>
     </main>
-  )
+  );
+}
