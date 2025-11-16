@@ -4,13 +4,23 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
-export const dynamic = 'force-dynamic';
-
 interface Notice {
   id: string;
   date: string;
   title: string;
   details?: string;
+}
+
+export async function generateStaticParams() {
+  const notices = await getSheetData('notices');
+  
+  if (!Array.isArray(notices)) {
+    return [];
+  }
+
+  return notices.map((notice) => ({
+    id: String(notice.id),
+  }))
 }
 
 async function getNotice(id: string): Promise<Notice | null> {

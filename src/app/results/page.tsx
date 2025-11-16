@@ -1,11 +1,11 @@
 
+
 'use client'
 
 import { useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import Papa from 'papaparse'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Trophy, Search, FileText, User, ChevronsRight, Printer, Share2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
