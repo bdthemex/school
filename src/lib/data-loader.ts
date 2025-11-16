@@ -3,38 +3,29 @@ import sheetUrls from '@/data/sheets.json';
 
 type SheetName = keyof typeof sheetUrls;
 
-const cache = new Map<string, any>();
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9002';
 
-async function fetchAndParseCSV(url: string): Promise<any[]> {
-    // Re-implement caching with a time-to-live (TTL) to avoid hitting sheet limits
-    // but also ensure data is refreshed. For now, disabling cache to fix the bug.
+async function fetchAndParseFromApi(name: SheetName): Promise<any[]> {
     try {
+        const apiUrl = `${BASE_URL}/api/sheets?name=${name}`;
         // Using `cache: 'no-store'` is crucial for dynamic pages on Vercel/Next.js
         // to ensure they re-fetch data on each request and don't serve stale build-time data.
-        const response = await fetch(url, { cache: 'no-store' }); 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch CSV from ${url}. Status: ${response.status}`);
-        }
-        const csvText = await response.text();
+        const response = await fetch(apiUrl, { cache: 'no-store' }); 
         
-        return new Promise((resolve, reject) => {
-            Papa.parse(csvText, {
-                header: true,
-                skipEmptyLines: true,
-                complete: (results) => {
-                    resolve(results.data);
-                },
-                error: (error: any) => {
-                    console.error('Error parsing CSV:', error);
-                    reject(error);
-                }
-            });
-        });
+        if (!response.ok) {
+            console.error(`Failed to fetch from API for sheet "${name}". Status: ${response.status}`);
+            return [];
+        }
+        
+        const data = await response.json();
+        return data;
+
     } catch (error) {
-        console.error('Error fetching or parsing sheet:', error);
+        console.error(`Error fetching or parsing sheet "${name}" from API:`, error);
         return []; // Return empty array on error to prevent site crash
     }
 }
+
 
 export async function getSheetData(name: SheetName): Promise<any[]> {
     const url = sheetUrls[name];
@@ -42,7 +33,8 @@ export async function getSheetData(name: SheetName): Promise<any[]> {
         console.warn(`Sheet URL for "${name}" is not configured in sheets.json.`);
         return [];
     }
-    return fetchAndParseCSV(url);
+    // All data fetching now goes through our internal API route
+    return fetchAndParseFromApi(name);
 }
 
 // Specific data transformation helpers
