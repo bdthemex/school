@@ -11,6 +11,19 @@ interface Notice {
   details?: string;
 }
 
+// This function tells Next.js which dynamic pages to build at build time.
+export async function generateStaticParams() {
+  const notices = await getSheetData('notices');
+  
+  if (!Array.isArray(notices)) {
+    return [];
+  }
+
+  return notices.map((notice) => ({
+    id: String(notice.id),
+  }));
+}
+
 async function getNotice(id: string): Promise<Notice | null> {
   const notices = await getSheetData('notices');
   // Ensure we are comparing strings to strings to avoid type issues.

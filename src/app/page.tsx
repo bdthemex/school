@@ -1,4 +1,4 @@
-'use client'
+'use server';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,9 +23,11 @@ import {
   Trophy
 } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
-import Autoplay from "embla-carousel-autoplay"
-import React, { useState, useEffect, useRef, Suspense } from 'react';
 import type { LucideProps } from 'lucide-react';
+import Marquee from '@/components/layout/marquee';
+import { getSheetData, objectify } from '@/lib/data-loader';
+import HeroCarousel from '@/components/layout/hero-carousel';
+import FacultyCarousel from '@/components/layout/faculty-carousel';
 
 const IconMap = {
     Megaphone,
@@ -90,13 +92,18 @@ interface InfoBox {
     links: { _key: string; label: string; href: string }[];
 }
 
+const IconComponent = ({ name, ...props }: { name: IconName } & LucideProps) => {
+    const Icon = IconMap[name];
+    if (!Icon) return <BookOpen {...props} />; // Fallback icon
+    return <Icon {...props} />;
+};
 
-async function getPageData() {
+export default async function Home() {
     const [homepageData, noticesData, messagesData, settingsData] = await Promise.all([
-        fetch('/api/sheets?name=homepage').then(res => res.json()),
-        fetch('/api/sheets?name=notices').then(res => res.json()),
-        fetch('/api/sheets?name=messages').then(res => res.json()),
-        fetch('/api/sheets?name=settings').then(res => res.json())
+        getSheetData('homepage'),
+        getSheetData('notices'),
+        getSheetData('messages'),
+        getSheetData('settings')
     ]);
 
     const content: HomepageContent = {
@@ -110,10 +117,10 @@ async function getPageData() {
         importantLinks: homepageData.filter((r: any) => r.type === 'importantLink').map((r: any) => ({ _key: r.key, title: r.value, href: r.value2, icon: r.value3 as IconName })),
         resourceLinks: homepageData.filter((r: any) => r.type === 'resourceLink').map((r: any) => ({ _key: r.key, title: r.value, href: r.value2 })),
         officialLinks: homepageData.filter((r: any) => r.type === 'officialLink').map((r: any) => ({ _key: r.key, title: r.value, href: r.value2 })),
-        marqueeText: settingsData.find((r: any) => r.key === 'marqueeText')?.value || ''
+        marqueeText: objectify(settingsData).marqueeText || ''
     };
-
-    const notices = noticesData.slice(0, 5).map((n: any) => ({ id: n.id, title: n.title }));
+    
+    const notices: Notice[] = (noticesData || []).slice(0, 5).map((n: any) => ({ id: n.id, title: n.title }));
     
     const principalMsg = messagesData.find((m: any) => m.key === 'principal');
     const vicePrincipalMsg = messagesData.find((m: any) => m.key === 'vicePrincipal');
@@ -135,46 +142,13 @@ async function getPageData() {
         quote: vicePrincipalMsg.quote,
         image: vicePrincipalMsg.image,
     });
-    
-    return { notices, content, faculty };
-}
-
-const IconComponent = ({ name, ...props }: { name: IconName } & LucideProps) => {
-    const Icon = IconMap[name];
-    if (!Icon) return <BookOpen {...props} />; // Fallback icon
-    return <Icon {...props} />;
-};
-
-
-export default function Home() {
-    const [notices, setNotices] = useState<Notice[]>([]);
-    const [homepageContent, setHomepageContent] = useState<HomepageContent | null>(null);
-    const [facultyMessages, setFacultyMessages] = useState<FacultyMessage[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    const heroCarouselPlugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: true }));
-    const facultyCarouselPlugin = useRef(Autoplay({ delay: 4000, stopOnInteraction: true, stopOnMouseEnter: true }));
-    const [showMarquee, setShowMarquee] = useState(true);
-
-    useEffect(() => {
-        getPageData().then(data => {
-            setNotices(data.notices);
-            setHomepageContent(data.content);
-            setFacultyMessages(data.faculty);
-            setIsLoading(false);
-        });
-    }, []);
-    
-    if (isLoading) {
-        return <div className="flex justify-center items-center h-screen">লোড হচ্ছে...</div>;
-    }
 
     const infoBoxes: InfoBox[] = [
         { 
             _key: 'ib1', 
             title: 'শিক্ষার্থীদের কর্নার',
             icon: 'GraduationCap' as IconName,
-            image: `https://picsum.photos/100/100?random=ib1`,
+            image: `https://picsum.photos/seed/ib1/100/100`,
             links: [
               {_key: 'ibl1', label: 'শ্রেণিভিত্তিক শিক্ষার্থী', href: '#'}, 
               {_key: 'ibl2', label: 'ক্লাস রুটিন', href: '/class-routine'}, 
@@ -186,7 +160,7 @@ export default function Home() {
             _key: 'ib2', 
             title: 'শিক্ষকমন্ডলীদের কর্ণার',
             icon: 'Users' as IconName,
-            image: `https://picsum.photos/100/100?random=ib2`,
+            image: `https://picsum.photos/seed/ib2/100/100`,
             links: [
               {_key: 'ibl5', label: 'শিক্ষকমন্ডলী', href: '/teachers'}, 
               {_key: 'ibl6', label: 'স্টাফ', href: '/staff'}, 
@@ -198,7 +172,7 @@ export default function Home() {
             _key: 'ib3', 
             title: 'সকল ডাউনলোড',
             icon: 'Download' as IconName,
-            image: `https://picsum.photos/100/100?random=ib3`,
+            image: `https://picsum.photos/seed/ib3/100/100`,
             links: [
                 {_key: 'ibl9', label: 'ডাউনলোড', href: '#'},
                 {_key: 'ibl10', label: 'পরীক্ষার রুটিন', href: '#'},
@@ -209,7 +183,7 @@ export default function Home() {
             _key: 'ib4', 
             title: 'একাডেমিক তথ্য',
             icon: 'BookMarked' as IconName,
-            image: `https://picsum.photos/100/100?random=ib4`,
+            image: `https://picsum.photos/seed/ib4/100/100`,
             links: [
               {_key: 'ibl12', label: 'প্রতিষ্ঠানের ইতিহাস', href: '/history'}, 
               {_key: 'ibl13', label: 'পরীক্ষার ফলাফল', href: '/results'}, 
@@ -223,66 +197,10 @@ export default function Home() {
     <main>
       <div className="pt-0 px-4 pb-4">
         <section className="relative w-full">
-            <Suspense fallback={<div className="w-full h-[400px] bg-muted animate-pulse" />}>
-                <Carousel
-                    plugins={[heroCarouselPlugin.current]}
-                    className="w-full"
-                    >
-                    <CarouselContent>
-                        {homepageContent?.heroSlider && homepageContent.heroSlider.length > 0 ? homepageContent.heroSlider.map(slide => (
-                            <CarouselItem key={slide._key}>
-                                <Image
-                                    src={slide.image}
-                                    alt={slide.alt || 'Slider image'}
-                                    width={1280}
-                                    height={400}
-                                    className="w-full h-auto max-h-[400px] object-cover"
-                                    priority
-                                />
-                                {slide.caption && (
-                                    <div className='absolute bottom-4 left-4 bg-primary/80 text-white py-2 px-4 rounded-md'>
-                                        <p className='font-bold text-lg'>{slide.caption}</p>
-                                    </div>
-                                )}
-                            </CarouselItem>
-                        )) : (
-                            <CarouselItem>
-                                <Image
-                                    src="https://picsum.photos/1280/400?random=11"
-                                    alt="Placeholder"
-                                    width={1280}
-                                    height={400}
-                                    className="w-full h-auto max-h-[400px] object-cover"
-                                    priority
-                                />
-                            </CarouselItem>
-                        )}
-                    </CarouselContent>
-                </Carousel>
-            </Suspense>
+            <HeroCarousel slides={content.heroSlider} />
         </section>
 
-        {showMarquee && homepageContent?.marqueeText && (
-        <div className="my-4">
-            <div className="bg-muted flex h-12 items-center overflow-hidden shadow-sm">
-                <div className="relative bg-primary text-primary-foreground px-4 py-3 flex items-center">
-                    <span className="text-base font-bold whitespace-nowrap">জরুরী ঘোষণা</span>
-                    <div className="absolute right-[-24px] top-0 h-full w-6 bg-primary" style={{ clipPath: 'polygon(100% 50%, 0 0, 0 100%)' }}></div>
-                </div>
-                <div className="ml-4 relative flex-grow h-full flex items-center overflow-hidden">
-                    <div className="w-full flex items-center">
-                    <div className="animate-marquee whitespace-nowrap flex text-foreground text-base">
-                        <span className="mx-4">{homepageContent.marqueeText}</span>
-                        <span className="mx-4">{homepageContent.marqueeText}</span>
-                    </div>
-                    </div>
-                </div>
-                <button onClick={() => setShowMarquee(false)} className='bg-primary text-primary-foreground hover:bg-primary/90 p-3 h-full flex items-center'>
-                    <X className='w-4 h-4' />
-                </button>
-            </div>
-        </div>
-        )}
+        {content.marqueeText && <Marquee text={content.marqueeText} />}
 
         <div className="grid lg:grid-cols-4 gap-6 pb-4">
           
@@ -297,7 +215,7 @@ export default function Home() {
                 <CardContent className="grid md:grid-cols-5 gap-6 pt-6">
                     <div className='md:col-span-2'>
                          <Image 
-                            src={homepageContent?.historySection?.image || "https://picsum.photos/400/300"} 
+                            src={content?.historySection?.image || "https://picsum.photos/400/300"} 
                             alt="প্রতিষ্ঠানের ইতিহাস" 
                             width={400} 
                             height={300} 
@@ -306,53 +224,18 @@ export default function Home() {
                     </div>
                     <div className="md:col-span-3 space-y-3">
                       <p className="text-foreground leading-relaxed text-base text-justify">
-                        {homepageContent?.historySection?.summary || "লোড হচ্ছে..."}
+                        {content?.historySection?.summary || "লোড হচ্ছে..."}
                       </p>
                        <Button asChild variant="link" size="sm" className="p-0 h-auto">
-                            <Link href={homepageContent?.historySection?.linkHref || "/about"}>
-                                {homepageContent?.historySection?.linkText || "বিস্তারিত পড়ুন"} <ChevronRight className="ml-1 h-4 w-4" />
+                            <Link href={content?.historySection?.linkHref || "/about"}>
+                                {content?.historySection?.linkText || "বিস্তারিত পড়ুন"} <ChevronRight className="ml-1 h-4 w-4" />
                             </Link>
                        </Button>
                     </div>
                 </CardContent>
             </Card>
 
-             <Carousel
-                opts={{ loop: true, align: "start" }}
-                plugins={[facultyCarouselPlugin.current]}
-                className="w-full"
-             >
-                <CarouselContent className="-ml-2 md:-ml-4">
-                     {facultyMessages.map((faculty, index) => (
-                        <CarouselItem key={faculty._id || index} className="pl-2 md:pl-4 md:basis-1/2">
-                            <Card className="shadow-lg h-full">
-                                <CardHeader className='bg-primary text-primary-foreground rounded-t-lg p-4'>
-                                    <CardTitle className="text-xl flex items-center gap-2">
-                                        <Users className="w-5 h-5" />
-                                        {faculty.title}
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="flex flex-col sm:flex-row items-center gap-4 pt-6">
-                                   <Image 
-                                    src={faculty.image} 
-                                    alt={faculty.name} 
-                                    width={80} 
-                                    height={80} 
-                                    className="rounded-md border-2 border-accent"
-                                    data-ai-hint="teacher portrait"
-                                   />
-                                   <div className='space-y-2 text-center sm:text-left'>
-                                       <p className='text-base text-foreground italic text-justify leading-relaxed'>"{faculty.quote}"</p>
-                                       <Button asChild variant="link" className="p-0 h-auto text-primary hover:underline">
-                                         <Link href={faculty.link}>বিস্তারিত</Link>
-                                       </Button>
-                                   </div>
-                                </CardContent>
-                            </Card>
-                        </CarouselItem>
-                     ))}
-                </CarouselContent>
-             </Carousel>
+             <FacultyCarousel faculty={faculty} />
 
              <div className="grid md:grid-cols-2 gap-6">
                 {infoBoxes.map(box => (
@@ -388,7 +271,7 @@ export default function Home() {
           <aside className="lg:col-span-1 space-y-6">
                <Card className="shadow-lg">
                  <CardContent className="p-2 space-y-2">
-                    {homepageContent?.importantLinks?.map((link) => (
+                    {content?.importantLinks?.map((link) => (
                         <Link
                             href={link.href}
                             key={link._key}
@@ -431,7 +314,7 @@ export default function Home() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 space-y-2">
-                     {homepageContent?.resourceLinks?.map((link) => (
+                     {content?.resourceLinks?.map((link) => (
                         <Link href={link.href} key={link._key} className="flex items-center text-base text-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
                             <ChevronRight className="w-4 h-4 text-primary" />
                             {link.title}
@@ -448,7 +331,7 @@ export default function Home() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 space-y-2">
-                     {homepageContent?.officialLinks?.map((link) => (
+                     {content?.officialLinks?.map((link) => (
                         <Link href={link.href} key={link._key} className="flex items-center text-base text-foreground hover:text-primary gap-2 border-b last:border-b-0 py-1.5">
                             <ChevronRight className="w-4 h-4 text-primary" />
                             {link.title}
