@@ -15,6 +15,8 @@ import { useToast } from '@/hooks/use-toast'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getSheetData } from '@/lib/data-loader'
 
+export const dynamic = 'force-dynamic';
+
 const searchSchema = z.object({
   examType: z.string().min(1, 'পরীক্ষার নাম নির্বাচন করুন'),
   class: z.string().min(1, 'শ্রেণী নির্বাচন করুন'),

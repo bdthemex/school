@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    serverComponentsExternalPackages: ['papaparse'],
+  },
+  runtime: 'edge',
 };
 
 export default nextConfig;
