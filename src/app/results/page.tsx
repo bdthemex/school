@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -13,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const searchSchema = z.object({
   examType: z.string().min(1, 'পরীক্ষার নাম নির্বাচন করুন'),
@@ -82,6 +84,26 @@ async function searchResult(params: SearchFormValues, allResults: any[]): Promis
         return { success: false, data: null, message: "ফলাফল খুঁজতে গিয়ে একটি সমস্যা হয়েছে।" };
     }
 }
+
+const SearchFormSkeleton = () => (
+    <div className="space-y-4">
+        <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+                <Label htmlFor="examType">পরীক্ষার নাম</Label>
+                <Skeleton className="h-10 w-full" />
+            </div>
+            <div>
+                <Label htmlFor="class">শ্রেণী</Label>
+                <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="sm:col-span-2">
+                <Label htmlFor="roll">রোল নম্বর</Label>
+                <Skeleton className="h-10 w-full" />
+            </div>
+        </div>
+        <Skeleton className="h-10 w-full" />
+    </div>
+);
 
 
 export default function ResultsPage() {
@@ -189,7 +211,7 @@ export default function ResultsPage() {
                         </CardHeader>
                         <CardContent>
                             {isFetchingSheet ? (
-                                 <p className="text-center text-muted-foreground">ফলাফলের ডেটাবেস লোড হচ্ছে...</p>
+                                 <SearchFormSkeleton />
                             ) : (
                             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                                 <div className="grid sm:grid-cols-2 gap-4">
@@ -338,4 +360,3 @@ export default function ResultsPage() {
         </div>
     </main>
   )
-}
