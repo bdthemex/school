@@ -11,6 +11,8 @@ import {
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'ছুটির তালিকা',
   description: 'বিদ্যালয়ের বাৎসরিক ছুটির তালিকা দেখুন।',

@@ -4,6 +4,8 @@ import { MessageSquare } from 'lucide-react'
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
     title: "প্রধান শিক্ষকের বাণী",
     description: 'প্রধান শিক্ষকের বাণী পড়ুন।',

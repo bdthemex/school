@@ -3,6 +3,8 @@ import { Phone, Mail, MapPin } from 'lucide-react'
 import type { Metadata } from 'next';
 import { getSheetData, objectify } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'যোগাযোগ',
   description: 'আমাদের সাথে যোগাযোগ করুন। ঠিকানা, ফোন নম্বর এবং ইমেইল।',

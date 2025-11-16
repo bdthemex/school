@@ -11,6 +11,8 @@ import {
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'একাডেমিক ক্যালেন্ডার',
   description: 'আমাদের বিদ্যালয়ের একাডেমিক ক্যালেন্ডার ও কার্যক্রমের তালিকা।',

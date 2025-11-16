@@ -4,6 +4,8 @@ import { Target, BookOpen } from 'lucide-react'
 import type { Metadata } from 'next';
 import { getSheetData, objectify } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic';
+
 interface AboutContent {
   schoolName?: string;
   description?: string;

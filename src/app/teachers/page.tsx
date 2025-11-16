@@ -4,6 +4,8 @@ import { Users, GraduationCap, Phone, Mail } from 'lucide-react'
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'শিক্ষক পরিচিতি',
   description: 'আমাদের বিদ্যালয়ের অভিজ্ঞ শিক্ষকমণ্ডলীর তালিকা।',

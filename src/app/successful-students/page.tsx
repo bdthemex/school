@@ -4,6 +4,8 @@ import { Award } from 'lucide-react'
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'কৃতি শিক্ষার্থীবৃন্দ',
   description: 'আমাদের বিদ্যালয়ের কৃতি শিক্ষার্থীদের দেখুন যারা তাদের মেধা দিয়ে বিদ্যালয়ের মুখ উজ্জ্বল করেছে।',

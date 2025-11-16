@@ -1,4 +1,3 @@
-'use server';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -28,6 +27,8 @@ import Marquee from '@/components/layout/marquee';
 import { getSheetData, objectify } from '@/lib/data-loader';
 import HeroCarousel from '@/components/layout/hero-carousel';
 import FacultyCarousel from '@/components/layout/faculty-carousel';
+
+export const dynamic = 'force-dynamic';
 
 const IconMap = {
     Megaphone,

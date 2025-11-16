@@ -13,6 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
 import { Skeleton } from '@/components/ui/skeleton'
+import { getSheetData } from '@/lib/data-loader'
 
 const searchSchema = z.object({
   examType: z.string().min(1, 'পরীক্ষার নাম নির্বাচন করুন'),
@@ -38,14 +39,6 @@ interface StudentResult {
   [key: string]: any;
 }
 
-// This function now runs on the client to fetch data from our new API route
-async function getSheetDataFromApi(sheetName: string) {
-    const response = await fetch(`/api/sheets?name=${sheetName}`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch sheet data');
-    }
-    return response.json();
-}
 
 function extractSubjects(resultData: { [key: string]: any }): SubjectResult[] {
     const predefinedColumns = ['studentName', 'examType', 'className', 'roll', 'totalMarks', 'grade', 'year'];
@@ -126,7 +119,7 @@ export default function ResultsPage() {
         const fetchResults = async () => {
             try {
                 // The client-side page now calls the server component's dataloader, which fetches direct.
-                const data = await getSheetDataFromApi('results_sheet');
+                const data = await getSheetData('results_sheet');
                 if (!data) {
                     throw new Error("ফলাফলের ডেটা আনা সম্ভব হয়নি।");
                 }

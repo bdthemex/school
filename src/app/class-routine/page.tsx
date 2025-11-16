@@ -12,6 +12,8 @@ import {
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'ক্লাস রুটিন',
   description: 'সকল শ্রেণীর ক্লাস রুটিন দেখুন।',

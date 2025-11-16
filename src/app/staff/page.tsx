@@ -4,6 +4,8 @@ import { UserSquare } from 'lucide-react'
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'কর্মচারী পরিচিতি',
   description: 'আমাদের বিদ্যালয়ের নিবেদিতপ্রাণ কর্মচারীদের তালিকা।',

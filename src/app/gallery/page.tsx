@@ -4,6 +4,8 @@ import { Camera } from 'lucide-react'
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'ফটো গ্যালারি',
   description: 'আমাদের বিদ্যালয়ের বিভিন্ন অনুষ্ঠানের ছবির সংগ্রহ।',

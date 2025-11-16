@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { FilePlus2 } from 'lucide-react'
 import type { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'নমুনা পৃষ্ঠা',
   description: 'এটি একটি নমুনা পৃষ্ঠা।',

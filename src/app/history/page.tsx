@@ -5,6 +5,8 @@ import { ScrollText } from 'lucide-react'
 import type { Metadata } from 'next';
 import { getSheetData } from '@/lib/data-loader';
 
+export const dynamic = 'force-dynamic';
+
 interface HistoryContent {
     title: string;
     historicalImage: string;

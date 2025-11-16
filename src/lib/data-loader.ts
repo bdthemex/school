@@ -5,8 +5,8 @@ type SheetName = keyof typeof sheetUrls;
 
 async function fetchAndParseCSV(url: string): Promise<any[]> {
     try {
-        // Use `no-store` to ensure fresh data on every request, bypassing any cache.
-        const response = await fetch(url, { cache: 'no-store' });
+        // Use `revalidate: 0` to ensure fresh data on every request, bypassing any cache.
+        const response = await fetch(url, { next: { revalidate: 0 } });
         if (!response.ok) {
             throw new Error(`Failed to fetch CSV from ${url}. Status: ${response.status}`);
         }
